@@ -1,8 +1,16 @@
-<script></script>
+<script>
+import NavbarComponent from '@/components/NavbarComponent.vue'
+
+export default {
+  components: {
+    NavbarComponent,
+  },
+}
+</script>
 
 <template>
   <div class="main" data-theme="pragmacom_theme">
-    <!-- <Navbar /> -->
+    <NavbarComponent />
 
     <RouterView />
 

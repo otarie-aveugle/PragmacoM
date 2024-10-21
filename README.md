@@ -1,6 +1,6 @@
 # PragmacoM
 
-![](https://i.imgur.com/3u3alRJ.png)
+![](https://i.imgur.com/6vo2Dp0.png)
 
 ## Project Setup
 
