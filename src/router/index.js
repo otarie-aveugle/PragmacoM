@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 import HomePage from '@/views/HomePage.vue'
 import LoginPage from '@/views/Authentication/LoginPage.vue'
-import { useUserStore } from '@/stores/user'
+import RecoveryPasswordPage from '@/views/Authentication/RecoveryPassword/RecoveryPasswordPage.vue'
+import ForgotPassword from '@/views/Authentication/RecoveryPassword/ForgotPassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +17,18 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginPage,
+    },
+    {
+      path: '/recovery_password',
+      name: 'recovery_password',
+      component: RecoveryPasswordPage,
+      children: [
+        {
+          path: '/forgot_password',
+          name: 'forgot_password',
+          component: ForgotPassword,
+        },
+      ],
     },
   ],
 })

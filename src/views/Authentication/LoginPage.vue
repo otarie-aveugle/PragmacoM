@@ -18,6 +18,7 @@ export default {
 
 <template>
   <div class="flex flex-col mx-auto items-center">
+
     <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
       <p class="text-lg font-bold">Se connecter</p>
 
@@ -70,6 +71,10 @@ export default {
       >
         Se connecter
       </RouterLink>
+
+      <div class="divider text-primary">
+        <RouterLink to="/recovery_password">Mot de passe oublié</RouterLink>
+      </div>
     </div>
   </div>
 </template>
