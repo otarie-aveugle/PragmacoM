@@ -70,6 +70,10 @@ export default {
       >
         Se connecter
       </RouterLink>
+
+      <div class="divider text-primary">
+        <RouterLink to="/recovery_password">Mot de passe oublié</RouterLink>
+      </div>
     </div>
   </div>
 </template>
