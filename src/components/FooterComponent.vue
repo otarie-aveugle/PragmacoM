@@ -11,30 +11,52 @@ export default {
 </script>
 
 <template>
-  <footer class="fixed bottom-0 left-0 w-full bg-base-content text-base-100 py-6 flex justify-between items-center">
-    <div class="footer-start mx-4 text-lef">
-      <p class="text-left">
-        PragmacoM<br>
-        43 RUE DU MOULIN D AULINE<br>
-        78720 SENLISSE<br>
-        France<br>
-      </p>
-    </div>
+  <div class="min-h-screen flex flex-col">
+    <main class="flex-grow">
 
-    <div class="footer-end">
-      <ul class="menu menu-horizontal px-1">
-        <li class="mx-2 hover:text-base-100 hover:underline transition-colors duration-300">
-          <RouterLink to="/about">cpragmacom@aol.com</RouterLink>
-        </li>
-        <li class="mx-2 hover:text-base-100 hover:underline transition-colors duration-300">
-          <RouterLink to="/contact">Contacts</RouterLink>
-        </li>
-        <li class="mx-2 hover:text-base-100 hover:underline transition-colors duration-300">
-          <RouterLink to="/terms">Mentions légales</RouterLink>
-        </li>
-      </ul>
-    </div>
-  </footer>
+    </main>
+
+    <footer class="w-full bg-neutral text-base-100 py-6 flex flex-col md:flex-row md:justify-between items-start md:items-center space-y-6 md:space-y-0">
+      <div class="mx-4 text-left">
+        <p>
+          PragmacoM<br>
+          43 RUE DU MOULIN D AULINE<br>
+          78720 SENLISSE<br>
+          France<br>
+        </p>
+      </div>
+
+      <div class="mx-4">
+        <ul class="menu menu-vertical md:menu-horizontal space-y-2 md:space-y-0 md:space-x-4">
+          <li>
+            <RouterLink
+              to="/adresse-mail"
+              class="hover:underline transition-colors duration-300"
+            >
+              cpragmacom@aol.com
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink
+              to="/contact"
+              class="hover:underline transition-colors duration-300"
+            >
+              Contacts
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink
+              to="/mentions-légales"
+              class="hover:underline duration-300"
+            >
+              Mentions légales
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </div>
 </template>
+
 
 <style></style>
