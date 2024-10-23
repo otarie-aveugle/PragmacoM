@@ -18,7 +18,6 @@ export default {
 
 <template>
   <div class="flex flex-col mx-auto items-center">
-
     <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
       <p class="text-lg font-bold">Se connecter</p>
 

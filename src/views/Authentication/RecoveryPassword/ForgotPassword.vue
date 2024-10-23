@@ -1,15 +1,30 @@
 <script>
-import LinkToLoginComponent from './components/LinkToLoginComponent.vue'
+import { mapActions } from 'pinia'
+import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'ForgotPasswordPage',
-  components: {
-    LinkToLoginComponent,
+  data() {
+    return {
+      email: '',
+    }
+  },
+  methods: {
+    ...mapActions(useUserStore, ['recovery_password']),
   },
 }
 </script>
 
 <template>
+  <div class="my-8">
+    <ul class="steps steps-vertical lg:steps-horizontal">
+      <li class="step step-primary">Mot de passe oublié</li>
+      <li class="step">Lien de réinitialisation</li>
+      <li class="step">Réinitialisation du mot de passe</li>
+      <li class="step">Mot de passe réinitialisé</li>
+    </ul>
+  </div>
+
   <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
     <p class="text-lg font-bold">Mot de passe oublié</p>
 
@@ -35,11 +50,17 @@ export default {
       />
     </label>
 
-    <RouterLink to="/" class="btn btn-primary" @click="login(email, password)">
+    <RouterLink
+      to="/reset_link"
+      class="btn btn-primary"
+      @click="recovery_password(email)"
+    >
       Suivant
     </RouterLink>
 
-    <LinkToLoginComponent />
+    <div class="divider text-primary">
+      <RouterLink to="/login">Se connecter</RouterLink>
+    </div>
   </div>
 </template>
 

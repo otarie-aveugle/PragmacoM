@@ -16,5 +16,24 @@ export const useUserStore = defineStore('user', {
       this.userLoggedIn = false
       localStorage.removeItem('userLoggedIn')
     },
+    async recovery_password(email) {
+      await account.createRecovery(
+        email,
+        'http://localhost:5173/reset_password/',
+      )
+    },
+    async confirm_recovery_password(
+      userID,
+      secret,
+      password,
+      password_confirmation,
+    ) {
+      await account.updateRecovery(
+        userID,
+        secret,
+        password,
+        password_confirmation,
+      )
+    },
   },
 })
