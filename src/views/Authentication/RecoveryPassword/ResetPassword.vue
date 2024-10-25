@@ -46,7 +46,7 @@ export default {
       </svg>
       <input
         type="password"
-        class="placeholder-base-content/70"
+        class="placeholder-base-content/70 w-full"
         placeholder="Password"
         v-model="password"
       />
@@ -66,7 +66,7 @@ export default {
       </svg>
       <input
         type="password"
-        class="placeholder-base-content/70"
+        class="placeholder-base-content/70 w-full"
         placeholder="Confirmation password"
         v-model="password_confirmation"
       />

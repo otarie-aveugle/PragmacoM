@@ -44,7 +44,7 @@ export default {
       </svg>
       <input
         type="email"
-        class="placeholder-base-content/70"
+        class="placeholder-base-content/70 w-full"
         placeholder="Email"
         v-model="email"
       />

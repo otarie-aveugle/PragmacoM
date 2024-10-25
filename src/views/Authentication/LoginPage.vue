@@ -8,10 +8,15 @@ export default {
     return {
       email: '',
       password: '',
+      formValid: true,
+      // formValid: this.valid_form(this.email, this.password),
     }
   },
   methods: {
     ...mapActions(useUserStore, ['login']),
+    // valid_form(email, password) {
+    //   return true
+    // },
   },
 }
 </script>
@@ -37,9 +42,10 @@ export default {
         </svg>
         <input
           type="email"
-          class="placeholder-base-content/70"
+          class="placeholder-base-content/70 w-full"
           placeholder="Email"
           v-model="email"
+          required
         />
       </label>
       <label class="input input-bordered flex items-center gap-2">
@@ -57,15 +63,17 @@ export default {
         </svg>
         <input
           type="password"
-          class="placeholder-base-content/70"
+          class="placeholder-base-content/70 w-full"
           placeholder="Password"
           v-model="password"
+          required
         />
       </label>
 
       <RouterLink
         to="/"
         class="btn btn-primary"
+        v-bind:class="{ 'btn-disabled': formValid }"
         @click="login(email, password)"
       >
         Se connecter
