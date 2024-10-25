@@ -20,8 +20,15 @@ export default {
         ><img src="../assets/logo/PragamacoM.png" class="min-h-10 h-14"
       /></RouterLink>
     </div>
-
     <div class="navbar-end">
+      <p>
+          <RouterLink to="/PanelsPage"
+            class="px-3 py-2 rounded-md transition-all duration-300
+            hover:bg-primary hover:text-white hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#26358A]"
+          >
+            Panneaux
+          </RouterLink>
+        </p>
       <ul class="menu menu-horizontal px-1">
         <li>
           <RouterLink to="/map">Carte intéractive</RouterLink>

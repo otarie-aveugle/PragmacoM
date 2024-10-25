@@ -7,6 +7,7 @@ import ForgotPassword from '@/views/Authentication/RecoveryPassword/ForgotPasswo
 import ResetLink from '@/views/Authentication/RecoveryPassword/ResetLink.vue'
 import ResetPassword from '@/views/Authentication/RecoveryPassword/ResetPassword.vue'
 import SuccessRecoveryPassword from '@/views/Authentication/RecoveryPassword/SuccessRecoveryPassword.vue'
+import PanelsPage from '@/views/Panels/PanelsPage.vue'
 import InteractiveMap from '@/views/InteractiveMap.vue'
 
 const router = createRouter({
@@ -16,6 +17,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomePage,
+    },
+    {
+      path: '/PanelsPage',
+      name: 'PanelsPage',
+      component: PanelsPage,
     },
     {
       path: '/login',

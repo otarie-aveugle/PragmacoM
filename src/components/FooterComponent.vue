@@ -24,7 +24,9 @@ export default {
       <div class="mx-4">
         <ul class="menu menu-vertical md:menu-horizontal space-y-2 md:space-y-0 md:space-x-4">
           <li class="hover:underline transition-colors duration-300">
+            <RouterLink to="">
               cpragmacom@aol.com
+            </RouterLink>
           </li>
           <li>
             <RouterLink
@@ -37,8 +39,7 @@ export default {
           <li>
             <RouterLink
               to="/mentions_légales"
-              class="hover:underline duration-300"
-            >
+              class="hover:underline duration-300">
               Mentions légales
             </RouterLink>
           </li>
