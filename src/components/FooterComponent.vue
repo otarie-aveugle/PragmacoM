@@ -1,12 +1,7 @@
 <script>
-import { mapState } from 'pinia'
-import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'FooterComponent',
-  computed: {
-    ...mapState(useUserStore, ['userLoggedIn']),
-  },
 }
 </script>
 
@@ -28,13 +23,8 @@ export default {
 
       <div class="mx-4">
         <ul class="menu menu-vertical md:menu-horizontal space-y-2 md:space-y-0 md:space-x-4">
-          <li>
-            <RouterLink
-              to="/adresse-mail"
-              class="hover:underline transition-colors duration-300"
-            >
+          <li class="hover:underline transition-colors duration-300">
               cpragmacom@aol.com
-            </RouterLink>
           </li>
           <li>
             <RouterLink
@@ -46,7 +36,7 @@ export default {
           </li>
           <li>
             <RouterLink
-              to="/mentions-légales"
+              to="/mentions_légales"
               class="hover:underline duration-300"
             >
               Mentions légales
