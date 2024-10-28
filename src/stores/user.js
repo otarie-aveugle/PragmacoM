@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import { account } from '@/lib/appwrite'
+import fr from '@/locales/index'
+
+const messages = fr.fr
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     userLoggedIn: localStorage.getItem('userLoggedIn') === 'true',
     errorMessage: '',
-    //TODO gérer errorMessage pour ne pas afficher le 'Invalid `password` param:', on utilisera vue-i18n pour les messages
   }),
   actions: {
     async login(email, password) {
@@ -15,8 +17,18 @@ export const useUserStore = defineStore('user', {
         localStorage.setItem('userLoggedIn', true)
         this.errorMessage = ''
       } catch (error) {
-        console.error('Login error:', error)
-        this.errorMessage = error.message
+        console.log(error.message)
+
+        switch (error.message) {
+          //TODO gérer les autres cas en suivants les taux de limites indiqués + ajouter le cas du taux de limite dépassé !
+          //https://appwrite.io/docs/references/cloud/client-web/account#createEmailPasswordSession
+          case 'Invalid credentials. Please check the email and password.':
+            console.log(messages)
+            this.errorMessage = messages.login.failure.credentials
+            break
+          default:
+            this.errorMessage = messages.login.failure.default
+        }
       }
     },
     async logout() {

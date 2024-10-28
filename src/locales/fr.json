@@ -1,0 +1,8 @@
+{
+  "login": {
+    "failure": {
+      "default": "Échec de la connexion, veuillez réessayer.",
+      "credentials": "L'identifiant ou le mot de passe est incorrect."
+    }
+  }
+}
