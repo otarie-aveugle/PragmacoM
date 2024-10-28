@@ -21,19 +21,25 @@ export default {
       /></RouterLink>
     </div>
     <div class="navbar-end">
-      <p>
-        <RouterLink to="/PanelsPage" class="px-3 py-2 rounded-md transition-all duration-300 hover:bg-primary hover:text-white hover:shadow">
-          Panneaux
-        </RouterLink>
-      </p>
       <ul class="menu menu-horizontal px-1">
-        <li>
+        <li class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow">
           <RouterLink to="/map">Carte intéractive</RouterLink>
         </li>
-        <li v-if="!userLoggedIn" class="mx-2">
+        <li
+          class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow"
+        >
+          <RouterLink to="/panels">Panneaux</RouterLink>
+        </li>
+        <li
+          v-if="!userLoggedIn"
+          class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow"
+        >
           <RouterLink to="/login">Connexion</RouterLink>
         </li>
-        <li v-else class="mx-2">
+        <li
+          v-else
+          class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow"
+        >
           <RouterLink to="/" @click="logout">Déconnexion</RouterLink>
         </li>
       </ul>
