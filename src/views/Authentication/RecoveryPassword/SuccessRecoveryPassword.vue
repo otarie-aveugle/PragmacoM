@@ -15,7 +15,7 @@ export default {
   </div>
 
   <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
-    <p class="text-lg font-bold">Le mot de passe à bien été réinitialisé !</p>
+    <p class="text-lg font-bold">Le mot de passe a bien été réinitialisé !</p>
 
     <RouterLink to="/login" class="btn btn-primary">Se connecter</RouterLink>
   </div>

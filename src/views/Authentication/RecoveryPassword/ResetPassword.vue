@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -12,8 +12,38 @@ export default {
       password_confirmation: '',
     }
   },
+  computed: {
+    ...mapState(useUserStore, ['errorMessage']),
+  },
   methods: {
     ...mapActions(useUserStore, ['confirm_recovery_password']),
+    async submitForm() {
+      if (this.isFormValid()) {
+        await this.confirm_recovery_password(
+          this.userId,
+          this.secret,
+          this.password,
+          this.password_confirmation,
+        )
+        if (!this.errorMessage) {
+          this.$router.push({ name: 'success_recover_password' })
+        }
+      } else {
+        // this.errorMessage = 'Formulaire invalide'
+        //TODO gérer ce cas d'erreur
+      }
+    },
+    isFormValid() {
+      return (
+        this.validPassword(this.password) &&
+        this.validPassword(this.password_confirmation) &&
+        this.password === this.password_confirmation
+      )
+    },
+    validPassword(password) {
+      const regex = /^(?=.{8,265}$).*$/
+      return regex.test(password)
+    },
   },
 }
 </script>
@@ -28,7 +58,10 @@ export default {
     </ul>
   </div>
 
-  <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
+  <form
+    class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8"
+    @submit.prevent="submitForm"
+  >
     <p class="text-lg font-bold">Réinitialisation du mot de passe</p>
 
     <label class="input input-bordered flex items-center gap-2">
@@ -47,8 +80,9 @@ export default {
       <input
         type="password"
         class="placeholder-base-content/70 w-full"
-        placeholder="Password"
+        placeholder="Mot de passe"
         v-model="password"
+        required
       />
     </label>
     <label class="input input-bordered flex items-center gap-2">
@@ -67,26 +101,18 @@ export default {
       <input
         type="password"
         class="placeholder-base-content/70 w-full"
-        placeholder="Confirmation password"
+        placeholder="Confirmation du mot de passe"
         v-model="password_confirmation"
+        required
       />
     </label>
 
-    <RouterLink
-      to="/success_recover_password"
-      class="btn btn-primary"
-      @click="
-        confirm_recovery_password(
-          userId,
-          secret,
-          password,
-          password_confirmation,
-        )
-      "
-    >
-      Suivant
-    </RouterLink>
-  </div>
+    <button type="submit" class="btn btn-primary">Suivant</button>
+
+    <p v-if="errorMessage" class="text-red-500 text-md mt-2">
+      {{ errorMessage }}
+    </p>
+  </form>
 </template>
 
 <style></style>

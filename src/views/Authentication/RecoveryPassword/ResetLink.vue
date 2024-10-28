@@ -15,11 +15,9 @@ export default {
   </div>
 
   <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
-    <p class="text-lg font-bold">Vérifier vos mail !</p>
+    <p class="text-lg font-bold">Vérifier vos e-mails !</p>
 
-    <p>
-      Cliquer sur le lien dans dans le mail pour créer un nouveau mot de passe.
-    </p>
+    <p>Cliquer sur le lien dans l'e-mail pour créer un nouveau mot de passe.</p>
   </div>
 </template>
 

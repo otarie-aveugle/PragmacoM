@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -9,8 +9,27 @@ export default {
       email: '',
     }
   },
+  computed: {
+    ...mapState(useUserStore, ['errorMessage']),
+  },
   methods: {
     ...mapActions(useUserStore, ['recovery_password']),
+    async submitForm() {
+      if (this.isFormValid()) {
+        await this.recovery_password(this.email)
+        if (!this.errorMessage) {
+          this.$router.push({ name: 'reset_link' })
+        }
+      } else {
+        // this.errorMessage = 'Formulaire invalide'
+        //TODO gérer ce cas d'erreur
+      }
+    },
+    isFormValid() {
+      const regex =
+        /^((?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/
+      return regex.test(this.email)
+    },
   },
 }
 </script>
@@ -25,7 +44,10 @@ export default {
     </ul>
   </div>
 
-  <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
+  <form
+    class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8"
+    @submit.prevent="submitForm"
+  >
     <p class="text-lg font-bold">Mot de passe oublié</p>
 
     <label class="input input-bordered flex items-center gap-2">
@@ -47,21 +69,20 @@ export default {
         class="placeholder-base-content/70 w-full"
         placeholder="Email"
         v-model="email"
+        required
       />
     </label>
 
-    <RouterLink
-      to="/reset_link"
-      class="btn btn-primary"
-      @click="recovery_password(email)"
-    >
-      Suivant
-    </RouterLink>
+    <button type="submit" class="btn btn-primary">Suivant</button>
+
+    <p v-if="errorMessage" class="text-red-500 text-md mt-2">
+      {{ errorMessage }}
+    </p>
 
     <div class="divider text-primary">
       <RouterLink to="/login">Se connecter</RouterLink>
     </div>
-  </div>
+  </form>
 </template>
 
 <style></style>

@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -8,21 +8,38 @@ export default {
     return {
       email: '',
       password: '',
-      formValid: true,
-      // formValid: this.valid_form(this.email, this.password),
     }
+  },
+  computed: {
+    ...mapState(useUserStore, ['errorMessage']),
   },
   methods: {
     ...mapActions(useUserStore, ['login']),
-    // valid_form(email, password) {
-    //   return true
-    // },
+    async submitForm() {
+      if (this.isFormValid()) {
+        await this.login(this.email, this.password)
+        if (!this.errorMessage) {
+          this.$router.push({ name: 'home' })
+        }
+      } else {
+        // this.errorMessage = 'Formulaire invalide'
+        //TODO gérer ce cas d'erreur
+      }
+    },
+    isFormValid() {
+      return this.validEmail(this.email) && this.password.length > 0
+    },
+    validEmail(email) {
+      const regex =
+        /^((?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/
+      return regex.test(email)
+    },
   },
 }
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto items-center">
+  <form class="flex flex-col mx-auto items-center" @submit.prevent="submitForm">
     <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
       <p class="text-lg font-bold">Se connecter</p>
 
@@ -64,26 +81,23 @@ export default {
         <input
           type="password"
           class="placeholder-base-content/70 w-full"
-          placeholder="Password"
+          placeholder="Mot de passe"
           v-model="password"
           required
         />
       </label>
 
-      <RouterLink
-        to="/"
-        class="btn btn-primary"
-        v-bind:class="{ 'btn-disabled': formValid }"
-        @click="login(email, password)"
-      >
-        Se connecter
-      </RouterLink>
+      <button type="submit" class="btn btn-primary">Se connecter</button>
+
+      <p v-if="errorMessage" class="text-red-500 text-md mt-2">
+        {{ errorMessage }}
+      </p>
 
       <div class="divider text-primary">
         <RouterLink to="/recovery_password">Mot de passe oublié</RouterLink>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <style></style>
