@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapActions } from 'pinia'
+import { mapWritableState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -10,19 +10,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(useUserStore, ['errorMessage']),
+    ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
     ...mapActions(useUserStore, ['recovery_password']),
     async submitForm() {
+      this.errorMessage = ''
       if (this.isFormValid()) {
         await this.recovery_password(this.email)
         if (!this.errorMessage) {
           this.$router.push({ name: 'reset_link' })
         }
       } else {
-        // this.errorMessage = 'Formulaire invalide'
-        //TODO gérer ce cas d'erreur
+        this.errorMessage =
+          'Le formulaire est invalide. Veuillez vérifier vos informations.'
       }
     },
     isFormValid() {

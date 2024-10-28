@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapActions } from 'pinia'
+import { mapWritableState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -13,11 +13,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(useUserStore, ['errorMessage']),
+    ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
     ...mapActions(useUserStore, ['confirm_recovery_password']),
     async submitForm() {
+      this.errorMessage = ''
       if (this.isFormValid()) {
         await this.confirm_recovery_password(
           this.userId,
@@ -29,8 +30,18 @@ export default {
           this.$router.push({ name: 'success_recover_password' })
         }
       } else {
-        // this.errorMessage = 'Formulaire invalide'
-        //TODO gérer ce cas d'erreur
+        if (this.password !== this.password_confirmation) {
+          this.errorMessage = 'Les mots de passe ne sont pas identiques.'
+        } else if (
+          !this.validPassword(this.password) ||
+          !this.validPassword(this.password_confirmation)
+        ) {
+          this.errorMessage =
+            'Le mot de passe doit contenir entre 8 et 256 caractères.'
+        } else {
+          this.errorMessage =
+            'Le formulaire est invalide. Veuillez vérifier vos informations.'
+        }
       }
     },
     isFormValid() {
@@ -41,7 +52,7 @@ export default {
       )
     },
     validPassword(password) {
-      const regex = /^(?=.{8,265}$).*$/
+      const regex = /^(?=.{8,256}$).*$/
       return regex.test(password)
     },
   },
