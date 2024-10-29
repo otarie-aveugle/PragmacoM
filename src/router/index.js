@@ -8,6 +8,7 @@ import ResetLink from '@/views/Authentication/RecoveryPassword/ResetLink.vue'
 import ResetPassword from '@/views/Authentication/RecoveryPassword/ResetPassword.vue'
 import SuccessRecoveryPassword from '@/views/Authentication/RecoveryPassword/SuccessRecoveryPassword.vue'
 import PanelsPage from '@/views/Panels/PanelsPage.vue'
+import CreatePanelPage from '@/views/Panels/CreatePanelPage.vue'
 import EditPanelPage from '@/views/Panels/EditPanelPage.vue'
 import InteractiveMap from '@/views/InteractiveMap.vue'
 
@@ -25,8 +26,13 @@ const router = createRouter({
       component: PanelsPage,
     },
     {
-      path: '/panel_edit',
-      name: 'panel_edit',
+      path: '/create_panel',
+      name: 'create_panel',
+      component: CreatePanelPage,
+    },
+    {
+      path: '/edit_panel',
+      name: 'edit_panel',
       component: EditPanelPage,
     },
     {
@@ -71,7 +77,7 @@ const router = createRouter({
 
 router.beforeEach(async to => {
   const store = useUserStore()
-  const pages = ['panel_edit']
+  const pages = ['edit_panel']
   const pages_userLoggedIn = [
     'login',
     'recovery_password',

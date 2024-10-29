@@ -11,7 +11,7 @@ export default {
         {
           preview: '/src/assets/images/Panneau1.jpg',
           disponibility: true,
-          disponibility_date: '09-30-2024',
+          disponibility_date: '09-10-2024',
           adresse: '5 rue machin',
           town: 'Metz',
           postal_code: '57000',
@@ -22,7 +22,7 @@ export default {
         {
           preview: '/src/assets/images/Panneau2.jpg',
           disponibility: false,
-          disponibility_date: '09-30-2024',
+          disponibility_date: '22-06-2025',
           adresse: '7 rue machin',
           town: 'Annecy',
           postal_code: '74000',
@@ -33,7 +33,7 @@ export default {
         {
           preview: '/src/assets/images/Panneau3.jpg',
           disponibility: true,
-          disponibility_date: '09-30-2024',
+          disponibility_date: '30-07-2024',
           adresse: '2 rue machin',
           town: 'Arles',
           postal_code: '13200',
@@ -55,9 +55,26 @@ export default {
     <p class="text-2xl">Liste des panneaux</p>
   </div>
   <div class="overflow-x-auto mx-14">
+    <RouterLink to="/create_panel" class="btn btn-primary mb-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15"
+        />
+      </svg>
+      Ajouter un panneau
+    </RouterLink>
     <table class="table">
       <!-- head -->
-      <thead>
+      <thead class="bg-base-200 text-base-content">
         <tr>
           <!-- <th v-if="userLoggedIn">
             <label>
@@ -129,7 +146,7 @@ export default {
           <td>{{ panel.observations }}</td>
           <!-- actions -->
           <td v-if="userLoggedIn">
-            <RouterLink to="/panel_edit" class="link link-hover">
+            <RouterLink to="/edit_panel" class="link link-hover">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -150,7 +167,7 @@ export default {
       </tbody>
       <!-- end body -->
       <!-- foot -->
-      <tfoot v-if="panels.length > 1">
+      <tfoot class="bg-base-200 text-base-content" v-if="panels.length > 1">
         <tr>
           <!-- <th v-if="userLoggedIn">
             <label>
