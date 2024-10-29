@@ -4,14 +4,6 @@ import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'EditPanelPage',
-  data() {
-    return {
-      //TODO à supprimer et insérés les vrais données directement dans le template
-      panel: {
-        name: 'PANNEAU 1',
-      },
-    }
-  },
   computed: {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
@@ -45,14 +37,15 @@ export default {
 </script>
 
 <template>
-  <div class="text-center">
-    <p class="text-2xl">Page de modification d'un panneau</p>
-  </div>
   <form class="flex flex-col mx-auto items-center" @submit.prevent="submitForm">
-    <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
-      <p class="text-lg font-bold">Modification de {{ panel.name }}</p>
+    <div
+      class="flex flex-col items-center card bg-base-100 w-2/3 shadow-xl gap-y-4 p-8"
+    >
+      <p class="text-lg font-bold">Modification du panneau</p>
 
-      <button type="submit" class="btn btn-primary">Modifier le panneau</button>
+      <button type="submit" class="btn btn-primary w-1/2">
+        Modifier le panneau
+      </button>
 
       <p v-if="errorMessage" class="text-red-500 text-md mt-2">
         {{ errorMessage }}

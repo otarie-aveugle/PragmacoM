@@ -71,7 +71,8 @@ const router = createRouter({
 
 router.beforeEach(async to => {
   const store = useUserStore()
-  const pages = [
+  const pages = ['panel_edit']
+  const pages_userLoggedIn = [
     'login',
     'recovery_password',
     'forgot_password',
@@ -80,7 +81,11 @@ router.beforeEach(async to => {
     'success_recover_password',
   ]
 
-  if (store.userLoggedIn && pages.includes(to.name)) {
+  if (store.userLoggedIn && pages_userLoggedIn.includes(to.name)) {
+    return { name: 'home' }
+  }
+
+  if (!store.userLoggedIn && pages.includes(to.name)) {
     return { name: 'home' }
   }
 })
