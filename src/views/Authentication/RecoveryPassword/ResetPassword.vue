@@ -73,7 +73,7 @@ export default {
     class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8"
     @submit.prevent="submitForm"
   >
-    <p class="text-lg font-bold">Réinitialisation du mot de passe</p>
+    <p class="text-xl font-bold">Réinitialisation du mot de passe</p>
 
     <label class="input input-bordered flex items-center gap-2">
       <svg

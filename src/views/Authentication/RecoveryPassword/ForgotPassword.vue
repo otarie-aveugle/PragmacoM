@@ -49,7 +49,7 @@ export default {
     class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8"
     @submit.prevent="submitForm"
   >
-    <p class="text-lg font-bold">Mot de passe oublié</p>
+    <p class="text-xl font-bold">Mot de passe oublié</p>
 
     <label class="input input-bordered flex items-center gap-2">
       <svg

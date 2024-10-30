@@ -1,11 +1,12 @@
 <script>
-import { mapWritableState, mapActions } from 'pinia'
+import { mapWritableState } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'EditPanelPage',
   data() {
     return {
+      //TODO ajouter la photo du panneau /regarder bookmars storage de techno back-end appwrite
       disponibility: false,
       disponibility_date: '2024-10-29', //TODO mettre la date du jour dynamiquement
       adresse: '',
@@ -20,11 +21,11 @@ export default {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
-    ...mapActions(useUserStore, ['login']),
     async submitForm() {
+      console.log(this.$data)
       this.errorMessage = ''
       if (this.isFormValid()) {
-        //TODO call méthods edit_panel from panelStore
+        //TODO call méthods create_panel from panelStore
         if (!this.errorMessage) {
           this.$router.push({ name: 'panels' })
         }
@@ -41,43 +42,41 @@ export default {
       }
     },
     isFormValid() {
-      false
-      //return if form is valid or not (true|false)
+      return (
+        this.textInputIsValid(this.adresse) &&
+        this.textInputIsValid(this.town) &&
+        this.textInputIsValid(this.postal_code) &&
+        this.textInputIsValid(this.format)
+      )
+    },
+    textInputIsValid(value_inputText) {
+      return value_inputText.length > 0
     },
   },
 }
 </script>
 
 <template>
-  <form class="flex flex-col mx-auto items-center" @submit.prevent="submitForm">
-    <div class="flex flex-col items-center gap-y-4">
-      <p class="text-lg font-bold">Ajout d'un panneau</p>
+  <form class="flex justify-center m-4" @submit.prevent="submitForm">
+    <div class="flex flex-col justify-center gap-y-4">
+      <p class="text-xl font-bold text-center">Ajout d'un panneau</p>
 
-      <!-- <div class="flex flex-row justify-around items-center gap-3"> -->
-      <!-- <div class="avatar">
-          <div class="h-40 w-40">
-            <img
-              src="/src/assets/images/Panneau1.jpg"
-              alt="Avatar Tailwind CSS Component"
-            />
-          </div>
-        </div> -->
-      <label class="form-control w-full max-w-xs">
-        <div class="label">
-          <span class="label-text">Photo du panneau</span>
-        </div>
+      <div class="flex flex-col gap-3">
+        <label class="label-text text-base">Photo du panneau</label>
         <input
           type="file"
           class="file-input file-input-primary w-full max-w-xs"
         />
-      </label>
-      <!-- </div> -->
+      </div>
 
       <!-- disponibility -->
-      <div class="form-control w-52">
-        <label class="label cursor-pointer">
-          <span v-if="disponibility" class="label-text">Disponible</span>
-          <span v-else class="label-text">Indisponible</span>
+      <label class="label-text text-base">Disponibilité du panneau</label>
+      <div class="form-control w-full">
+        <label class="label cursor-pointer flex flex-row justify-between p-0">
+          <span v-if="disponibility" class="label-text text-base"
+            >Disponible</span
+          >
+          <span v-else class="label-text text-base">Indisponible</span>
           <input
             type="checkbox"
             class="toggle toggle-primary"
@@ -88,7 +87,7 @@ export default {
 
       <!-- disponibility_date -->
       <!-- //TODO ajout de la gestion des dates now() pour la date actuel 'value' et pour le min voir avec charles -->
-      <label for="disponibility_date">Date de disponibilité:</label>
+      <label class="label-text text-base">Date de disponibilité</label>
       <input
         type="date"
         id="disponibility_date"
@@ -100,6 +99,7 @@ export default {
       />
 
       <!-- adresse -->
+      <label class="label-text text-base">Emplacement du panneau</label>
       <label class="input input-bordered flex items-center gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -187,55 +187,56 @@ export default {
       </label>
 
       <!-- position -->
-      <div class="flex flex-row gap-3">
-        <div class="form-control">
-          <label class="label cursor-pointer gap-2">
-            <span class="label-text">BR Gauche</span>
-            <input
-              type="radio"
-              name="radio-10"
-              class="radio checked:bg-primary"
-              checked="checked"
-              value="BR Gauche"
-              v-model="position"
-            />
-          </label>
-        </div>
-        <div class="form-control">
-          <label class="label cursor-pointer gap-2">
-            <span class="label-text">BR Droit</span>
-            <input
-              type="radio"
-              name="radio-10"
-              class="radio checked:bg-primary"
-              value="BR Droit"
-              v-model="position"
-            />
-          </label>
+      <div>
+        <label class="label-text text-base">Position du panneau</label>
+        <div class="flex flex-row items-center gap-3">
+          <div class="form-control">
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text">BR Gauche</span>
+              <input
+                type="radio"
+                name="radio-10"
+                class="radio checked:bg-primary"
+                checked="checked"
+                value="BR Gauche"
+                v-model="position"
+              />
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text">BR Droit</span>
+              <input
+                type="radio"
+                name="radio-10"
+                class="radio checked:bg-primary"
+                value="BR Droit"
+                v-model="position"
+              />
+            </label>
+          </div>
         </div>
       </div>
 
       <!-- format -->
-      <!-- class="h-4 w-4 opacity-70"  -->
+      <label class="label-text text-base">Format du panneau</label>
       <label class="input input-bordered flex items-center gap-2">
         <input
           type="format"
           class="placeholder-base-content/70"
-          placeholder="Format : 2mx2m"
+          placeholder="Format"
           v-model="format"
         />
       </label>
 
       <!-- observations -->
-      <label class="form-control">
-        <div class="label">
-          <span class="label-text">Observations</span>
-        </div>
+      <div class="flex flex-col gap-3">
+        <label class="label-text text-base">Observations</label>
         <textarea
           class="textarea textarea-bordered h-24 w-full"
           v-model="observations"
         ></textarea>
-      </label>
+      </div>
 
       <button type="submit" class="btn btn-primary w-1/2">
         Ajouter le panneau

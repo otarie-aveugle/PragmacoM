@@ -46,7 +46,7 @@ export default {
 <template>
   <form class="flex flex-col mx-auto items-center" @submit.prevent="submitForm">
     <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
-      <p class="text-lg font-bold">Se connecter</p>
+      <p class="text-xl font-bold">Se connecter</p>
 
       <label class="input input-bordered flex items-center gap-2">
         <svg

@@ -1,14 +1,14 @@
 <script>
-import { mapWritableState, mapActions } from 'pinia'
+import { mapWritableState } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'EditPanelPage',
+  //TODO ajout du préremplissage des données dans le formulaire en fonction de l'id du panneau
   computed: {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
-    ...mapActions(useUserStore, ['login']),
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
@@ -29,31 +29,215 @@ export default {
       }
     },
     isFormValid() {
-      false
-      //return if form is valid or not (true|false)
+      return (
+        this.textInputIsValid(this.adresse) &&
+        this.textInputIsValid(this.town) &&
+        this.textInputIsValid(this.postal_code) &&
+        this.textInputIsValid(this.format)
+      )
+    },
+    textInputIsValid(value_inputText) {
+      return value_inputText.length > 0
     },
   },
 }
 </script>
 
 <template>
-  <form class="flex flex-col mx-auto items-center" @submit.prevent="submitForm">
-    <div
-      class="flex flex-col items-center card bg-base-100 w-2/3 shadow-xl gap-y-4 p-8"
-    >
-      <p class="text-lg font-bold">Modification du panneau</p>
+  <form class="flex justify-center m-4" @submit.prevent="submitForm">
+    <div class="flex flex-col justify-center gap-y-4">
+      <p class="text-xl font-bold text-center">Modification d'un panneau</p>
 
-      <button type="submit" class="btn btn-primary w-1/2">
-        Modifier le panneau
-      </button>
+      <div class="flex flex-col gap-3">
+        <label class="label-text text-base">Photo du panneau</label>
+        <input
+          type="file"
+          class="file-input file-input-primary w-full max-w-xs"
+        />
+      </div>
+
+      <!-- disponibility -->
+      <label class="label-text text-base">Disponibilité du panneau</label>
+      <div class="form-control w-full">
+        <label class="label cursor-pointer flex flex-row justify-between p-0">
+          <span v-if="disponibility" class="label-text text-base"
+            >Disponible</span
+          >
+          <span v-else class="label-text text-base">Indisponible</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary"
+            v-model="disponibility"
+          />
+        </label>
+      </div>
+
+      <!-- disponibility_date -->
+      <!-- //TODO ajout de la gestion des dates now() pour la date actuel 'value' et pour le min voir avec charles -->
+      <label class="label-text text-base">Date de disponibilité</label>
+      <input
+        type="date"
+        id="disponibility_date"
+        name="trip-start"
+        value="2024-10-29"
+        min="2024-10-29"
+        class="bg-base-100"
+        v-model="disponibility_date"
+      />
+
+      <!-- adresse -->
+      <label class="label-text text-base">Emplacement du panneau</label>
+      <label class="input input-bordered flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="h-4 w-4 opacity-70"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+          />
+        </svg>
+        <input
+          type="adresse"
+          class="placeholder-base-content/70"
+          placeholder="Adresse"
+          v-model="adresse"
+        />
+      </label>
+
+      <!-- town -->
+      <label class="input input-bordered flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="h-4 w-4 opacity-70"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+          />
+        </svg>
+        <input
+          type="town"
+          class="placeholder-base-content/70"
+          placeholder="Ville"
+          v-model="town"
+        />
+      </label>
+
+      <!-- postal_code -->
+      <label class="input input-bordered flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="h-4 w-4 opacity-70"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+          />
+        </svg>
+        <input
+          type="postal_code"
+          class="placeholder-base-content/70"
+          placeholder="Code postale"
+          v-model="postal_code"
+        />
+      </label>
+
+      <!-- position -->
+      <div>
+        <label class="label-text text-base">Position du panneau</label>
+        <div class="flex flex-row items-center gap-3">
+          <div class="form-control">
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text">BR Gauche</span>
+              <input
+                type="radio"
+                name="radio-10"
+                class="radio checked:bg-primary"
+                checked="checked"
+                value="BR Gauche"
+                v-model="position"
+              />
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text">BR Droit</span>
+              <input
+                type="radio"
+                name="radio-10"
+                class="radio checked:bg-primary"
+                value="BR Droit"
+                v-model="position"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- format -->
+      <label class="label-text text-base">Format du panneau</label>
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          type="format"
+          class="placeholder-base-content/70"
+          placeholder="Format"
+          v-model="format"
+        />
+      </label>
+
+      <!-- observations -->
+      <div class="flex flex-col gap-3">
+        <label class="label-text text-base">Observations</label>
+        <textarea
+          class="textarea textarea-bordered h-24 w-full"
+          v-model="observations"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-row gap-3">
+        <button type="submit" class="btn btn-primary w-1/2">
+          Modifier le panneau
+        </button>
+        <!-- ajout du prevent submit suppression > afficher une modale de confirmation avec une description des conséquences iréversibles -->
+        <button type="submit" class="btn btn-error w-1/2">
+          Supprimer le panneau
+        </button>
+      </div>
 
       <p v-if="errorMessage" class="text-red-500 text-md mt-2">
         {{ errorMessage }}
       </p>
-
-      <div class="divider text-primary">
-        <RouterLink to="/panels">Liste des panneaux</RouterLink>
-      </div>
     </div>
   </form>
 </template>
