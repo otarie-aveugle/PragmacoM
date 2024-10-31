@@ -5,13 +5,30 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen">
-    <div class="flex justify-center mt-8">
-      <p class="text-2xl text-center">Page d'accueil</p>
+  <div class="flex min-h-screen items-start justify-center">
+    <div class="flex flex-col items-start justify-center w-1/2 p-8 mt-52">
+      <div>
+        <h1 class="text-7xl font-bold mb-12">
+          Un panneau, <br>
+          <span class="text-primary">1000</span> regards
+        </h1>
+        <p class="text-base text-gray-700 leading-relaxed">
+          Donec tincidunt ultricies dui, at tincidunt nisl porta eu.
+          Fusce nec ipsum dignissim, egestas nisl a, interdum dui.
+          Fusce urna erat, efficitur et lectus vitae, congue tincidunt augue.
+          Suspendisse venenatis vel elit sed ullamcorper. 
+          Donec vel semper risus, eu mollis lectus. 
+          Phasellus commodo lectus libero. Integer lorem enim, lobortis sed mi quis, suscipit vulputate nulla. 
+          Donec at vulputate metus, a varius purus. 
+        </p>
+        <RouterLink to="/carte-interactive">
+          <button class="btn btn-xs btn-primary sm:btn-sm md:btn-md lg:btn-lg mt-16">Carte Interactive</button>
+        </RouterLink>
+      </div>
     </div>
 
-    <div class="flex flex-1 items-center justify-end pr-8">
-      <div class="carousel w-[500px] h-[400px]">
+    <div class="flex flex-1 items-center justify-end pr-8 mr-5 mt-5">
+      <div class="carousel w-[1014px] h-[658px] rounded-lg">
         <div id="slide1" class="carousel-item relative w-full h-full">
           <img
             src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp"
