@@ -9,6 +9,12 @@ export default {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
+    deletePanel() {
+      //TODO call méthods delete_panel from panelStore
+      if (!this.errorMessage) {
+        this.$router.push({ name: 'panels' })
+      }
+    },
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
@@ -30,7 +36,7 @@ export default {
     },
     isFormValid() {
       return (
-        this.textInputIsValid(this.adresse) &&
+        this.textInputIsValid(this.address) &&
         this.textInputIsValid(this.town) &&
         this.textInputIsValid(this.postal_code) &&
         this.textInputIsValid(this.format)
@@ -85,7 +91,7 @@ export default {
         v-model="disponibility_date"
       />
 
-      <!-- adresse -->
+      <!-- address -->
       <label class="label-text text-base">Emplacement du panneau</label>
       <label class="input input-bordered flex items-center gap-2">
         <svg
@@ -108,10 +114,11 @@ export default {
           />
         </svg>
         <input
-          type="adresse"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Adresse"
-          v-model="adresse"
+          v-model="address"
+          required
         />
       </label>
 
@@ -137,10 +144,11 @@ export default {
           />
         </svg>
         <input
-          type="town"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Ville"
           v-model="town"
+          required
         />
       </label>
 
@@ -166,10 +174,11 @@ export default {
           />
         </svg>
         <input
-          type="postal_code"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Code postale"
           v-model="postal_code"
+          required
         />
       </label>
 
@@ -182,11 +191,12 @@ export default {
               <span class="label-text">BR Gauche</span>
               <input
                 type="radio"
-                name="radio-10"
+                name="position"
                 class="radio checked:bg-primary"
                 checked="checked"
                 value="BR Gauche"
                 v-model="position"
+                required
               />
             </label>
           </div>
@@ -195,7 +205,7 @@ export default {
               <span class="label-text">BR Droit</span>
               <input
                 type="radio"
-                name="radio-10"
+                name="position"
                 class="radio checked:bg-primary"
                 value="BR Droit"
                 v-model="position"
@@ -209,7 +219,7 @@ export default {
       <label class="label-text text-base">Format du panneau</label>
       <label class="input input-bordered flex items-center gap-2">
         <input
-          type="format"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Format"
           v-model="format"
@@ -229,10 +239,26 @@ export default {
         <button type="submit" class="btn btn-primary w-1/2">
           Modifier le panneau
         </button>
-        <!-- ajout du prevent submit suppression > afficher une modale de confirmation avec une description des conséquences iréversibles -->
-        <button type="submit" class="btn btn-error w-1/2">
+
+        <button class="btn btn-error w-1/2" onclick="my_modal_5.showModal()">
           Supprimer le panneau
         </button>
+        <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <h3 class="text-lg font-bold">
+              Voulez-vous vraiment supprimer ce panneau ?
+            </h3>
+            <p class="py-4">Attention, cette action est iréversible !</p>
+            <div class="modal-action">
+              <form method="dialog">
+                <button class="btn">Annuler</button>
+              </form>
+              <button class="btn btn-error ml-4" @click="deletePanel()">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </dialog>
       </div>
 
       <p v-if="errorMessage" class="text-red-500 text-md mt-2">

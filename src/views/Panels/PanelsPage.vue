@@ -12,7 +12,7 @@ export default {
           preview: '/src/assets/images/Panneau1.jpg',
           disponibility: true,
           disponibility_date: '09-10-2024',
-          adresse: '5 rue machin',
+          address: '5 rue machin',
           town: 'Metz',
           postal_code: '57000',
           position: 'gauche',
@@ -23,7 +23,7 @@ export default {
           preview: '/src/assets/images/Panneau2.jpg',
           disponibility: false,
           disponibility_date: '22-06-2025',
-          adresse: '7 rue machin',
+          address: '7 rue machin',
           town: 'Annecy',
           postal_code: '74000',
           position: 'gauche',
@@ -34,7 +34,7 @@ export default {
           preview: '/src/assets/images/Panneau3.jpg',
           disponibility: true,
           disponibility_date: '30-07-2024',
-          adresse: '2 rue machin',
+          address: '2 rue machin',
           town: 'Arles',
           postal_code: '13200',
           position: 'droite',
@@ -55,7 +55,11 @@ export default {
     <p class="text-2xl">Liste des panneaux</p>
   </div>
   <div class="overflow-x-auto mx-14">
-    <RouterLink to="/create_panel" class="btn btn-primary mb-4">
+    <RouterLink
+      to="/create_panel"
+      class="btn btn-primary mb-4"
+      v-if="userLoggedIn"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -97,6 +101,7 @@ export default {
       <!-- body -->
       <tbody>
         <!-- //TODO il faut gérer le cas ou l'on n'affiche pas les panneaux indisponible si l'on est pas connecté -->
+        <!-- //TODO + il faut aussi gérer le cas des ID de panneau pour les passer a la page modification pour ne pas supprimer /modifier le mauvais -->
         <tr v-for="(panel, key, index) in this.panels" v-bind:key="index">
           <!-- checkbox -->
           <!-- <td v-if="userLoggedIn">
@@ -132,8 +137,8 @@ export default {
           </td>
           <!-- disponibility_date -->
           <td>{{ panel.disponibility_date }}</td>
-          <!-- adresse -->
-          <td>{{ panel.adresse }}</td>
+          <!-- address -->
+          <td>{{ panel.address }}</td>
           <!-- town -->
           <td>{{ panel.town }}</td>
           <!-- postal_code -->

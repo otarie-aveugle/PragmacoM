@@ -1,6 +1,7 @@
 <script>
-import { mapWritableState } from 'pinia'
+import { mapWritableState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'EditPanelPage',
@@ -9,7 +10,7 @@ export default {
       //TODO ajouter la photo du panneau /regarder bookmars storage de techno back-end appwrite
       disponibility: false,
       disponibility_date: '2024-10-29', //TODO mettre la date du jour dynamiquement
-      adresse: '',
+      address: '',
       town: '',
       postal_code: '',
       position: 'BR Gauche',
@@ -21,11 +22,21 @@ export default {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
+    ...mapActions(usePanelStore, ['createPanel']),
     async submitForm() {
-      console.log(this.$data)
       this.errorMessage = ''
       if (this.isFormValid()) {
-        //TODO call méthods create_panel from panelStore
+        const document = {
+          disponibility: this.disponibility,
+          disponibility_date: this.disponibility_date,
+          address: this.address,
+          town: this.town,
+          postal_code: this.postal_code,
+          position: this.position,
+          format: this.format,
+          observations: this.observations,
+        }
+        this.createPanel(document)
         if (!this.errorMessage) {
           this.$router.push({ name: 'panels' })
         }
@@ -43,7 +54,7 @@ export default {
     },
     isFormValid() {
       return (
-        this.textInputIsValid(this.adresse) &&
+        this.textInputIsValid(this.address) &&
         this.textInputIsValid(this.town) &&
         this.textInputIsValid(this.postal_code) &&
         this.textInputIsValid(this.format)
@@ -98,7 +109,7 @@ export default {
         v-model="disponibility_date"
       />
 
-      <!-- adresse -->
+      <!-- address -->
       <label class="label-text text-base">Emplacement du panneau</label>
       <label class="input input-bordered flex items-center gap-2">
         <svg
@@ -121,10 +132,11 @@ export default {
           />
         </svg>
         <input
-          type="adresse"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Adresse"
-          v-model="adresse"
+          v-model="address"
+          required
         />
       </label>
 
@@ -150,10 +162,11 @@ export default {
           />
         </svg>
         <input
-          type="town"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Ville"
           v-model="town"
+          required
         />
       </label>
 
@@ -179,10 +192,11 @@ export default {
           />
         </svg>
         <input
-          type="postal_code"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Code postale"
           v-model="postal_code"
+          required
         />
       </label>
 
@@ -195,11 +209,12 @@ export default {
               <span class="label-text">BR Gauche</span>
               <input
                 type="radio"
-                name="radio-10"
+                name="position"
                 class="radio checked:bg-primary"
                 checked="checked"
                 value="BR Gauche"
                 v-model="position"
+                required
               />
             </label>
           </div>
@@ -208,7 +223,7 @@ export default {
               <span class="label-text">BR Droit</span>
               <input
                 type="radio"
-                name="radio-10"
+                name="position"
                 class="radio checked:bg-primary"
                 value="BR Droit"
                 v-model="position"
@@ -222,7 +237,7 @@ export default {
       <label class="label-text text-base">Format du panneau</label>
       <label class="input input-bordered flex items-center gap-2">
         <input
-          type="format"
+          type="text"
           class="placeholder-base-content/70"
           placeholder="Format"
           v-model="format"
