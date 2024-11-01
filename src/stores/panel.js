@@ -7,16 +7,8 @@ const COLLECTION_ID = '67248edd003126d4a0e0'
 export const usePanelStore = defineStore('panel', {
   state: () => ({
     panels: localStorage.getItem('panels'),
-    currentPanel: {},
   }),
   actions: {
-    getPanelById(documentId) {
-      const total = this.panels.total
-      const documents = this.panels.documents
-      for (let i = 0; i < total; i++) {
-        if (documents[i].$id === documentId) this.currentPanel = documents[i]
-      }
-    },
     async createPanel(document) {
       await databases.createDocument(
         DATABASE_ID,
@@ -24,6 +16,7 @@ export const usePanelStore = defineStore('panel', {
         ID.unique(),
         document,
       )
+      this.getPanels()
     },
     async getPanels() {
       const response = await databases.listDocuments(
@@ -34,8 +27,26 @@ export const usePanelStore = defineStore('panel', {
       this.panels = response
       localStorage.setItem('panels', response)
     },
-    async deletePanel(DOCUMENT_ID) {
-      await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, DOCUMENT_ID)
+    async getPanelById(documentId) {
+      const response = await databases.getDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        documentId,
+      )
+      return response
+    },
+    async updatePanel(documentId, updatedData) {
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        documentId,
+        updatedData,
+      )
+      this.getPanels()
+    },
+    async deletePanel(documentId) {
+      await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, documentId)
+      this.getPanels()
     },
   },
 })

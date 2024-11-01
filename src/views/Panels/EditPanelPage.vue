@@ -8,23 +8,30 @@ export default {
   data() {
     return {
       panel_id: this.$route.params.id,
-      //TODO obtenir le document à l'aide de l'id transmis via l'url et préremplir les inputs avec
-      // disponibility: this.currentPanel.disponibility,
-      // disponibility_date: this.currentPanel.disponibility_date,
-      // address: this.currentPanel.address,
-      // town: this.currentPanel.town,
-      // postal_code: this.currentPanel.postal_code,
-      // position: this.currentPanel.position,
-      // format: this.currentPanel.format,
-      // observations: this.currentPanel.observations,
+      disponibility: false,
+      disponibility_date: '',
+      address: '',
+      town: '',
+      postal_code: '',
+      position: '',
+      format: '',
+      observations: '',
     }
   },
   computed: {
     ...mapWritableState(useUserStore, ['errorMessage']),
     ...mapState(usePanelStore, ['panels', 'currentPanel']),
   },
-  created() {
-    this.getPanelById(this.panel_id)
+  async created() {
+    const panel = await this.getPanelById(this.panel_id)
+    this.disponibility = panel.disponibility
+    this.disponibility_date = panel.disponibility_date
+    this.address = panel.address
+    this.town = panel.town
+    this.postal_code = panel.postal_code
+    this.position = panel.position
+    this.format = panel.format
+    this.observations = panel.observations
   },
   methods: {
     ...mapActions(usePanelStore, ['getPanelById', 'deletePanel']),
@@ -38,6 +45,17 @@ export default {
       this.errorMessage = ''
       if (this.isFormValid()) {
         //TODO call méthods edit_panel from panelStore
+        const document = {
+          disponibility: this.disponibility,
+          disponibility_date: this.disponibility_date,
+          address: this.address,
+          town: this.town,
+          postal_code: this.postal_code,
+          position: this.position,
+          format: this.format,
+          observations: this.observations,
+        }
+        this.updatePanel(this.panel_id, document)
         if (!this.errorMessage) {
           this.$router.push({ name: 'panels' })
         }
@@ -54,12 +72,13 @@ export default {
       }
     },
     isFormValid() {
-      return (
-        this.textInputIsValid(this.address) &&
-        this.textInputIsValid(this.town) &&
-        this.textInputIsValid(this.postal_code) &&
-        this.textInputIsValid(this.format)
-      )
+      false
+      // return (
+      //   this.textInputIsValid(this.address) &&
+      //   this.textInputIsValid(this.town) &&
+      //   this.textInputIsValid(this.postal_code) &&
+      //   this.textInputIsValid(this.format)
+      // )
     },
     textInputIsValid(value_inputText) {
       return value_inputText.length > 0
