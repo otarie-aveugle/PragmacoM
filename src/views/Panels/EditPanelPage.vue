@@ -34,7 +34,11 @@ export default {
     this.observations = panel.observations
   },
   methods: {
-    ...mapActions(usePanelStore, ['getPanelById', 'deletePanel']),
+    ...mapActions(usePanelStore, [
+      'getPanelById',
+      'updatePanel',
+      'deletePanel',
+    ]),
     submitDelete() {
       this.deletePanel(this.panel_id)
       if (!this.errorMessage) {
@@ -44,7 +48,6 @@ export default {
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
-        //TODO call méthods edit_panel from panelStore
         const document = {
           disponibility: this.disponibility,
           disponibility_date: this.disponibility_date,
@@ -72,13 +75,12 @@ export default {
       }
     },
     isFormValid() {
-      false
-      // return (
-      //   this.textInputIsValid(this.address) &&
-      //   this.textInputIsValid(this.town) &&
-      //   this.textInputIsValid(this.postal_code) &&
-      //   this.textInputIsValid(this.format)
-      // )
+      return (
+        this.textInputIsValid(this.address) &&
+        this.textInputIsValid(this.town) &&
+        this.textInputIsValid(this.postal_code) &&
+        this.textInputIsValid(this.format)
+      )
     },
     textInputIsValid(value_inputText) {
       return value_inputText.length > 0
