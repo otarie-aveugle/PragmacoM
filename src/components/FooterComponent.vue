@@ -33,7 +33,10 @@ export default {
             </RouterLink>
           </li>
           <li>
-            <RouterLink to="/mentions_légales" class="link link-hover">
+            <RouterLink
+              to="/views/LegalNotices"
+              class="hover:underline duration-300"
+            >
               Mentions légales
             </RouterLink>
           </li>
