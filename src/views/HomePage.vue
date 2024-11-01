@@ -5,13 +5,11 @@ export default {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-start justify-center">
+  <div class="flex items-start justify-center">
     <div class="flex flex-col items-start justify-center w-1/2 p-8 mt-52">
       <div>
-        <h1 class="text-7xl font-bold mb-12">
-          Un panneau, <br>
-          <span class="text-primary">1000</span> regards
-        </h1>
+        <h1 class="text-7xl font-bold mb-12"> Un panneau, <br> <span class="text-primary">1000</span> regards </h1>
+
         <p class="text-base text-gray-700 leading-relaxed">
           Donec tincidunt ultricies dui, at tincidunt nisl porta eu.
           Fusce nec ipsum dignissim, egestas nisl a, interdum dui.
@@ -21,8 +19,11 @@ export default {
           Phasellus commodo lectus libero. Integer lorem enim, lobortis sed mi quis, suscipit vulputate nulla. 
           Donec at vulputate metus, a varius purus. 
         </p>
+
         <RouterLink to="/carte-interactive">
-          <button class="btn btn-xs btn-primary sm:btn-sm md:btn-md lg:btn-lg mt-16">Carte Interactive</button>
+          <button class="btn btn-xs btn-primary sm:btn-sm md:btn-md lg:btn-lg mt-16">Carte Interactive <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+          </button>
         </RouterLink>
       </div>
     </div>
@@ -68,6 +69,19 @@ export default {
       </div>
     </div>
   </div>
+
+  <div class="flex items-start">
+    <div class="flex flex-col items-start w-full p-8">
+      <h1 class="text-7xl font-bold mb-12"> Nos <span class="text-primary">Faces</span> Disponible </h1>
+      <div class="flex justify-between w-full mt-8 space-x-4">
+        <img src="https://via.placeholder.com/342x257" alt="Image 1" class="h-[257px] w-[342px] object-cover rounded-lg shadow-lg">
+        <img src="https://via.placeholder.com/342x257" alt="Image 2" class="h-[257px] w-[342px] object-cover rounded-lg shadow-lg">
+        <img src="https://via.placeholder.com/342x257" alt="Image 3" class="h-[257px] w-[342px] object-cover rounded-lg shadow-lg">
+        <img src="https://via.placeholder.com/342x257" alt="Image 4" class="h-[257px] w-[342px] object-cover rounded-lg shadow-lg">
+      </div>
+    </div>
+  </div>
+
 </template>
 
 
