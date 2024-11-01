@@ -11,6 +11,7 @@ import PanelsPage from '@/views/Panels/PanelsPage.vue'
 import CreatePanelPage from '@/views/Panels/CreatePanelPage.vue'
 import EditPanelPage from '@/views/Panels/EditPanelPage.vue'
 import InteractiveMap from '@/views/InteractiveMap.vue'
+import NotFoundPage from '@/views/NotFoundPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
           name: 'success_recover_password',
           component: SuccessRecoveryPassword,
         },
+        {
+          path: '/:pathMatch(.*)',
+          name: 'NotFound',
+          component: NotFoundPage,
+        }
       ],
     },
   ],
