@@ -31,7 +31,7 @@ const router = createRouter({
       component: CreatePanelPage,
     },
     {
-      path: '/edit_panel',
+      path: '/edit_panel/:id',
       name: 'edit_panel',
       component: EditPanelPage,
     },

@@ -1,16 +1,35 @@
 <script>
-import { mapWritableState } from 'pinia'
+import { mapWritableState, mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'EditPanelPage',
-  //TODO ajout du préremplissage des données dans le formulaire en fonction de l'id du panneau
+  data() {
+    return {
+      panel_id: this.$route.params.id,
+      //TODO obtenir le document à l'aide de l'id transmis via l'url et préremplir les inputs avec
+      // disponibility: this.currentPanel.disponibility,
+      // disponibility_date: this.currentPanel.disponibility_date,
+      // address: this.currentPanel.address,
+      // town: this.currentPanel.town,
+      // postal_code: this.currentPanel.postal_code,
+      // position: this.currentPanel.position,
+      // format: this.currentPanel.format,
+      // observations: this.currentPanel.observations,
+    }
+  },
   computed: {
     ...mapWritableState(useUserStore, ['errorMessage']),
+    ...mapState(usePanelStore, ['panels', 'currentPanel']),
+  },
+  created() {
+    this.getPanelById(this.panel_id)
   },
   methods: {
-    deletePanel() {
-      //TODO call méthods delete_panel from panelStore
+    ...mapActions(usePanelStore, ['getPanelById', 'deletePanel']),
+    submitDelete() {
+      this.deletePanel(this.panel_id)
       if (!this.errorMessage) {
         this.$router.push({ name: 'panels' })
       }
@@ -85,7 +104,6 @@ export default {
         type="date"
         id="disponibility_date"
         name="trip-start"
-        value="2024-10-29"
         min="2024-10-29"
         class="bg-base-100"
         v-model="disponibility_date"
@@ -240,7 +258,11 @@ export default {
           Modifier le panneau
         </button>
 
-        <button class="btn btn-error w-1/2" onclick="my_modal_5.showModal()">
+        <button
+          type="button"
+          class="btn btn-error w-1/2"
+          onclick="my_modal_5.showModal()"
+        >
           Supprimer le panneau
         </button>
         <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
@@ -253,7 +275,7 @@ export default {
               <form method="dialog">
                 <button class="btn">Annuler</button>
               </form>
-              <button class="btn btn-error ml-4" @click="deletePanel()">
+              <button class="btn btn-error ml-4" @click="submitDelete()">
                 Supprimer
               </button>
             </div>

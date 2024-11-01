@@ -1,51 +1,19 @@
 <script>
-import { mapState } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'PanelsPage',
-  data() {
-    return {
-      //TODO remplacer les fausses données par des données provenant d'un store usePanelStore qui récupère les données de la base de donnée appwrite
-      panels: [
-        {
-          preview: '/src/assets/images/Panneau1.jpg',
-          disponibility: true,
-          disponibility_date: '09-10-2024',
-          address: '5 rue machin',
-          town: 'Metz',
-          postal_code: '57000',
-          position: 'gauche',
-          format: '2mx2m',
-          observations: 'blablabla',
-        },
-        {
-          preview: '/src/assets/images/Panneau2.jpg',
-          disponibility: false,
-          disponibility_date: '22-06-2025',
-          address: '7 rue machin',
-          town: 'Annecy',
-          postal_code: '74000',
-          position: 'gauche',
-          format: '4mx2m',
-          observations: 'blablabla',
-        },
-        {
-          preview: '/src/assets/images/Panneau3.jpg',
-          disponibility: true,
-          disponibility_date: '30-07-2024',
-          address: '2 rue machin',
-          town: 'Arles',
-          postal_code: '13200',
-          position: 'droite',
-          format: '5mx7m',
-          observations: 'blablabla',
-        },
-      ],
-    }
+  methods: {
+    ...mapActions(usePanelStore, ['getPanels']),
+  },
+  created() {
+    this.getPanels()
   },
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
+    ...mapState(usePanelStore, ['panels']),
   },
 }
 </script>
@@ -76,7 +44,7 @@ export default {
       </svg>
       Ajouter un panneau
     </RouterLink>
-    <table class="table">
+    <table class="table" v-if="panels.total > 0">
       <!-- head -->
       <thead class="bg-base-200 text-base-content">
         <tr>
@@ -101,8 +69,7 @@ export default {
       <!-- body -->
       <tbody>
         <!-- //TODO il faut gérer le cas ou l'on n'affiche pas les panneaux indisponible si l'on est pas connecté -->
-        <!-- //TODO + il faut aussi gérer le cas des ID de panneau pour les passer a la page modification pour ne pas supprimer /modifier le mauvais -->
-        <tr v-for="(panel, key, index) in this.panels" v-bind:key="index">
+        <tr v-for="(panel, key, index) in panels.documents" v-bind:key="index">
           <!-- checkbox -->
           <!-- <td v-if="userLoggedIn">
             <label>
@@ -111,7 +78,7 @@ export default {
           </td> -->
           <!-- preview -->
           <td>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3" v-if="panel.preview">
               <div class="avatar">
                 <div class="h-20 w-20">
                   <img
@@ -121,6 +88,7 @@ export default {
                 </div>
               </div>
             </div>
+            <div v-else></div>
           </td>
           <!-- disponibility -->
           <td v-if="panel.disponibility">
@@ -148,10 +116,15 @@ export default {
           <!-- format -->
           <td>{{ panel.format }}</td>
           <!-- observations -->
-          <td>{{ panel.observations }}</td>
+          <td v-bind:title="panel.observations">
+            {{ $filters.truncateText(panel.observations, 32) }}
+          </td>
           <!-- actions -->
           <td v-if="userLoggedIn">
-            <RouterLink to="/edit_panel" class="link link-hover">
+            <RouterLink
+              v-bind:to="/edit_panel/ + `${panel.$id}`"
+              class="link link-hover"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -172,7 +145,7 @@ export default {
       </tbody>
       <!-- end body -->
       <!-- foot -->
-      <tfoot class="bg-base-200 text-base-content" v-if="panels.length > 1">
+      <tfoot class="bg-base-200 text-base-content" v-if="panels.total > 1">
         <tr>
           <!-- <th v-if="userLoggedIn">
             <label>
@@ -193,72 +166,8 @@ export default {
       </tfoot>
       <!-- end foot -->
     </table>
+    <h3 v-else>La liste des panneaux est vide</h3>
   </div>
 </template>
 
 <style></style>
-
-<!-- <td>
-  <label>
-    <input type="checkbox" class="checkbox" />
-  </label>
-</td>
-<td>
-  <div class="flex items-center gap-3">
-    <div class="avatar">
-      <div class="h-20 w-20">
-        <img
-          src="/src/assets/images/Panneau1.jpg"
-          alt="Avatar Tailwind CSS Component"
-        />
-      </div>
-    </div>
-  </div>
-</td>
-<td>
-  <span
-    class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-500 dark:text-white"
-    >Disponible
-  </span>
-  <span
-    class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-500 dark:text-white"
-    >Indisponible
-  </span>
-</td>
-<td>Date de disponibilité</td>
-<td>Adresse</td>
-<td>Ville</td>
-<td>Code postale</td>
-<td>Position</td>
-<td>Format</td>
-<td>Observations</td>
-<td>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="1.5"
-    stroke="currentColor"
-    class="size-6"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-    />
-  </svg>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="1.5"
-    stroke="currentColor"
-    class="size-6"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-    />
-  </svg>
-</td> -->
