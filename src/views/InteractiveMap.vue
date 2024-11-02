@@ -43,8 +43,7 @@
 
   <!-- carte de test -->
   <iframe
-    width="100%"
-    height="300px"
+    wclass="m-6 flex justify-center"
     frameborder="0"
     allowfullscreen
     allow="geolocation"
