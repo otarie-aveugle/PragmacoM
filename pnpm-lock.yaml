@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@vue-leaflet/vue-leaflet':
+        specifier: ^0.10.1
+        version: 0.10.1(@types/leaflet@1.9.14)(leaflet@1.9.4)(typescript@5.6.3)
       appwrite:
         specifier: ^16.0.2
         version: 16.0.2
@@ -38,9 +41,6 @@ importers:
       vue-router:
         specifier: ^4.4.5
         version: 4.4.5(vue@3.5.12(typescript@5.6.3))
-      vue2-leaflet:
-        specifier: ^2.7.1
-        version: 2.7.1(@types/leaflet@1.9.14)(leaflet@1.9.4)(vue@3.5.12(typescript@5.6.3))
     devDependencies:
       '@eslint/js':
         specifier: ^9.12.0
@@ -509,6 +509,15 @@ packages:
 
   '@vitest/utils@2.1.3':
     resolution: {integrity: sha512-xpiVfDSg1RrYT0tX6czgerkpcKFmFOF/gCr30+Mve5V2kewCy4Prn1/NDMSRwaSmT7PRaOF83wu+bEtsY1wrvA==}
+
+  '@vue-leaflet/vue-leaflet@0.10.1':
+    resolution: {integrity: sha512-RNEDk8TbnwrJl8ujdbKgZRFygLCxd0aBcWLQ05q/pGv4+d0jamE3KXQgQBqGAteE1mbQsk3xoNcqqUgaIGfWVg==}
+    peerDependencies:
+      '@types/leaflet': ^1.5.7
+      leaflet: ^1.6.0
+    peerDependenciesMeta:
+      '@types/leaflet':
+        optional: true
 
   '@vue/compiler-core@3.5.12':
     resolution: {integrity: sha512-ISyBTRMmMYagUxhcpyEH0hpXRd/KqDU4ymofPgl2XAkY9ZhQ+h0ovEZJIiPop13UmR/54oA2cgMDjgroRelaEw==}
@@ -1604,13 +1613,6 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  vue2-leaflet@2.7.1:
-    resolution: {integrity: sha512-K7HOlzRhjt3Z7+IvTqEavIBRbmCwSZSCVUlz9u4Rc+3xGCLsHKz4TAL4diAmfHElCQdPPVdZdJk8wPUt2fu6WQ==}
-    peerDependencies:
-      '@types/leaflet': ^1.5.7
-      leaflet: ^1.3.4
-      vue: ^2.5.17
-
   vue@3.5.12:
     resolution: {integrity: sha512-CLVZtXtn2ItBIi/zHZ0Sg1Xkb7+PU32bJJ8Bmy7ts3jxXTcbfsEfBivFYYWz1Hur+lalqGAh65Coin0r+HRUfg==}
     peerDependencies:
@@ -1937,13 +1939,15 @@ snapshots:
 
   '@types/estree@1.0.6': {}
 
-  '@types/geojson@7946.0.14': {}
+  '@types/geojson@7946.0.14':
+    optional: true
 
   '@types/json-schema@7.0.15': {}
 
   '@types/leaflet@1.9.14':
     dependencies:
       '@types/geojson': 7946.0.14
+    optional: true
 
   '@typescript-eslint/scope-manager@8.10.0':
     dependencies:
@@ -2035,6 +2039,15 @@ snapshots:
       '@vitest/pretty-format': 2.1.3
       loupe: 3.1.2
       tinyrainbow: 1.2.0
+
+  '@vue-leaflet/vue-leaflet@0.10.1(@types/leaflet@1.9.14)(leaflet@1.9.4)(typescript@5.6.3)':
+    dependencies:
+      leaflet: 1.9.4
+      vue: 3.5.12(typescript@5.6.3)
+    optionalDependencies:
+      '@types/leaflet': 1.9.14
+    transitivePeerDependencies:
+      - typescript
 
   '@vue/compiler-core@3.5.12':
     dependencies:
@@ -3156,12 +3169,6 @@ snapshots:
   vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
-      vue: 3.5.12(typescript@5.6.3)
-
-  vue2-leaflet@2.7.1(@types/leaflet@1.9.14)(leaflet@1.9.4)(vue@3.5.12(typescript@5.6.3)):
-    dependencies:
-      '@types/leaflet': 1.9.14
-      leaflet: 1.9.4
       vue: 3.5.12(typescript@5.6.3)
 
   vue@3.5.12(typescript@5.6.3):
