@@ -7,6 +7,7 @@ import ForgotPassword from '@/views/Authentication/RecoveryPassword/ForgotPasswo
 import ResetLink from '@/views/Authentication/RecoveryPassword/ResetLink.vue'
 import ResetPassword from '@/views/Authentication/RecoveryPassword/ResetPassword.vue'
 import SuccessRecoveryPassword from '@/views/Authentication/RecoveryPassword/SuccessRecoveryPassword.vue'
+import InteractiveMap from '@/views/InteractiveMap.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginPage,
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: InteractiveMap,
     },
     {
       path: '/recovery_password',

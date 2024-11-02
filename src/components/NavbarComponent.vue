@@ -23,6 +23,9 @@ export default {
 
     <div class="navbar-end">
       <ul class="menu menu-horizontal px-1">
+        <li>
+          <RouterLink to="/map">Carte intéractive</RouterLink>
+        </li>
         <li v-if="!userLoggedIn" class="mx-2">
           <RouterLink to="/login">Connexion</RouterLink>
         </li>
