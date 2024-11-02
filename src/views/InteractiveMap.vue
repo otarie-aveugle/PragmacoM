@@ -1,9 +1,9 @@
 <script setup>
 import 'leaflet/dist/leaflet.css'
-import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
+import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import { ref } from 'vue'
 
-// import arcades from '@/arcade.json'
+import arcades from '@/arcade.json'
 
 let zoom = ref(6)
 let center = ref([38, 139.69])
@@ -13,7 +13,7 @@ let center = ref([38, 139.69])
   <div class="text-center">
     <p class="text-2xl">Carte intéractive</p>
   </div>
-  <main>
+  <main class="m-6 flex justify-center">
     <l-map
       ref="map"
       v-model:zoom="zoom"
@@ -25,6 +25,11 @@ let center = ref([38, 139.69])
         layer-type="base"
         name="Stadia Maps Basemap"
       ></l-tile-layer>
+      <l-marker
+        v-for="(arcade, index) in arcades.features"
+        :key="index"
+        :lat-lng="arcade.geometry.coordinates.reverse()"
+      ></l-marker>
     </l-map>
   </main>
 </template>
@@ -37,7 +42,7 @@ body {
 }
 
 main {
-  height: 100vh;
-  width: 100vw;
+  height: 98vh;
+  width: 96vw;
 }
 </style>
