@@ -18,6 +18,7 @@ export const usePanelStore = defineStore('panel', {
       )
       this.getPanels()
     },
+    //TODO si on est pas connecté on ne peut pas récupérer la liste des panneaux
     async getPanels() {
       const response = await databases.listDocuments(
         DATABASE_ID,
