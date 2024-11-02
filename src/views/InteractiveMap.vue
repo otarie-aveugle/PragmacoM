@@ -43,11 +43,12 @@
 
   <!-- carte de test -->
   <iframe
-    class="m-6 flex justify-center"
+    width="100%"
+    height="300px"
     frameborder="0"
     allowfullscreen
     allow="geolocation"
-    src="https://umap.openstreetmap.fr/fr/map/test-carte-interactive_1133743?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true"
+    src="//umap.openstreetmap.fr/fr/map/test-carte-interactive_1133743?scaleControl=true&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=false&searchControl=true&tilelayersControl=true&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=true&locateControl=true&measureControl=true&editinosmControl=false&starControl=false"
   ></iframe>
 
   <!-- Solution simple et rapide d'intégration de la carte d'origine de la localisation des panneaux avec possibilité d'ajout de lien et de photo dans les popups voir: https://docs.framasoft.org/fr/umap/5-infobulles-multimedia.html -->
