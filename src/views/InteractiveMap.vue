@@ -35,14 +35,8 @@ let center = ref([38, 139.69])
 </template>
 
 <style>
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
 main {
-  height: 98vh;
-  width: 96vw;
+  height: 97vh;
+  width: 97vw;
 }
 </style>
