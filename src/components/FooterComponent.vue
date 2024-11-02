@@ -5,8 +5,10 @@ export default {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
-    <main class="flex-grow"></main>
+  <div class=" flex flex-col">
+    <main class="flex-grow">
+
+    </main>
 
     <footer
       class="w-full bg-neutral text-base-100 py-6 flex flex-col md:flex-row md:justify-between items-start md:items-center space-y-6 md:space-y-0"
@@ -28,9 +30,7 @@ export default {
             <a href="mailto:cpragmacom@aol.com">cpragmacom@aol.com</a>
           </li>
           <li>
-            <RouterLink to="/contact" class="link link-hover">
-              Contacts
-            </RouterLink>
+            <RouterLink to="/contact" class="hover:underline transition-colors duration-300"> Contacts </RouterLink>
           </li>
           <li>
             <RouterLink to="/Legal_notices" class="hover:underline duration-300"> Mentions légales </RouterLink>
