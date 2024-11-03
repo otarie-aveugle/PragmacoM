@@ -10,7 +10,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto items-center">
+  <div class="flex-grow mx-auto">
     <!-- <StepsComponent currentStep="one"/> -->
 
     <RouterView v-slot="{ Component }">
