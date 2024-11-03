@@ -14,34 +14,37 @@ export default {
 </script>
 
 <template>
-  <div class="navbar bg-base-100 text-base-100-content mb-6 drop-shadow">
+  <div class="mb-6 p-6 navbar bg-base-100 text-base-100-content drop-shadow">
     <div class="navbar-start mx-4">
       <RouterLink to="/"
         ><img src="../assets/logo/PragamacoM.png" class="min-h-10 h-14"
       /></RouterLink>
     </div>
-    <div class="navbar-end">
-      <ul class="menu menu-horizontal px-1">
-        <li class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow">
-          <RouterLink to="/map">Carte intéractive</RouterLink>
-        </li>
-        <li
-          class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow"
-        >
-          <RouterLink to="/panels">Panneaux</RouterLink>
-        </li>
-        <li
+    <div class="navbar-end mr-4">
+      <ul class="menu menu-vertical md:menu-horizontal md:gap-x-6">
+        <RouterLink
+          to="/map"
+          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
+          ><li class="text-lg p-2">Carte intéractive</li>
+        </RouterLink>
+        <RouterLink
+          to="/panels"
+          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
+          ><li class="text-lg p-2">Panneaux</li>
+        </RouterLink>
+        <RouterLink
           v-if="!userLoggedIn"
-          class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow"
-        >
-          <RouterLink to="/login">Connexion</RouterLink>
-        </li>
-        <li
+          to="/login"
+          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
+          ><li class="text-lg p-2">Connexion</li>
+        </RouterLink>
+        <RouterLink
           v-else
-          class="mx-2 rounded-md hover:bg-primary hover:text-white hover:shadow"
-        >
-          <RouterLink to="/" @click="logout">Déconnexion</RouterLink>
-        </li>
+          to="/"
+          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
+          @click="logout"
+          ><li class="text-lg p-2">Déconnexion</li>
+        </RouterLink>
       </ul>
     </div>
   </div>

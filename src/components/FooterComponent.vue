@@ -5,40 +5,32 @@ export default {
 </script>
 
 <template>
-  <div class=" flex flex-col">
-    <main class="flex-grow">
+  <footer
+    class="mt-6 p-6 flex flex-col bg-neutral text-base-100 text-center md:flex-row md:justify-between md:items-center"
+  >
+    <div class="mx-4 text-left">
+      <ul class="menu menu-vertical">
+        <li class="text-lg">PragmacoM</li>
+        <li class="text-lg">43 RUE DU MOULIN D AULINE</li>
+        <li class="text-lg">78720 SENLISSE</li>
+        <li class="text-lg">France</li>
+      </ul>
+    </div>
 
-    </main>
-
-    <footer
-      class="w-full bg-neutral text-base-100 py-6 flex flex-col md:flex-row md:justify-between items-start md:items-center space-y-6 md:space-y-0"
-    >
-      <div class="mx-4 text-left">
-        <p>
-          PragmacoM<br />
-          43 RUE DU MOULIN D AULINE<br />
-          78720 SENLISSE<br />
-          France<br />
-        </p>
-      </div>
-
-      <div class="mx-4">
-        <ul
-          class="menu menu-vertical md:menu-horizontal space-y-2 md:space-y-0 md:space-x-4"
-        >
-          <li class="link link-hover">
-            <a href="mailto:cpragmacom@aol.com">cpragmacom@aol.com</a>
-          </li>
-          <li>
-            <RouterLink to="/contact" class="hover:underline transition-colors duration-300"> Contacts </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/Legal_notices" class="hover:underline duration-300"> Mentions légales </RouterLink>
-          </li>
-        </ul>
-      </div>
-    </footer>
-  </div>
+    <div class="mx-4 text-left">
+      <ul class="menu menu-vertical md:menu-horizontal md:gap-x-6">
+        <!-- <li href="mailto:cpragmacom@aol.com" class="link link-hover text-lg">
+          cpragmacom@aol.com
+        </li> -->
+        <RouterLink to="/contact" class="link link-hover text-lg"
+          ><li>Contact</li>
+        </RouterLink>
+        <RouterLink to="/legal_notices" class="link link-hover text-lg">
+          <li>Mentions légales</li>
+        </RouterLink>
+      </ul>
+    </div>
+  </footer>
 </template>
 
 <style></style>

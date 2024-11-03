@@ -14,7 +14,7 @@
 <!-- si un component ne fonctionne pas, vérifier l'import ! -->
 <template>
   <div class="text-center">
-    <p class="text-2xl">Carte intéractive</p>
+    <p class="text-3xl mb-6">Carte intéractive</p>
   </div>
   <!-- <main class="m-6 flex justify-center">
     <l-map
@@ -42,13 +42,15 @@
   </main> -->
 
   <!-- carte de test -->
-  <iframe
-    class="m-6 flex justify-center"
-    frameborder="0"
-    allowfullscreen
-    allow="geolocation"
-    src="//umap.openstreetmap.fr/fr/map/test-carte-interactive_1133743?scaleControl=true&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=false&searchControl=true&tilelayersControl=true&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=true&locateControl=true&measureControl=true&editinosmControl=false&starControl=false"
-  ></iframe>
+  <div class="flex justify-center items-center mx-4">
+    <iframe
+      class="w-full h-[calc(100vh-20px)]"
+      frameborder="0"
+      allowfullscreen
+      allow="geolocation"
+      src="//umap.openstreetmap.fr/fr/map/test-carte-interactive_1133743?scaleControl=true&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=false&searchControl=true&tilelayersControl=true&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=true&locateControl=true&measureControl=true&editinosmControl=false&starControl=false"
+    ></iframe>
+  </div>
 
   <!-- Solution simple et rapide d'intégration de la carte d'origine de la localisation des panneaux avec possibilité d'ajout de lien et de photo dans les popups voir: https://docs.framasoft.org/fr/umap/5-infobulles-multimedia.html -->
   <!-- carte pragmacom -->
@@ -62,9 +64,7 @@
 </template>
 
 <style>
-main,
 iframe {
-  height: 97vh;
-  width: 97vw;
+  max-width: 100%;
 }
 </style>

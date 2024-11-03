@@ -11,7 +11,7 @@ export default {
 </script>
 
 <template>
-  <div class="main" data-theme="pragmacom_theme">
+  <div class="main flex flex-col min-h-screen" data-theme="pragmacom_theme">
     <NavbarComponent />
 
     <RouterView />
