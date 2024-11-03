@@ -19,9 +19,9 @@ export default {
 
     <div class="mx-4 text-left">
       <ul class="menu menu-vertical md:menu-horizontal md:gap-x-6">
-        <li href="mailto:cpragmacom@aol.com" class="link link-hover text-lg">
+        <!-- <li href="mailto:cpragmacom@aol.com" class="link link-hover text-lg">
           cpragmacom@aol.com
-        </li>
+        </li> -->
         <RouterLink to="/contact" class="link link-hover text-lg"
           ><li>Contact</li>
         </RouterLink>
