@@ -26,7 +26,16 @@ export default {
   src: url('~@/assets/fonts/route159_110/Route159-Regular.eot') format('eot');
 }
 
+@font-face {
+  font-family: 'Inter';
+  src: url('~@/assets/fonts/inter/Inter_18pt-Regular.ttf') format('ttf');
+}
+
 .main {
   font-family: 'Route159';
+}
+
+.h1 {
+  font-family: 'Inter';
 }
 </style>
