@@ -45,7 +45,9 @@ export default {
         </h2>
         <div class="flex flex-col gap-y-4">
           <p class="text-lg">{{ panel.postal_code }} - {{ panel.town }}</p>
-          <p>{{ panel.observations }}</p>
+          <p v-bind:title="panel.observations">
+            {{ $filters.truncateText(panel.observations, 32) }}
+          </p>
         </div>
 
         <div class="card-actions justify-end">
