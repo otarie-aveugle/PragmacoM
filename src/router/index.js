@@ -8,6 +8,7 @@ import ResetLink from '@/views/Authentication/RecoveryPassword/ResetLink.vue'
 import ResetPassword from '@/views/Authentication/RecoveryPassword/ResetPassword.vue'
 import SuccessRecoveryPassword from '@/views/Authentication/RecoveryPassword/SuccessRecoveryPassword.vue'
 import PanelsPage from '@/views/Panels/PanelsPage.vue'
+import PanelPage from '@/views/Panels/PanelPage.vue'
 import CreatePanelPage from '@/views/Panels/CreatePanelPage.vue'
 import EditPanelPage from '@/views/Panels/EditPanelPage.vue'
 import InteractiveMap from '@/views/InteractiveMap.vue'
@@ -36,6 +37,11 @@ const router = createRouter({
       path: '/edit_panel/:id',
       name: 'edit_panel',
       component: EditPanelPage,
+    },
+    {
+      path: '/panel/:id',
+      name: 'panel',
+      component: PanelPage,
     },
     {
       path: '/login',
@@ -76,7 +82,7 @@ const router = createRouter({
           path: '/:pathMatch(.*)',
           name: 'NotFound',
           component: NotFoundPage,
-        }
+        },
       ],
     },
     {
