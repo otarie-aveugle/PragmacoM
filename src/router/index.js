@@ -15,6 +15,7 @@ import InteractiveMap from '@/views/InteractiveMap.vue'
 import NotFoundPage from '@/views/NotFoundPage.vue'
 import LegalNoticesPage from '@/views/LegalNotices.vue'
 import ContactPage from '@/views/ContactPage.vue'
+import ReceptionBoxPage from '@/views/ReceptionBoxPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomePage,
+    },
+    {
+      path: '/:pathMatch(.*)',
+      name: 'NotFound',
+      component: NotFoundPage,
     },
     {
       path: '/panels',
@@ -79,11 +85,6 @@ const router = createRouter({
           name: 'success_recover_password',
           component: SuccessRecoveryPassword,
         },
-        {
-          path: '/:pathMatch(.*)',
-          name: 'NotFound',
-          component: NotFoundPage,
-        },
       ],
     },
     {
@@ -96,12 +97,17 @@ const router = createRouter({
       name: 'contact',
       component: ContactPage,
     },
+    {
+      path: '/box',
+      name: 'box',
+      component: ReceptionBoxPage,
+    },
   ],
 })
 
 router.beforeEach(async to => {
   const store = useUserStore()
-  const pages = ['create_panel', 'edit_panel']
+  const pages = ['create_panel', 'edit_panel', 'box']
   const pages_userLoggedIn = [
     'login',
     'recovery_password',

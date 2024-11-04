@@ -33,6 +33,12 @@ export default {
           ><li class="text-lg p-2">Panneaux</li>
         </RouterLink>
         <RouterLink
+          v-if="userLoggedIn"
+          to="/box"
+          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
+          ><li class="text-lg p-2">Boite de réception</li>
+        </RouterLink>
+        <RouterLink
           v-if="!userLoggedIn"
           to="/login"
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"

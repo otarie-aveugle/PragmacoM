@@ -26,4 +26,28 @@ app.config.globalProperties.$filters = {
     }
     return text
   },
+
+  /**
+   * Capitalize the first letter of a given text.
+   * @param {string} text - The text to be capitalized.
+   * @returns {string} - The text with the first letter capitalized.
+   */
+  capitalizeText(text) {
+    if (typeof text !== 'string' || text.length === 0) {
+      return ''
+    }
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  },
+
+  /**
+   * Get the first letter of a given text.
+   * @param {string} text - The text to extract the first letter from.
+   * @returns {string} - The first letter of the text, or an empty string if the text is empty.
+   */
+  getFirstLetter(text) {
+    if (typeof text !== 'string' || text.length === 0) {
+      return ''
+    }
+    return text.charAt(0)
+  },
 }
