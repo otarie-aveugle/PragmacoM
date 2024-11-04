@@ -16,6 +16,7 @@ import NotFoundPage from '@/views/NotFoundPage.vue'
 import LegalNoticesPage from '@/views/LegalNotices.vue'
 import ContactPage from '@/views/ContactPage.vue'
 import ReceptionBoxPage from '@/views/ReceptionBoxPage.vue'
+import PrivacyPolicyPage from '@/views/PrivacyPolicyPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -102,6 +103,11 @@ const router = createRouter({
       name: 'box',
       component: ReceptionBoxPage,
     },
+    {
+      path: '/privacy_policy',
+      name: 'privacy_policy',
+      component: PrivacyPolicyPage,
+    }
   ],
 })
 
