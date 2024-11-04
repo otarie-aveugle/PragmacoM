@@ -14,6 +14,7 @@ import EditPanelPage from '@/views/Panels/EditPanelPage.vue'
 import InteractiveMap from '@/views/InteractiveMap.vue'
 import NotFoundPage from '@/views/NotFoundPage.vue'
 import LegalNoticesPage from '@/views/LegalNotices.vue'
+import PrivacyPolicyPage from '@/views/PrivacyPolicyPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -90,6 +91,11 @@ const router = createRouter({
       name: 'legal_notices',
       component: LegalNoticesPage,
     },
+    {
+      path: '/privacy_policy',
+      name: 'privacy_policy',
+      component: PrivacyPolicyPage,
+    }
   ],
 })
 
