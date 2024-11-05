@@ -16,6 +16,8 @@ export default {
       position: '',
       format: '',
       observations: '',
+      file: null,
+      fileId: null,
     }
   },
   computed: {
@@ -32,15 +34,24 @@ export default {
     this.position = panel.position
     this.format = panel.format
     this.observations = panel.observations
+    // this.imageFileId = panel.imageFileId TODO METTRE À JOUR L'ID_IMAGE
   },
   methods: {
     ...mapActions(usePanelStore, [
       'getPanelById',
       'updatePanel',
       'deletePanel',
+      'deletePanelImage',
+      'updatePanelImage',
     ]),
+    onFileChange(event) {
+      this.file = event.target.files[0]
+    },
     submitDelete() {
       this.deletePanel(this.panel_id)
+      // if (TEST SI L'ID IMAGE EXIST) {
+      //   this.deletePanelImage(IMAGE_ID)
+      // }
       if (!this.errorMessage) {
         this.$router.push({ name: 'panels' })
       }
@@ -48,20 +59,31 @@ export default {
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
-        const document = {
-          disponibility: this.disponibility,
-          disponibility_date: this.disponibility_date,
-          address: this.address,
-          town: this.town,
-          postal_code: this.postal_code,
-          position: this.position,
-          format: this.format,
-          observations: this.observations,
-        }
-        this.updatePanel(this.panel_id, document)
-        if (!this.errorMessage) {
-          this.$router.push({ name: 'panels' })
-        }
+        //TODO TEST SI L'ID IMAGE EXIST POUR LE METTRE A JOUR
+        // if (this.file != null) {
+        //   const fileResponse = this.updatePanelImage(IMAGE_ID)
+        //   this.fileId = fileResponse.$id
+        // }
+        // const document = {
+        //   disponibility: this.disponibility,
+        //   disponibility_date: this.disponibility_date,
+        //   address: this.address,
+        //   town: this.town,
+        //   postal_code: this.postal_code,
+        //   position: this.position,
+        //   format: this.format,
+        //   observations: this.observations,
+        //   //TODO METTRE A JJOUR L'ID_IMAGE
+        //   // imageFileId: this.fileId
+        //   //   ? this.file.$id
+        //   //     ? this.file.$id
+        //   //     : this.fileId
+        //   //   : null,
+        // }
+        //await this.updatePanel(this.panel_id, document)
+        // if (!this.errorMessage) {
+        //   this.$router.push({ name: 'panels' })
+        // }
       } else {
         //TODO a supprimer une fois implémenté
         this.errorMessage =
@@ -101,6 +123,8 @@ export default {
           <label class="label-text text-base">Photo du panneau</label>
           <input
             type="file"
+            @change="onFileChange"
+            accept="image/*"
             class="file-input file-input-primary w-full max-w-xs"
           />
         </div>

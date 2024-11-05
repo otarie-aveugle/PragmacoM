@@ -10,22 +10,33 @@ export default {
       //TODO ajouter la photo du panneau /regarder bookmars storage de techno back-end appwrite
       disponibility: false,
       disponibility_date: '2024-10-29', //TODO mettre la date du jour dynamiquement
-      address: '',
-      town: '',
-      postal_code: '',
+      address: 'test',
+      town: 'test',
+      postal_code: '20111',
       position: 'BR Gauche',
-      format: '',
-      observations: '',
+      format: 'test',
+      observations: 'testtesttesttesttesttesttest',
+      file: null,
+      fileId: null,
     }
   },
   computed: {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
-    ...mapActions(usePanelStore, ['createPanel']),
+    ...mapActions(usePanelStore, ['createPanel', 'addPanelImage']),
+    onFileChange(event) {
+      this.file = event.target.files[0]
+    },
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
+        if (this.file != null) {
+          //image file
+          const fileResponse = await this.addPanelImage(this.file)
+          this.fileId = fileResponse.$id
+        }
+        //document panel
         const document = {
           disponibility: this.disponibility,
           disponibility_date: this.disponibility_date,
@@ -35,8 +46,9 @@ export default {
           position: this.position,
           format: this.format,
           observations: this.observations,
+          imageFileId: this.fileId ? this.fileId : null,
         }
-        this.createPanel(document)
+        await this.createPanel(document)
         if (!this.errorMessage) {
           this.$router.push({ name: 'panels' })
         }
@@ -77,6 +89,8 @@ export default {
           <label class="label-text text-base">Photo du panneau</label>
           <input
             type="file"
+            @change="onFileChange"
+            accept="image/*"
             class="file-input file-input-primary w-full max-w-xs"
           />
         </div>
