@@ -20,7 +20,7 @@ export default {
     <!-- add margin autour de la box pour le responsive design -->
   <div class="flex flex-col h-screen">
     <div class="text-center mb-6">
-      <p class="text-3xl mb-6">Boîte de réception</p>
+      <h1 class="text-3xl mb-6">Boîte de réception</h1>
     </div>
 
     <div class="flex-grow flex justify-center items-center mx-4">

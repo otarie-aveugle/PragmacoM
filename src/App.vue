@@ -23,7 +23,8 @@ export default {
 <style>
 @font-face {
   font-family: 'Route159';
-  src: url('~@/assets/fonts/route159_110/Route159-Regular.eot') format('eot');
+  src: url('~@/assets/fonts/route159_110/Route159-Regular.eot') format('eot')
+      url('~@/assets/fonts/route159_110/Route159-Regular.woff') format('woff');
 }
 
 @font-face {
@@ -32,10 +33,10 @@ export default {
 }
 
 .main {
-  font-family: 'Route159';
+  font-family: 'Route159' !important;
 }
 
 h1 {
-  font-family: 'Inter';
+  font-family: 'Inter' !important;
 }
 </style>
