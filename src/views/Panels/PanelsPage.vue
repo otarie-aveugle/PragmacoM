@@ -5,6 +5,17 @@ import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'PanelsPage',
+  mounted() {
+    if (this.userLoggedIn) {
+      this.disponibilityState = 'all'
+    }
+  },
+  data() {
+    return {
+      disponibility: false,
+      disponibilityState: 'true',
+    }
+  },
   methods: {
     ...mapActions(usePanelStore, ['getPanels']),
   },
@@ -14,6 +25,16 @@ export default {
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
     ...mapState(usePanelStore, ['panels']),
+    filteredPanels() {
+      if (this.disponibilityState === 'all') {
+        return this.panels.documents
+      } else {
+        const isAvailable = this.disponibilityState === 'true'
+        return this.panels.documents.filter(
+          panel => panel.disponibility === isAvailable,
+        )
+      }
+    },
   },
 }
 </script>
@@ -23,28 +44,68 @@ export default {
     <div class="text-center mb-6">
       <p class="text-3xl mb-6">Liste des panneaux</p>
     </div>
-    <div class="overflow-x-auto mx-14">
-      <RouterLink
-        to="/create_panel"
-        class="btn btn-primary mb-4"
-        v-if="userLoggedIn"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-6"
+    <div
+      class="overflow-x-auto mx-14"
+      v-bind:class="{ 'text-center': !panels.total }"
+    >
+      <div class="flex flex-col items-center md:flex-row gap-2 mb-4">
+        <RouterLink
+          to="/create_panel"
+          class="btn btn-primary"
+          v-if="userLoggedIn"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
-        Ajouter un panneau
-      </RouterLink>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Ajouter un panneau
+        </RouterLink>
+
+        <div
+          class="dropdown dropdown-bottom md:dropdown-right"
+          v-if="userLoggedIn"
+        >
+          <div tabindex="0" role="button" class="btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m19.5 8.25-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+
+            Filtrer la disponibilité
+          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+          >
+            <li @click="this.disponibilityState = 'all'"><a>Tous</a></li>
+            <li @click="this.disponibilityState = 'true'"><a>Disponible</a></li>
+            <li @click="this.disponibilityState = 'false'">
+              <a>Indisponible</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <table class="table" v-if="panels.total > 0">
         <!-- head -->
         <thead class="bg-base-200 text-base-content">
@@ -54,7 +115,7 @@ export default {
               <input type="checkbox" class="checkbox" />
             </label>
           </th> -->
-            <th>Aperçu</th>
+            <!-- <th>Aperçu</th> -->
             <th>Disponibilité</th>
             <th>Date de disponibilité</th>
             <th>Adresse</th>
@@ -69,10 +130,9 @@ export default {
         <!-- end head -->
         <!-- body -->
         <tbody>
-          <!-- //TODO il faut gérer le cas ou l'on n'affiche pas les panneaux indisponible si l'on est pas connecté -->
           <tr
             class="hover:bg-base-200"
-            v-for="(panel, key, index) in panels.documents"
+            v-for="(panel, key, index) in filteredPanels"
             v-bind:key="index"
           >
             <!-- checkbox -->
@@ -82,7 +142,7 @@ export default {
             </label>
           </td> -->
             <!-- preview -->
-            <td>
+            <!-- <td>
               <div class="flex items-center gap-3" v-if="panel.preview">
                 <div class="avatar">
                   <div class="h-20 w-20">
@@ -94,7 +154,7 @@ export default {
                 </div>
               </div>
               <div v-else></div>
-            </td>
+            </td> -->
             <!-- disponibility -->
             <td v-if="panel.disponibility">
               <span
@@ -183,7 +243,7 @@ export default {
               <input type="checkbox" class="checkbox" />
             </label>
           </th> -->
-            <th>Aperçu</th>
+            <!-- <th>Aperçu</th> -->
             <th>Disponibilité</th>
             <th>Date de disponibilité</th>
             <th>Adresse</th>

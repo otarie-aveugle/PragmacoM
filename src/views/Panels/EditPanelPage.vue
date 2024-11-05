@@ -16,6 +16,8 @@ export default {
       position: '',
       format: '',
       observations: '',
+      file: null,
+      fileId: null,
     }
   },
   computed: {
@@ -32,15 +34,24 @@ export default {
     this.position = panel.position
     this.format = panel.format
     this.observations = panel.observations
+    this.fileId = panel.imageFileId
   },
   methods: {
     ...mapActions(usePanelStore, [
       'getPanelById',
       'updatePanel',
       'deletePanel',
+      'deletePanelImage',
+      'updatePanelImage',
     ]),
-    submitDelete() {
-      this.deletePanel(this.panel_id)
+    onFileChange(event) {
+      this.file = event.target.files[0]
+    },
+    async submitDelete() {
+      await this.deletePanel(this.panel_id)
+      if (this.fileId) {
+        await this.deletePanelImage(this.fileId)
+      }
       if (!this.errorMessage) {
         this.$router.push({ name: 'panels' })
       }
@@ -48,17 +59,27 @@ export default {
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
+        if (this.fileId && this.file) {
+          const fileResponse = await this.updatePanelImage(
+            this.fileId,
+            this.file,
+          )
+          this.fileId = fileResponse.$id
+        }
         const document = {
           disponibility: this.disponibility,
-          disponibility_date: this.disponibility_date,
+          disponibility_date: this.disponibility
+            ? this.disponibility_date
+            : '/',
           address: this.address,
           town: this.town,
           postal_code: this.postal_code,
           position: this.position,
           format: this.format,
           observations: this.observations,
+          imageFileId: this.fileId,
         }
-        this.updatePanel(this.panel_id, document)
+        await this.updatePanel(this.panel_id, document)
         if (!this.errorMessage) {
           this.$router.push({ name: 'panels' })
         }
@@ -101,6 +122,8 @@ export default {
           <label class="label-text text-base">Photo du panneau</label>
           <input
             type="file"
+            @change="onFileChange"
+            accept="image/*"
             class="file-input file-input-primary w-full max-w-xs"
           />
         </div>
@@ -122,16 +145,18 @@ export default {
         </div>
 
         <!-- disponibility_date -->
-        <!-- //TODO ajout de la gestion des dates now() pour la date actuel 'value' et pour le min voir avec charles -->
-        <label class="label-text text-base">Date de disponibilité</label>
-        <input
-          type="date"
-          id="disponibility_date"
-          name="trip-start"
-          min="2024-10-29"
-          class="bg-base-100"
-          v-model="disponibility_date"
-        />
+        <div v-if="this.disponibility" class="flex flex-col">
+          <label class="label-text text-base">Date de disponibilité</label>
+          <input
+            type="date"
+            id="disponibility_date"
+            name="trip-start"
+            value="2024-10-29"
+            min="2024-10-29"
+            class="bg-base-100"
+            v-model="disponibility_date"
+          />
+        </div>
 
         <!-- address -->
         <label class="label-text text-base">Emplacement du panneau</label>

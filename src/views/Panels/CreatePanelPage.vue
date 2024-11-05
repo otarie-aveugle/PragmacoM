@@ -7,25 +7,35 @@ export default {
   name: 'EditPanelPage',
   data() {
     return {
-      //TODO ajouter la photo du panneau /regarder bookmars storage de techno back-end appwrite
       disponibility: false,
-      disponibility_date: '2024-10-29', //TODO mettre la date du jour dynamiquement
+      disponibility_date: this.disponibility ? '' : '/',
       address: '',
       town: '',
       postal_code: '',
       position: 'BR Gauche',
       format: '',
       observations: '',
+      file: null,
+      fileId: null,
     }
   },
   computed: {
     ...mapWritableState(useUserStore, ['errorMessage']),
   },
   methods: {
-    ...mapActions(usePanelStore, ['createPanel']),
+    ...mapActions(usePanelStore, ['createPanel', 'addPanelImage']),
+    onFileChange(event) {
+      this.file = event.target.files[0]
+    },
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
+        if (this.file != null) {
+          //image file
+          const fileResponse = await this.addPanelImage(this.file)
+          this.fileId = fileResponse.$id
+        }
+        //document panel
         const document = {
           disponibility: this.disponibility,
           disponibility_date: this.disponibility_date,
@@ -35,8 +45,9 @@ export default {
           position: this.position,
           format: this.format,
           observations: this.observations,
+          imageFileId: this.fileId ? this.fileId : null,
         }
-        this.createPanel(document)
+        await this.createPanel(document)
         if (!this.errorMessage) {
           this.$router.push({ name: 'panels' })
         }
@@ -77,6 +88,8 @@ export default {
           <label class="label-text text-base">Photo du panneau</label>
           <input
             type="file"
+            @change="onFileChange"
+            accept="image/*"
             class="file-input file-input-primary w-full max-w-xs"
           />
         </div>
@@ -98,17 +111,18 @@ export default {
         </div>
 
         <!-- disponibility_date -->
-        <!-- //TODO ajout de la gestion des dates now() pour la date actuel 'value' et pour le min voir avec charles -->
-        <label class="label-text text-base">Date de disponibilité</label>
-        <input
-          type="date"
-          id="disponibility_date"
-          name="trip-start"
-          value="2024-10-29"
-          min="2024-10-29"
-          class="bg-base-100"
-          v-model="disponibility_date"
-        />
+        <div v-if="this.disponibility" class="flex flex-col">
+          <label class="label-text text-base">Date de disponibilité</label>
+          <input
+            type="date"
+            id="disponibility_date"
+            name="trip-start"
+            value="2024-10-29"
+            min="2024-10-29"
+            class="bg-base-100"
+            v-model="disponibility_date"
+          />
+        </div>
 
         <!-- address -->
         <label class="label-text text-base">Emplacement du panneau</label>

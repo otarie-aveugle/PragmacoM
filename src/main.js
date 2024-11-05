@@ -21,6 +21,9 @@ app.config.globalProperties.$filters = {
    * @returns {string} - The truncated text with ellipsis if necessary.
    */
   truncateText(text, maxLength) {
+    if (typeof text !== 'string' || text.length === 0) {
+      return ''
+    }
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...'
     }

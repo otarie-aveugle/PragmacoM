@@ -11,21 +11,34 @@ export default {
     }
   },
   methods: {
-    ...mapActions(usePanelStore, ['getPanelById']),
+    ...mapActions(usePanelStore, ['getPanelById', 'getPanelImage']),
   },
   async created() {
     this.panel = await this.getPanelById(this.panel_id)
+    if (this.panel.imageFileId) {
+      this.panel.preview = await this.getPanelImage(this.panel.imageFileId)
+    }
   },
 }
 </script>
 
 <template>
-  <div class="flex flex-col flex-grow items-center">
-    <!-- <p class="text-center text-3xl mb-6">Panneau {{ panel_id }}</p> -->
-
-    <div class="mx-6 card bg-base-100 shadow-xl">
-      <figure>
-        <img src="../../assets/images/Panneau1.jpg" alt="panel" />
+  <div class="flex flex-grow flex-col items-center justify-center">
+    <div
+      class="mx-6 card bg-base-100 shadow-xl min-w-[80%] min-h-[400px] md:min-w-[50%] lg:min-w-[40%]"
+    >
+      <figure v-if="panel.preview" class="w-full h-64">
+        <img
+          v-bind:src="panel.preview"
+          alt="panel"
+          class="w-full h-full object-cover rounded-t-lg"
+        />
+      </figure>
+      <figure
+        v-else
+        class="w-full h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+      >
+        <span class="text-gray-500">Image non disponible</span>
       </figure>
       <div class="card-body gap-y-2">
         <h2 class="card-title">
