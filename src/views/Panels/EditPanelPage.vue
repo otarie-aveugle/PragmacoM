@@ -68,7 +68,9 @@ export default {
         }
         const document = {
           disponibility: this.disponibility,
-          disponibility_date: this.disponibility_date,
+          disponibility_date: this.disponibility
+            ? this.disponibility_date
+            : '/',
           address: this.address,
           town: this.town,
           postal_code: this.postal_code,
@@ -143,16 +145,18 @@ export default {
         </div>
 
         <!-- disponibility_date -->
-        <!-- //TODO ajout de la gestion des dates now() pour la date actuel 'value' et pour le min voir avec charles -->
-        <label class="label-text text-base">Date de disponibilité</label>
-        <input
-          type="date"
-          id="disponibility_date"
-          name="trip-start"
-          min="2024-10-29"
-          class="bg-base-100"
-          v-model="disponibility_date"
-        />
+        <div v-if="this.disponibility" class="flex flex-col">
+          <label class="label-text text-base">Date de disponibilité</label>
+          <input
+            type="date"
+            id="disponibility_date"
+            name="trip-start"
+            value="2024-10-29"
+            min="2024-10-29"
+            class="bg-base-100"
+            v-model="disponibility_date"
+          />
+        </div>
 
         <!-- address -->
         <label class="label-text text-base">Emplacement du panneau</label>

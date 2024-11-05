@@ -5,6 +5,11 @@ import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'PanelsPage',
+  data() {
+    return {
+      disponibility: false,
+    }
+  },
   methods: {
     ...mapActions(usePanelStore, ['getPanels']),
   },
@@ -27,27 +32,59 @@ export default {
       class="overflow-x-auto mx-14"
       v-bind:class="{ 'text-center': !panels.total }"
     >
-      <RouterLink
-        to="/create_panel"
-        class="btn btn-primary mb-4"
-        v-if="userLoggedIn"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-6"
+      <div class="flex flex-col items-center md:flex-row gap-2 mb-4">
+        <RouterLink
+          to="/create_panel"
+          class="btn btn-primary"
+          v-if="userLoggedIn"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
-        Ajouter un panneau
-      </RouterLink>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Ajouter un panneau
+        </RouterLink>
+
+        <div class="dropdown dropdown-bottom md:dropdown-right">
+          <div tabindex="0" role="button" class="btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m19.5 8.25-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+
+            Filtrer la disponibilité
+          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+          >
+            <li><a>Tous</a></li>
+            <li><a>Disponible</a></li>
+            <li><a>Indisponible</a></li>
+          </ul>
+        </div>
+      </div>
+
       <table class="table" v-if="panels.total > 0">
         <!-- head -->
         <thead class="bg-base-200 text-base-content">
@@ -72,7 +109,10 @@ export default {
         <!-- end head -->
         <!-- body -->
         <tbody>
-          <!-- //TODO il faut gérer le cas ou l'on n'affiche pas les panneaux indisponible si l'on est pas connecté -->
+          <!-- 
+            N'afficher que les panneaux disponibles pour les utilisateur non connecté, il suffit d'ajouter `.filter(panel => panel.disponibility)` 
+            et afficher un bouton toggle indeterminate pour les utilisateur connecté pour switch les disponibilités affichés/non affichés
+            -->
           <tr
             class="hover:bg-base-200"
             v-for="(panel, key, index) in panels.documents"
