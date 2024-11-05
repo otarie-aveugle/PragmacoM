@@ -34,7 +34,7 @@ export default {
     this.position = panel.position
     this.format = panel.format
     this.observations = panel.observations
-    // this.imageFileId = panel.imageFileId TODO METTRE À JOUR L'ID_IMAGE
+    this.fileId = panel.imageFileId
   },
   methods: {
     ...mapActions(usePanelStore, [
@@ -47,11 +47,11 @@ export default {
     onFileChange(event) {
       this.file = event.target.files[0]
     },
-    submitDelete() {
-      this.deletePanel(this.panel_id)
-      // if (TEST SI L'ID IMAGE EXIST) {
-      //   this.deletePanelImage(IMAGE_ID)
-      // }
+    async submitDelete() {
+      await this.deletePanel(this.panel_id)
+      if (this.fileId) {
+        await this.deletePanelImage(this.fileId)
+      }
       if (!this.errorMessage) {
         this.$router.push({ name: 'panels' })
       }
