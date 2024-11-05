@@ -49,7 +49,7 @@ export default {
           varius purus.
         </p>
 
-        <RouterLink to="/carte-interactive">
+        <RouterLink to="/map">
           <button
             class="btn btn-primary md:btn-md lg:btn-lg flex items-center gap-2"
           >
@@ -71,7 +71,7 @@ export default {
           </button>
         </RouterLink>
       </div>
-
+      <!-- carousel -->
       <div class="flex justify-center items-center w-full md:w-1/2">
         <div class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden">
           <div v-for="(slide, index) in slides" :key="index" class="carousel-item relative w-full h-full" :class="{ 'hidden': currentSlide !== index, 'flex': currentSlide === index }">
