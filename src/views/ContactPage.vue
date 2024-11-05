@@ -13,6 +13,7 @@ export default {
       message: '',
       phone: '',
       consent: false,
+      countdown: 3,
     }
   },
   computed: {
@@ -22,6 +23,7 @@ export default {
     ...mapActions(useContactStore, ['sendMessage']),
     closeToast() {
       this.toastShow = false
+      this.$router.push({ name: "home" })
     },
     async submitForm() {
       this.errorMessage = ''
@@ -38,11 +40,14 @@ export default {
           this.toastShow = true
           setTimeout(() => {
             this.toastShow = false
-            if (this.$route.href === '/contact') {
+            if (this.$route.href === '/contact' && this.toastShow == true) {
               //prevent si l'utilsateur décide de naviguer dans le site avant la redirection
               this.$router.push({ name: 'home' })
             }
-          }, 4000)
+          }, 4000),
+          setInterval(() => {
+            --this.countdown
+          }, 1000)
         }
       } else {
         if (!this.validEmail(this.email)) {
@@ -76,27 +81,33 @@ export default {
 
 <template>
   <div class="flex-grow">
-    <div v-if="toastShow" class="toast toast-top toast-center">
-      <div class="alert alert-success">
-        <span>Le message a bien été envoyé !</span>
-        <button @click="closeToast" class="ml-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+    <!-- Notification Toast -->
+    <transition name="fade">
+      <div
+        v-if="toastShow"
+        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50"
+      >
+        <div
+          class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md text-center"
+        >
+          <h3 class="text-lg font-bold mb-2 text-green-600">Message envoyé</h3>
+          <p>Votre message a bien été envoyé !</p>
+          <p class= "text-s text-gray-900 mt-4">Vous allez être redirigé dans&nbsp;
+            <span class="countdown">
+              <span v-bind:style='`--value:${countdown}`'></span>
+            </span> secondes
+          </p>
+          <button
+            @click="closeToast"
+            class="mt-4 bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            Fermer
+          </button>
+        </div>
       </div>
-    </div>
+    </transition>
+
+    <!-- Formulaire de contact -->
     <form
       v-if="!toastShow"
       class="flex flex-col mx-auto items-center"
@@ -159,10 +170,8 @@ export default {
             J'accepte que mes informations soient collectées et traitées
             conformément à la
             <RouterLink to="/privacy_policy">
-              <span class="text-primary"
-                >politique de confidentialité</span
-              ></RouterLink
-            >.
+              <span class="text-primary">politique de confidentialité</span>
+            </RouterLink>.
           </label>
         </div>
 

@@ -35,7 +35,7 @@ export default {
   font-family: 'Route159';
 }
 
-.h1 {
+h1 {
   font-family: 'Inter';
 }
 </style>
