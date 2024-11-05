@@ -5,10 +5,8 @@ export default {
 </script>
 
 <template>
-  <section
-    class="p-8 text-gray-800 min-h-screen flex items-center justify-center"
-  >
-    <div class="w-full max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8">
+  <section class="p-8 text-gray-800 min-h-screen flex items-center justify-center">
+    <div id="legal-notices" class="w-full max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8">
       <h1 class="text-4xl font-bold mb-6 text-primary">Mentions Légales</h1>
 
       <!-- Informations légales de la société -->
