@@ -59,31 +59,28 @@ export default {
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
-        //TODO TEST SI L'ID IMAGE EXIST POUR LE METTRE A JOUR
-        // if (this.file != null) {
-        //   const fileResponse = this.updatePanelImage(IMAGE_ID)
-        //   this.fileId = fileResponse.$id
-        // }
-        // const document = {
-        //   disponibility: this.disponibility,
-        //   disponibility_date: this.disponibility_date,
-        //   address: this.address,
-        //   town: this.town,
-        //   postal_code: this.postal_code,
-        //   position: this.position,
-        //   format: this.format,
-        //   observations: this.observations,
-        //   //TODO METTRE A JJOUR L'ID_IMAGE
-        //   // imageFileId: this.fileId
-        //   //   ? this.file.$id
-        //   //     ? this.file.$id
-        //   //     : this.fileId
-        //   //   : null,
-        // }
-        //await this.updatePanel(this.panel_id, document)
-        // if (!this.errorMessage) {
-        //   this.$router.push({ name: 'panels' })
-        // }
+        if (this.fileId && this.file) {
+          const fileResponse = await this.updatePanelImage(
+            this.fileId,
+            this.file,
+          )
+          this.fileId = fileResponse.$id
+        }
+        const document = {
+          disponibility: this.disponibility,
+          disponibility_date: this.disponibility_date,
+          address: this.address,
+          town: this.town,
+          postal_code: this.postal_code,
+          position: this.position,
+          format: this.format,
+          observations: this.observations,
+          imageFileId: this.fileId,
+        }
+        await this.updatePanel(this.panel_id, document)
+        if (!this.errorMessage) {
+          this.$router.push({ name: 'panels' })
+        }
       } else {
         //TODO a supprimer une fois implémenté
         this.errorMessage =

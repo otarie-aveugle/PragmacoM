@@ -24,8 +24,8 @@ export const usePanelStore = defineStore('panel', {
     },
     async updatePanelImage(oldFileId, newImageFile) {
       //delete and create are used here because update storage method is only for the fileName
-      this.deletePanelImage(oldFileId)
-      const response = this.addPanelImage(newImageFile)
+      await this.deletePanelImage(oldFileId)
+      const response = await this.addPanelImage(newImageFile)
       return response
     },
     //methods for db

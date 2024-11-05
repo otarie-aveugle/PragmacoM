@@ -7,7 +7,6 @@ export default {
   name: 'EditPanelPage',
   data() {
     return {
-      //TODO ajouter la photo du panneau /regarder bookmars storage de techno back-end appwrite
       disponibility: false,
       disponibility_date: '2024-10-29', //TODO mettre la date du jour dynamiquement
       address: 'test',
