@@ -1,7 +1,26 @@
 <script>
 export default {
   name: 'HomePage',
-}
+  data() {
+    return {
+      currentSlide: 0,
+      slides: [
+        { image: "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp" },
+        { image: "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp" },
+        { image: "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp" },
+        { image: "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp" },
+      ],
+    };
+  },
+  methods: {
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+    },
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+    },
+  },
+};
 </script>
 
 <template>
@@ -53,62 +72,18 @@ export default {
         </RouterLink>
       </div>
 
-      <!-- carrousel -->
       <div class="flex justify-center items-center w-full md:w-1/2">
-        <div
-          class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
-        >
-          <div id="slide1" class="carousel-item relative w-full h-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-            >
-              <a href="#slide4" class="btn btn-circle">❮</a>
-              <a href="#slide2" class="btn btn-circle">❯</a>
-            </div>
-          </div>
-
-          <div id="slide2" class="carousel-item relative w-full h-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-            >
-              <a href="#slide1" class="btn btn-circle">❮</a>
-              <a href="#slide3" class="btn btn-circle">❯</a>
-            </div>
-          </div>
-          <div id="slide3" class="carousel-item relative w-full h-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-            >
-              <a href="#slide2" class="btn btn-circle">❮</a>
-              <a href="#slide4" class="btn btn-circle">❯</a>
-            </div>
-          </div>
-          <div id="slide4" class="carousel-item relative w-full h-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-            >
-              <a href="#slide3" class="btn btn-circle">❮</a>
-              <a href="#slide1" class="btn btn-circle">❯</a>
+        <div class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden">
+          <div v-for="(slide, index) in slides" :key="index" class="carousel-item relative w-full h-full" :class="{ 'hidden': currentSlide !== index, 'flex': currentSlide === index }">
+            <img :src="slide.image" class="w-full h-full object-cover" />
+            <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+              <button @click="prevSlide" class="btn btn-circle">❮</button>
+              <button @click="nextSlide" class="btn btn-circle">❯</button>
             </div>
           </div>
         </div>
       </div>
+      
     </div>
 
     <!-- faces disponibles -->
