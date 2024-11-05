@@ -23,7 +23,10 @@ export default {
     <div class="text-center mb-6">
       <p class="text-3xl mb-6">Liste des panneaux</p>
     </div>
-    <div class="overflow-x-auto mx-14">
+    <div
+      class="overflow-x-auto mx-14"
+      v-bind:class="{ 'text-center': !panels.total }"
+    >
       <RouterLink
         to="/create_panel"
         class="btn btn-primary mb-4"
@@ -54,7 +57,7 @@ export default {
               <input type="checkbox" class="checkbox" />
             </label>
           </th> -->
-            <th>Aperçu</th>
+            <!-- <th>Aperçu</th> -->
             <th>Disponibilité</th>
             <th>Date de disponibilité</th>
             <th>Adresse</th>
@@ -82,7 +85,7 @@ export default {
             </label>
           </td> -->
             <!-- preview -->
-            <td>
+            <!-- <td>
               <div class="flex items-center gap-3" v-if="panel.preview">
                 <div class="avatar">
                   <div class="h-20 w-20">
@@ -94,7 +97,7 @@ export default {
                 </div>
               </div>
               <div v-else></div>
-            </td>
+            </td> -->
             <!-- disponibility -->
             <td v-if="panel.disponibility">
               <span
@@ -183,7 +186,7 @@ export default {
               <input type="checkbox" class="checkbox" />
             </label>
           </th> -->
-            <th>Aperçu</th>
+            <!-- <th>Aperçu</th> -->
             <th>Disponibilité</th>
             <th>Date de disponibilité</th>
             <th>Adresse</th>

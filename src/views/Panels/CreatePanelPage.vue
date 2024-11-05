@@ -9,12 +9,12 @@ export default {
     return {
       disponibility: false,
       disponibility_date: '2024-10-29', //TODO mettre la date du jour dynamiquement
-      address: 'test',
-      town: 'test',
-      postal_code: '20111',
+      address: '',
+      town: '',
+      postal_code: '',
       position: 'BR Gauche',
-      format: 'test',
-      observations: 'testtesttesttesttesttesttest',
+      format: '',
+      observations: '',
       file: null,
       fileId: null,
     }

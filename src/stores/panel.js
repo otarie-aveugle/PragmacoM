@@ -28,6 +28,10 @@ export const usePanelStore = defineStore('panel', {
       const response = await this.addPanelImage(newImageFile)
       return response
     },
+    async getPanelImage(fileId) {
+      const response = await storage.getFileView(BUCKET_ID, fileId)
+      return response
+    },
     //methods for db
     async createPanel(document) {
       await databases.createDocument(
