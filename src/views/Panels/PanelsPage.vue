@@ -5,9 +5,15 @@ import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'PanelsPage',
+  mounted() {
+    if (this.userLoggedIn) {
+      this.disponibilityState = 'all'
+    }
+  },
   data() {
     return {
       disponibility: false,
+      disponibilityState: 'true',
     }
   },
   methods: {
@@ -19,6 +25,16 @@ export default {
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
     ...mapState(usePanelStore, ['panels']),
+    filteredPanels() {
+      if (this.disponibilityState === 'all') {
+        return this.panels.documents
+      } else {
+        const isAvailable = this.disponibilityState === 'true'
+        return this.panels.documents.filter(
+          panel => panel.disponibility === isAvailable,
+        )
+      }
+    },
   },
 }
 </script>
@@ -55,7 +71,10 @@ export default {
           Ajouter un panneau
         </RouterLink>
 
-        <div class="dropdown dropdown-bottom md:dropdown-right">
+        <div
+          class="dropdown dropdown-bottom md:dropdown-right"
+          v-if="userLoggedIn"
+        >
           <div tabindex="0" role="button" class="btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -78,9 +97,11 @@ export default {
             tabindex="0"
             class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
           >
-            <li><a>Tous</a></li>
-            <li><a>Disponible</a></li>
-            <li><a>Indisponible</a></li>
+            <li @click="this.disponibilityState = 'all'"><a>Tous</a></li>
+            <li @click="this.disponibilityState = 'true'"><a>Disponible</a></li>
+            <li @click="this.disponibilityState = 'false'">
+              <a>Indisponible</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -109,13 +130,9 @@ export default {
         <!-- end head -->
         <!-- body -->
         <tbody>
-          <!-- 
-            N'afficher que les panneaux disponibles pour les utilisateur non connecté, il suffit d'ajouter `.filter(panel => panel.disponibility)` 
-            et afficher un bouton toggle indeterminate pour les utilisateur connecté pour switch les disponibilités affichés/non affichés
-            -->
           <tr
             class="hover:bg-base-200"
-            v-for="(panel, key, index) in panels.documents"
+            v-for="(panel, key, index) in filteredPanels"
             v-bind:key="index"
           >
             <!-- checkbox -->
