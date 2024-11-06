@@ -1,78 +1,32 @@
 <script>
+import { mapState, mapActions } from 'pinia'
+import { useHomeStore } from '@/stores/home'
 import { useUserStore } from '@/stores/user'
-import { mapState } from 'pinia'
-
-import Panneau1 from '../assets/images/Panneau1.jpg'
-import Panneau2 from '../assets/images/Panneau2.jpg'
-import Panneau3 from '../assets/images/Panneau3.jpg'
-import Panneau4 from '../assets/images/Panneau4.jpg'
 
 export default {
   name: 'HomePage',
-  data() {
-    return {
-      isEditing: false,
-      editableImage: null,
-      currentSlide: 0,
-      slides: [
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp',
-        },
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp',
-        },
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp',
-        },
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp',
-        },
-      ],
-      faces: [
-        {
-          image: Panneau1,
-        },
-        {
-          image: Panneau2,
-        },
-        {
-          image: Panneau3,
-        },
-        {
-          image: Panneau4,
-        },
-      ],
-    }
-  },
   computed: {
+    ...mapState(useHomeStore, [
+      'isEditing',
+      'editableImage',
+      'currentSlide',
+      'slides',
+      'faces',
+    ]),
     ...mapState(useUserStore, ['userLoggedIn']),
   },
   methods: {
-    toggleEdit() {
-      this.isEditing = !this.isEditing
-    },
-    editImage(index, type) {
-      this.editableImage = { index, type }
-    },
-    updateImage(newUrl) {
-      if (this.editableImage.type === 'carousel') {
-        this.slides[this.editableImage.index].image = newUrl
-      } else if (this.editableImage.type === 'faces') {
-        this.faces[this.editableImage.index].image = newUrl
-      }
-      this.editableImage = null
-    },
-    nextSlide() {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length
-    },
-    prevSlide() {
-      this.currentSlide =
-        (this.currentSlide - 1 + this.slides.length) % this.slides.length
-    },
+    ...mapActions(useHomeStore, [
+      'toggleEdit',
+      'editImage',
+      'updateImage',
+      'nextSlide',
+      'prevSlide',
+      'fetchContent',
+    ]),
+  },
+  mounted() {
+    this.fetchContent()
   },
 }
 </script>
@@ -136,9 +90,11 @@ export default {
           </button>
         </RouterLink>
       </div>
+
       <!-- carousel -->
       <div class="flex justify-center items-center w-full md:w-1/2">
         <div
+          v-if="slides.length > 0"
           class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
         >
           <div
@@ -151,7 +107,7 @@ export default {
             }"
           >
             <img
-              :src="slide.image"
+              :src="slide.image_link"
               class="w-full h-full object-cover"
               :class="{ 'border border-dashed border-primary': isEditing }"
             />
@@ -165,8 +121,8 @@ export default {
             >
               <input
                 type="text"
-                v-model="slides[index].image"
-                @blur="updateImage(slides[index].image)"
+                v-model="slides[index].image_link"
+                @blur="updateImage(slides[index].image_link)"
                 class="input input-sm"
                 placeholder="Image URL"
               />
@@ -191,58 +147,85 @@ export default {
             </div>
           </div>
         </div>
+
+        <!-- no slides images -->
+        <figure
+          v-else
+          class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
+        >
+          <span class="text-gray-500">Aucune image disponible</span>
+        </figure>
       </div>
     </div>
 
-    <!-- faces disponibles -->
+    <!-- faces -->
     <div class="flex flex-col gap-y-6">
       <h1
         class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
       >
         Nos <span class="text-primary">faces</span> disponibles
       </h1>
+
       <div
         class="flex flex-row flex-wrap gap-6 justify-center md:justify-start"
       >
-        <figure
-          v-for="(face, index) in faces"
-          :key="index"
-          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
+        <div
+          v-if="faces.length > 0"
+          class="flex flex-wrap gap-6 justify-center md:justify-start"
         >
-          <img
-            :src="face.image"
-            alt="panel"
-            class="w-full h-full object-cover rounded-t-lg"
-          />
-          <div
-            v-if="
-              isEditing &&
-              editableImage?.index === index &&
-              editableImage?.type === 'faces'
-            "
-            class="absolute top-5 left-5 bg-white p-2 shadow rounded"
+          <figure
+            v-for="(face, index) in faces"
+            :key="index"
+            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
           >
-            <input
-              type="text"
-              v-model="faces[index].image"
-              @blur="updateImage(faces[index].image)"
-              class="input input-sm"
-              placeholder="Image URL"
+            <img
+              :src="face.image_link"
+              alt="panel"
+              class="w-full h-full object-cover rounded-t-lg"
             />
-          </div>
-          <button
-            v-if="isEditing"
-            @click="editImage(index, 'faces')"
-            class="btn btn-sm absolute bottom-5 left-5"
-            style="
-              background-color: rgba(0, 0, 0, 0.6);
-              color: white;
-              font-weight: bold;
-            "
+            <div
+              v-if="
+                isEditing &&
+                editableImage?.index === index &&
+                editableImage?.type === 'faces'
+              "
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
+            >
+              <input
+                type="text"
+                v-model="faces[index].image_link"
+                @blur="updateImage(faces[index].image_link)"
+                class="input input-sm"
+                placeholder="Image URL"
+              />
+            </div>
+            <button
+              v-if="isEditing"
+              @click="editImage(index, 'faces')"
+              class="btn btn-sm absolute bottom-5 left-5"
+              style="
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+                font-weight: bold;
+              "
+            >
+              Modifier
+            </button>
+          </figure>
+        </div>
+
+        <div
+          v-else
+          class="flex flex-wrap gap-6 justify-center md:justify-start"
+        >
+          <figure
+            v-for="index in 5"
+            :key="index"
+            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
           >
-            Modifier
-          </button>
-        </figure>
+            <span class="text-gray-500">Aucune image disponible</span>
+          </figure>
+        </div>
       </div>
     </div>
   </div>
