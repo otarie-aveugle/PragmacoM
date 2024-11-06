@@ -5,22 +5,35 @@ export default {
     return {
       currentSlide: 0,
       slides: [
-        { image: "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp" },
-        { image: "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp" },
-        { image: "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp" },
-        { image: "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp" },
+        {
+          image:
+            'https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp',
+        },
+        {
+          image:
+            'https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp',
+        },
+        {
+          image:
+            'https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp',
+        },
+        {
+          image:
+            'https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp',
+        },
       ],
-    };
+    }
   },
   methods: {
     nextSlide() {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+      this.currentSlide = (this.currentSlide + 1) % this.slides.length
     },
     prevSlide() {
-      this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+      this.currentSlide =
+        (this.currentSlide - 1 + this.slides.length) % this.slides.length
     },
   },
-};
+}
 </script>
 
 <template>
@@ -73,17 +86,28 @@ export default {
       </div>
       <!-- carousel -->
       <div class="flex justify-center items-center w-full md:w-1/2">
-        <div class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden">
-          <div v-for="(slide, index) in slides" :key="index" class="carousel-item relative w-full h-full" :class="{ 'hidden': currentSlide !== index, 'flex': currentSlide === index }">
+        <div
+          class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
+        >
+          <div
+            v-for="(slide, index) in slides"
+            :key="index"
+            class="carousel-item relative w-full h-full"
+            :class="{
+              hidden: currentSlide !== index,
+              flex: currentSlide === index,
+            }"
+          >
             <img :src="slide.image" class="w-full h-full object-cover" />
-            <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+            <div
+              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+            >
               <button @click="prevSlide" class="btn btn-circle">❮</button>
               <button @click="nextSlide" class="btn btn-circle">❯</button>
             </div>
           </div>
         </div>
       </div>
-      
     </div>
 
     <!-- faces disponibles -->
@@ -96,31 +120,42 @@ export default {
       <div
         class="flex flex-row flex-wrap gap-6 justify-center md:justify-start"
       >
-        <img
-          src="https://via.placeholder.com/342x257"
-          alt="Image 1"
-          class="h-[150px] w-[200px] object-cover rounded-lg shadow-lg sm:h-[200px] sm:w-[300px] md:h-[257px] md:w-[342px]"
-        />
-        <img
-          src="https://via.placeholder.com/342x257"
-          alt="Image 2"
-          class="h-[150px] w-[200px] object-cover rounded-lg shadow-lg sm:h-[200px] sm:w-[300px] md:h-[257px] md:w-[342px]"
-        />
-        <img
-          src="https://via.placeholder.com/342x257"
-          alt="Image 3"
-          class="h-[150px] w-[200px] object-cover rounded-lg shadow-lg sm:h-[200px] sm:w-[300px] md:h-[257px] md:w-[342px]"
-        />
-        <img
-          src="https://via.placeholder.com/342x257"
-          alt="Image 4"
-          class="h-[150px] w-[200px] object-cover rounded-lg shadow-lg sm:h-[200px] sm:w-[300px] md:h-[257px] md:w-[342px]"
-        />
-        <img
-          src="https://via.placeholder.com/342x257"
-          alt="Image 5"
-          class="h-[150px] w-[200px] object-cover rounded-lg shadow-lg sm:h-[200px] sm:w-[300px] md:h-[257px] md:w-[342px]"
-        />
+        <figure
+          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+        >
+          <img
+            src="../assets/images/Panneau1.jpg"
+            alt="panel"
+            class="w-full h-full object-cover rounded-t-lg"
+          />
+        </figure>
+        <figure
+          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+        >
+          <img
+            src="../assets/images/Panneau2.jpg"
+            alt="panel"
+            class="w-full h-full object-cover rounded-t-lg"
+          />
+        </figure>
+        <figure
+          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+        >
+          <img
+            src="../assets/images/Panneau3.jpg"
+            alt="panel"
+            class="w-full h-full object-cover rounded-t-lg"
+          />
+        </figure>
+        <figure
+          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+        >
+          <img
+            src="../assets/images/Panneau4.jpg"
+            alt="panel"
+            class="w-full h-full object-cover rounded-t-lg"
+          />
+        </figure>
       </div>
     </div>
   </div>
