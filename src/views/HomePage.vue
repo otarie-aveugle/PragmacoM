@@ -219,7 +219,7 @@ export default {
           class="flex flex-wrap gap-6 justify-center md:justify-start"
         >
           <figure
-            v-for="index in 5"
+            v-for="index in 4"
             :key="index"
             class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
           >
