@@ -29,12 +29,18 @@ export const useHomeStore = defineStore('home', {
           FACES_COLLECTION_ID,
         )
 
+        console.log('fetchContent call')
+        console.log('slidesData : ', slidesData)
+        console.log('facesData : ', facesData)
         this.slides = slidesData.documents.map(doc => ({
+          id: doc.$id,
           image_link: doc.image_link,
         }))
         this.faces = facesData.documents.map(doc => ({
+          id: doc.$id,
           image_link: doc.image_link,
         }))
+        console.log('slides : ', this.slides)
       } catch (error) {
         console.error('Error fetching content:', error)
       }
@@ -46,14 +52,17 @@ export const useHomeStore = defineStore('home', {
 
     editImage(index, type) {
       this.editableImage = { index, type }
+      console.log('editableImage : ', this.editableImage)
     },
 
     async addImage(url) {
+      console.log('addImage url : ', url)
       if (typeof url === 'string' && url) {
         try {
           if (this.editableImage) {
             const { index, type } = this.editableImage
             if (type === 'carousel') {
+              console.log('carousel url : ', url)
               await databases.createDocument(
                 DATABASE_ID,
                 SLIDES_COLLECTION_ID,
@@ -62,8 +71,9 @@ export const useHomeStore = defineStore('home', {
                   image_link: url,
                 },
               )
-              this.slides[index].image_link = url
+              this.slides[index] = { image_link: url }
             } else if (type === 'faces') {
+              console.log('faces url : ', url)
               await databases.createDocument(
                 DATABASE_ID,
                 FACES_COLLECTION_ID,
@@ -72,7 +82,7 @@ export const useHomeStore = defineStore('home', {
                   image_link: url,
                 },
               )
-              this.faces[index].image_link = url
+              this.faces[index] = { image_link: url }
             }
             this.editableImage = null
           }
@@ -87,37 +97,80 @@ export const useHomeStore = defineStore('home', {
     },
 
     async updateImage(newUrl) {
-      if (typeof newUrl === 'string' && newUrl) {
-        try {
-          if (this.editableImage) {
-            const { index, type } = this.editableImage
-            if (type === 'carousel') {
-              const documentId = this.slides[index].id
-              await databases.updateDocument(
-                DATABASE_ID,
-                SLIDES_COLLECTION_ID,
-                documentId,
-                {
-                  image_link: newUrl,
-                },
-              )
-              this.slides[index].image_link = newUrl
-            } else if (type === 'faces') {
-              const documentId = this.faces[index].id
-              await databases.updateDocument(
-                DATABASE_ID,
-                FACES_COLLECTION_ID,
-                documentId,
-                {
-                  image_link: newUrl,
-                },
-              )
-              this.faces[index].image_link = newUrl
+      console.log('updateImage newUrl : ', newUrl)
+      if (typeof newUrl === 'string') {
+        if (newUrl.length > 0) {
+          //update
+          console.log('update method')
+          try {
+            if (this.editableImage) {
+              const { index, type } = this.editableImage
+              if (type === 'carousel') {
+                const documentId = this.slides[index].id
+                console.log('update carousel documentId : ', documentId)
+                await databases.updateDocument(
+                  DATABASE_ID,
+                  SLIDES_COLLECTION_ID,
+                  documentId,
+                  {
+                    image_link: newUrl,
+                  },
+                )
+                this.slides[index].image_link = newUrl
+              } else if (type === 'faces') {
+                const documentId = this.faces[index].id
+                console.log('update faces documentId : ', documentId)
+                await databases.updateDocument(
+                  DATABASE_ID,
+                  FACES_COLLECTION_ID,
+                  documentId,
+                  {
+                    image_link: newUrl,
+                  },
+                )
+                this.faces[index].image_link = newUrl
+              }
+              this.editableImage = null
             }
-            this.editableImage = null
+          } catch (error) {
+            console.error('Error updating image:', error)
           }
-        } catch (error) {
-          console.error('Error updating image:', error)
+        } else {
+          if (newUrl && newUrl === '') {
+            //delete
+            console.log('delete method')
+            try {
+              if (this.editableImage) {
+                const { index, type } = this.editableImage
+                if (type === 'carousel') {
+                  const documentId = this.slides[index].id
+                  await databases.deleteDocument(
+                    DATABASE_ID,
+                    SLIDES_COLLECTION_ID,
+                    documentId,
+                    {
+                      image_link: newUrl,
+                    },
+                  )
+                  this.slides[index].image_link.push(newUrl)
+                } else if (type === 'faces') {
+                  const documentId = this.faces[index].id
+                  await databases.deleteDocument(
+                    DATABASE_ID,
+                    FACES_COLLECTION_ID,
+                    documentId,
+                    {
+                      image_link: newUrl,
+                    },
+                  )
+                  this.faces[index].image_link.push(newUrl)
+                }
+                this.editableImage = null
+              }
+            } catch (error) {
+              console.error('Error deleting image:', error)
+            }
+          }
         }
       }
     },

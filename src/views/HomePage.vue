@@ -122,6 +122,7 @@ export default {
             }"
           >
             <img
+              :contenteditable="isEditing"
               :src="slide.image_link"
               class="w-full h-full object-cover"
               :class="{ 'border border-dashed border-primary': isEditing }"
@@ -166,7 +167,9 @@ export default {
         <!-- no slides images -->
         <div
           v-else-if="isEditing && !slides.length > 0"
+          :contenteditable="isEditing"
           class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
+          :class="{ 'border border-dashed border-primary': isEditing }"
         >
           <div
             v-if="
@@ -226,7 +229,9 @@ export default {
     <!-- faces -->
     <div class="flex flex-col gap-y-6">
       <h1
+        :contenteditable="isEditing"
         class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+        :class="{ 'border border-dashed border-primary': isEditing }"
       >
         Nos <span class="text-primary">faces</span> disponibles
       </h1>
@@ -282,7 +287,9 @@ export default {
         <!-- no faces images -->
         <div
           v-else-if="isEditing && !faces.length > 0"
+          :contenteditable="isEditing"
           class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-lg"
+          :class="{ 'border border-dashed border-primary': isEditing }"
         >
           <div
             v-if="
