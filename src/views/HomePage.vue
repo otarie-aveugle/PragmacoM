@@ -20,6 +20,7 @@ export default {
       'toggleEdit',
       'editImage',
       'updateImage',
+      'addImage',
       'nextSlide',
       'prevSlide',
       'fetchContent',
@@ -149,6 +150,49 @@ export default {
         </div>
 
         <!-- no slides images -->
+        <div
+          v-else-if="isEditing && !slides.length > 0"
+          class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
+        >
+          <div
+            v-if="
+              isEditing &&
+              editableImage?.index === '0' &&
+              editableImage?.type === 'carousel'
+            "
+            class="top-5 left-5 bg-white p-2 shadow rounded"
+          >
+            <input
+              type="text"
+              v-model="slides[0].image_link"
+              @blur="addImage(slides[0].image_link)"
+              class="input input-sm"
+              placeholder="Image URL"
+            />
+          </div>
+          <button
+            v-if="isEditing"
+            @click="editImage('0', 'carousel')"
+            class="bg-gray-200 bottom-5 left-5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-8 bg-gray-200"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </button>
+          <!-- <span class="text-gray-500">TEST</span> -->
+        </div>
+        <!-- no slides images / no editing -->
         <figure
           v-else
           class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"

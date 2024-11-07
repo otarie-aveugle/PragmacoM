@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { databases } from '@/lib/appwrite'
+import { databases, ID } from '@/lib/appwrite'
 
 const DATABASE_ID = '67248eb20017c1067937'
 const SLIDES_COLLECTION_ID = '672b437d00367fdf47ea'
@@ -39,6 +39,38 @@ export const useHomeStore = defineStore('home', {
 
     editImage(index, type) {
       this.editableImage = { index, type }
+    },
+
+    async addImage(url) {
+      try {
+        if (this.editableImage) {
+          const { index, type } = this.editableImage
+          if (type === 'carousel') {
+            await databases.createDocument(
+              DATABASE_ID,
+              SLIDES_COLLECTION_ID,
+              ID.unique(),
+              {
+                image: url,
+              },
+            )
+            this.slides[index].image = url
+          } else if (type === 'faces') {
+            await databases.createDocument(
+              DATABASE_ID,
+              FACES_COLLECTION_ID,
+              ID.unique(),
+              {
+                image: url,
+              },
+            )
+            this.faces[index].image = url
+          }
+          this.editableImage = null
+        }
+      } catch (error) {
+        console.error('Error adding image:', error)
+      }
     },
 
     async updateImage(newUrl) {
