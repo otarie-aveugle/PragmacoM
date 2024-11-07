@@ -136,7 +136,7 @@ export const useHomeStore = defineStore('home', {
             console.error('Error updating image:', error)
           }
         } else {
-          if (newUrl && newUrl === '') {
+          if (newUrl === '') {
             //delete
             console.log('delete method')
             try {
@@ -152,7 +152,7 @@ export const useHomeStore = defineStore('home', {
                       image_link: newUrl,
                     },
                   )
-                  this.slides[index].image_link.push(newUrl)
+                  this.slides[index].image_link = newUrl
                 } else if (type === 'faces') {
                   const documentId = this.faces[index].id
                   await databases.deleteDocument(
@@ -163,7 +163,7 @@ export const useHomeStore = defineStore('home', {
                       image_link: newUrl,
                     },
                   )
-                  this.faces[index].image_link.push(newUrl)
+                  this.faces[index].image_link = newUrl
                 }
                 this.editableImage = null
               }

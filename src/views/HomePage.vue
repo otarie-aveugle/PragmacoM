@@ -107,7 +107,10 @@ export default {
       </div>
 
       <!-- carousel -->
-      <div class="flex justify-center items-center w-full md:w-1/2">
+      <div
+        class="flex justify-center items-center w-full md:w-1/2"
+        :class="{ 'border border-dashed border-primary': isEditing }"
+      >
         <div
           v-if="slides.length > 0"
           class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
@@ -121,12 +124,7 @@ export default {
               flex: currentSlide === index,
             }"
           >
-            <img
-              :contenteditable="isEditing"
-              :src="slide.image_link"
-              class="w-full h-full object-cover"
-              :class="{ 'border border-dashed border-primary': isEditing }"
-            />
+            <img :src="slide.image_link" class="w-full h-full object-cover" />
             <div
               v-if="
                 isEditing &&
@@ -167,9 +165,7 @@ export default {
         <!-- no slides images -->
         <div
           v-else-if="isEditing && !slides.length > 0"
-          :contenteditable="isEditing"
           class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
-          :class="{ 'border border-dashed border-primary': isEditing }"
         >
           <div
             v-if="
@@ -187,33 +183,39 @@ export default {
               placeholder="Image URL"
             />
           </div>
-          <button
-            v-if="
-              (isEditing &&
-                editableImage?.index === '' &&
-                editableImage?.type === '') ||
-              (isEditing &&
-                editableImage?.index === 0 &&
-                editableImage?.type === 'faces')
-            "
-            @click="editImage(0, 'carousel')"
-            class="bg-gray-200 bottom-5 left-5"
+          <figure
+            v-else
+            class="w-full h-[400px] flex flex-col items-center justify-center bg-gray-200 rounded-lg"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-8 bg-gray-200"
+            <button
+              v-if="
+                (isEditing &&
+                  editableImage?.index === '' &&
+                  editableImage?.type === '') ||
+                (isEditing &&
+                  editableImage?.index === 0 &&
+                  editableImage?.type === 'faces')
+              "
+              @click="editImage(0, 'carousel')"
+              class="bg-gray-200 bottom-5 left-5"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-8 bg-gray-200"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </button>
+            <span class="text-gray-500">Aucune image disponible</span>
+          </figure>
         </div>
 
         <!-- no slides images / no editing -->
@@ -242,6 +244,7 @@ export default {
         <div
           v-if="faces.length > 0"
           class="flex flex-wrap gap-6 justify-center md:justify-start"
+          :class="{ 'border border-dashed border-primary': isEditing }"
         >
           <figure
             v-for="(face, index) in faces"
@@ -287,7 +290,6 @@ export default {
         <!-- no faces images -->
         <div
           v-else-if="isEditing && !faces.length > 0"
-          :contenteditable="isEditing"
           class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-lg"
           :class="{ 'border border-dashed border-primary': isEditing }"
         >
@@ -307,33 +309,43 @@ export default {
               placeholder="Image URL"
             />
           </div>
-          <button
-            v-if="
-              (isEditing &&
-                editableImage?.index === '' &&
-                editableImage?.type === '') ||
-              (isEditing &&
-                editableImage?.index === 0 &&
-                editableImage?.type === 'carousel')
-            "
-            @click="editImage(0, 'faces')"
-            class="bg-gray-200 bottom-5 left-5"
+          <div
+            v-else
+            class="flex flex-wrap gap-6 justify-center md:justify-start"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-8 bg-gray-200"
+            <figure
+              class="w-96 h-64 flex flex-col items-center justify-center bg-gray-200 rounded-t-lg relative"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </button>
+              <button
+                v-if="
+                  (isEditing &&
+                    editableImage?.index === '' &&
+                    editableImage?.type === '') ||
+                  (isEditing &&
+                    editableImage?.index === 0 &&
+                    editableImage?.type === 'carousel')
+                "
+                @click="editImage(0, 'faces')"
+                class="bg-gray-200 bottom-5 left-5"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-8 bg-gray-200"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </button>
+              <span class="text-gray-500">Aucune image disponible</span>
+            </figure>
+          </div>
         </div>
 
         <!-- no faces images / no editing -->
