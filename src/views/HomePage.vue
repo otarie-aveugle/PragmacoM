@@ -5,6 +5,20 @@ import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'HomePage',
+  data() {
+    return {
+      newSlides: [
+        {
+          image_link: '',
+        },
+      ],
+      newFaces: [
+        {
+          image_link: '',
+        },
+      ],
+    }
+  },
   computed: {
     ...mapState(useHomeStore, [
       'isEditing',
@@ -157,22 +171,29 @@ export default {
           <div
             v-if="
               isEditing &&
-              editableImage?.index === '0' &&
+              editableImage?.index === 0 &&
               editableImage?.type === 'carousel'
             "
             class="top-5 left-5 bg-white p-2 shadow rounded"
           >
             <input
               type="text"
-              v-model="slides[0].image_link"
-              @blur="addImage(slides[0].image_link)"
+              v-model="newSlides[0].image_link"
+              @blur="addImage(newSlides[0].image_link)"
               class="input input-sm"
               placeholder="Image URL"
             />
           </div>
           <button
-            v-if="isEditing"
-            @click="editImage('0', 'carousel')"
+            v-if="
+              (isEditing &&
+                editableImage?.index === '' &&
+                editableImage?.type === '') ||
+              (isEditing &&
+                editableImage?.index === 0 &&
+                editableImage?.type === 'faces')
+            "
+            @click="editImage(0, 'carousel')"
             class="bg-gray-200 bottom-5 left-5"
           >
             <svg
@@ -190,8 +211,8 @@ export default {
               />
             </svg>
           </button>
-          <!-- <span class="text-gray-500">TEST</span> -->
         </div>
+
         <!-- no slides images / no editing -->
         <figure
           v-else
@@ -258,13 +279,62 @@ export default {
           </figure>
         </div>
 
+        <!-- no faces images -->
+        <div
+          v-else-if="isEditing && !faces.length > 0"
+          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-lg"
+        >
+          <div
+            v-if="
+              isEditing &&
+              editableImage?.index === 0 &&
+              editableImage?.type === 'faces'
+            "
+            class="top-5 left-5 bg-white p-2 shadow rounded"
+          >
+            <input
+              type="text"
+              v-model="newFaces[0].image_link"
+              @blur="addImage(newFaces[0].image_link)"
+              class="input input-sm"
+              placeholder="Image URL"
+            />
+          </div>
+          <button
+            v-if="
+              (isEditing &&
+                editableImage?.index === '' &&
+                editableImage?.type === '') ||
+              (isEditing &&
+                editableImage?.index === 0 &&
+                editableImage?.type === 'carousel')
+            "
+            @click="editImage(0, 'faces')"
+            class="bg-gray-200 bottom-5 left-5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-8 bg-gray-200"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- no faces images / no editing -->
         <div
           v-else
           class="flex flex-wrap gap-6 justify-center md:justify-start"
         >
           <figure
-            v-for="index in 3"
-            :key="index"
             class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
           >
             <span class="text-gray-500">Aucune image disponible</span>

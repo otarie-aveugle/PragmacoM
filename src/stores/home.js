@@ -8,7 +8,10 @@ const FACES_COLLECTION_ID = '672b4553001da9498403'
 export const useHomeStore = defineStore('home', {
   state: () => ({
     isEditing: false,
-    editableImage: null,
+    editableImage: {
+      index: '',
+      type: '',
+    },
     currentSlide: 0,
     slides: [],
     faces: [],
@@ -26,8 +29,12 @@ export const useHomeStore = defineStore('home', {
           FACES_COLLECTION_ID,
         )
 
-        this.slides = slidesData.documents.map(doc => ({ image: doc.image }))
-        this.faces = facesData.documents.map(doc => ({ image: doc.image }))
+        this.slides = slidesData.documents.map(doc => ({
+          image_link: doc.image_link,
+        }))
+        this.faces = facesData.documents.map(doc => ({
+          image_link: doc.image_link,
+        }))
       } catch (error) {
         console.error('Error fetching content:', error)
       }
@@ -42,68 +49,76 @@ export const useHomeStore = defineStore('home', {
     },
 
     async addImage(url) {
-      try {
-        if (this.editableImage) {
-          const { index, type } = this.editableImage
-          if (type === 'carousel') {
-            await databases.createDocument(
-              DATABASE_ID,
-              SLIDES_COLLECTION_ID,
-              ID.unique(),
-              {
-                image: url,
-              },
-            )
-            this.slides[index].image = url
-          } else if (type === 'faces') {
-            await databases.createDocument(
-              DATABASE_ID,
-              FACES_COLLECTION_ID,
-              ID.unique(),
-              {
-                image: url,
-              },
-            )
-            this.faces[index].image = url
+      if (typeof url === 'string' && url) {
+        try {
+          if (this.editableImage) {
+            const { index, type } = this.editableImage
+            if (type === 'carousel') {
+              await databases.createDocument(
+                DATABASE_ID,
+                SLIDES_COLLECTION_ID,
+                ID.unique(),
+                {
+                  image_link: url,
+                },
+              )
+              this.slides[index].image_link = url
+            } else if (type === 'faces') {
+              await databases.createDocument(
+                DATABASE_ID,
+                FACES_COLLECTION_ID,
+                ID.unique(),
+                {
+                  image_link: url,
+                },
+              )
+              this.faces[index].image_link = url
+            }
+            this.editableImage = null
           }
-          this.editableImage = null
+        } catch (error) {
+          console.error('Error adding image:', error)
         }
-      } catch (error) {
-        console.error('Error adding image:', error)
+      }
+      this.editableImage = {
+        index: '',
+        type: '',
       }
     },
 
     async updateImage(newUrl) {
-      try {
-        if (this.editableImage) {
-          const { index, type } = this.editableImage
-          if (type === 'carousel') {
-            const documentId = this.slides[index].id
-            await databases.updateDocument(
-              DATABASE_ID,
-              SLIDES_COLLECTION_ID,
-              documentId,
-              {
-                image: newUrl,
-              },
-            )
-            this.slides[index].image = newUrl
-          } else if (type === 'faces') {
-            const documentId = this.faces[index].id
-            await databases.updateDocument(
-              DATABASE_ID,
-              FACES_COLLECTION_ID,
-              documentId,
-              {
-                image: newUrl,
-              },
-            )
-            this.faces[index].image = newUrl
+      if (typeof newUrl === 'string' && newUrl) {
+        try {
+          if (this.editableImage) {
+            const { index, type } = this.editableImage
+            if (type === 'carousel') {
+              const documentId = this.slides[index].id
+              await databases.updateDocument(
+                DATABASE_ID,
+                SLIDES_COLLECTION_ID,
+                documentId,
+                {
+                  image_link: newUrl,
+                },
+              )
+              this.slides[index].image_link = newUrl
+            } else if (type === 'faces') {
+              const documentId = this.faces[index].id
+              await databases.updateDocument(
+                DATABASE_ID,
+                FACES_COLLECTION_ID,
+                documentId,
+                {
+                  image_link: newUrl,
+                },
+              )
+              this.faces[index].image_link = newUrl
+            }
+            this.editableImage = null
           }
-          this.editableImage = null
+        } catch (error) {
+          console.error('Error updating image:', error)
         }
-      } catch (error) {
-        console.error('Error updating image:', error)
       }
     },
 
