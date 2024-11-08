@@ -112,10 +112,14 @@ export default {
               flex: currentSlide === index,
             }"
           >
-            <img :src="slide.image_link" class="w-full h-full object-cover" />
+            <img
+              :src="slide.image_link"
+              v-if="slide.id != 'add_img'"
+              class="w-full h-full object-cover"
+            />
 
             <!-- slide add -->
-            <!-- <div
+            <div
               v-if="isEditing"
               class="w-full h-full flex items-center justify-center bg-gray-200"
             >
@@ -149,9 +153,9 @@ export default {
                     />
                   </svg>
                 </button>
-                <span class="text-gray-500">Aucune image disponible</span>
+                <span class="text-gray-500">Aucune image enregistrée</span>
               </figure>
-            </div> -->
+            </div>
 
             <div
               v-if="
@@ -170,7 +174,7 @@ export default {
               />
             </div>
             <button
-              v-if="isEditing && slide.id"
+              v-if="isEditing && slide.id != 'add_img'"
               @click="editImage(index, 'carousel')"
               class="btn btn-sm absolute bottom-5 left-5"
               style="
@@ -248,16 +252,20 @@ export default {
         </div>
 
         <!-- no slides images / no editing -->
-        <!-- <figure
+        <figure
           v-else
           class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
         >
-          <span class="text-gray-500">Aucune image disponible</span>
-        </figure> -->
+          <span class="text-gray-500"
+            >Aucune image de carrousel n'est enregistrée actuellement</span
+          >
+        </figure>
       </div>
     </div>
     <!-- end carousel -->
+    <!-- ------------ -->
 
+    <!-- ------------ -->
     <!-- faces -->
     <div class="flex flex-col items-center gap-y-6">
       <h1
@@ -267,8 +275,6 @@ export default {
       >
         Nos <span class="text-primary">faces</span> disponibles
       </h1>
-
-      <p>faces.length: {{ faces.length }}</p>
 
       <!-- div faces -->
       <div
@@ -332,11 +338,10 @@ export default {
                     editableImage?.type === 'carousel_add')
                 "
                 class="text-gray-500"
-                >Aucune image disponible</span
+                >Aucune image enregistrée</span
               >
             </figure>
 
-            <!-- //TODO séparer cette div en 2 div, une pour la face d'ajout et l'autre pour l'affichage de l'input modif img -->
             <!-- div d'ajout d'img -->
             <div
               v-if="
@@ -345,7 +350,7 @@ export default {
                 editableImage?.type === 'faces_add' &&
                 face.id == 'add_img'
               "
-              class="top-5 left-5 bg-white p-2 shadow rounded"
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
             >
               <input
                 type="text"
@@ -450,7 +455,6 @@ export default {
         </div>
          -->
 
-        <!--
         <div
           v-else
           class="flex flex-wrap gap-6 justify-center md:justify-start"
@@ -458,9 +462,11 @@ export default {
           <figure
             class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
           >
-            <span class="text-gray-500">Aucune image disponible</span>
+            <span class="text-gray-500"
+              >Aucune faces n'est enregistrée actuellement</span
+            >
           </figure>
-        </div> -->
+        </div>
       </div>
       <!-- end div faces -->
     </div>

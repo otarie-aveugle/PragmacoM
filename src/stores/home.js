@@ -128,6 +128,8 @@ export const useHomeStore = defineStore('home', {
       }
       this.newSlides = [{ image_link: '' }]
       this.newFaces = [{ image_link: '' }]
+      this.toggleEdit()
+      this.toggleEdit()
     },
 
     async updateImage(newUrl) {
@@ -209,6 +211,8 @@ export const useHomeStore = defineStore('home', {
           index: '',
           type: '',
         }
+        this.toggleEdit()
+        this.toggleEdit()
       }
     },
 
