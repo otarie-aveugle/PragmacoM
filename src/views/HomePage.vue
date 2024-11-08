@@ -142,6 +142,7 @@ export default {
               Modifier
             </button>
             <div
+              v-if="slides.length > 1"
               class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
             >
               <button @click="prevSlide" class="btn btn-circle">❮</button>
@@ -217,7 +218,7 @@ export default {
     </div>
 
     <!-- faces -->
-    <div class="flex flex-col gap-y-6">
+    <div class="flex flex-col items-center gap-y-6">
       <h1
         :contenteditable="isEditing"
         class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
