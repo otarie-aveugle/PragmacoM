@@ -58,6 +58,28 @@ export const useHomeStore = defineStore('home', {
 
     toggleEdit() {
       this.isEditing = !this.isEditing
+      if (this.isEditing) {
+        console.log('[EDITION] ON')
+      } else {
+        console.log('[EDITION] OFF')
+      }
+      console.log('----------')
+      console.log('slides : ', this.slides)
+      console.log('faces : ', this.faces)
+      console.log('slides.lenght : ', this.slides.length)
+      console.log('faces.lenght : ', this.faces.length)
+      if (this.isEditing) {
+        this.slides.push({ id: 'add_img', image_link: '' }) //add image
+        this.faces.push({ id: 'add_img', image_link: '' }) //add image
+      } else {
+        this.slides.pop() //remove last slide 'add_img'
+        this.faces.pop() //remove last faces 'add_img'
+      }
+      console.log('slides : ', this.slides)
+      console.log('faces : ', this.faces)
+      console.log('slides.lenght : ', this.slides.length)
+      console.log('faces.lenght : ', this.faces.length)
+      console.log('----------')
     },
 
     editImage(index, type) {
@@ -71,7 +93,7 @@ export const useHomeStore = defineStore('home', {
         try {
           if (this.editableImage) {
             const { index, type } = this.editableImage
-            if (type === 'carousel') {
+            if (type === 'carousel' || type === 'carousel_add') {
               console.log('carousel url : ', url)
               await databases.createDocument(
                 DATABASE_ID,
@@ -82,7 +104,7 @@ export const useHomeStore = defineStore('home', {
                 },
               )
               this.slides[index] = { image_link: url }
-            } else if (type === 'faces') {
+            } else if (type === 'faces' || type === 'faces_add') {
               console.log('faces url : ', url)
               await databases.createDocument(
                 DATABASE_ID,

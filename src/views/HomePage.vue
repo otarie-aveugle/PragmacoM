@@ -113,6 +113,46 @@ export default {
             }"
           >
             <img :src="slide.image_link" class="w-full h-full object-cover" />
+
+            <!-- slide add -->
+            <!-- <div
+              v-if="isEditing"
+              class="w-full h-full flex items-center justify-center bg-gray-200"
+            >
+              <figure
+                class="w-full h-[400px] flex flex-col items-center justify-center bg-gray-200 rounded-lg"
+              >
+                <button
+                  v-if="
+                    (isEditing &&
+                      editableImage?.index === '' &&
+                      editableImage?.type === '') ||
+                    (isEditing &&
+                      editableImage?.index === 0 &&
+                      editableImage?.type === 'faces')
+                  "
+                  @click="editImage(0, 'carousel')"
+                  class="bg-gray-200 bottom-5 left-5"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-8 bg-gray-200"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </button>
+                <span class="text-gray-500">Aucune image disponible</span>
+              </figure>
+            </div> -->
+
             <div
               v-if="
                 isEditing &&
@@ -130,7 +170,7 @@ export default {
               />
             </div>
             <button
-              v-if="isEditing"
+              v-if="isEditing && slide.id"
               @click="editImage(index, 'carousel')"
               class="btn btn-sm absolute bottom-5 left-5"
               style="
@@ -142,7 +182,7 @@ export default {
               Modifier
             </button>
             <div
-              v-if="slides.length > 1"
+              v-if="slides.length > 1 && slide.id"
               class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
             >
               <button @click="prevSlide" class="btn btn-circle">❮</button>
@@ -208,14 +248,15 @@ export default {
         </div>
 
         <!-- no slides images / no editing -->
-        <figure
+        <!-- <figure
           v-else
           class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
         >
           <span class="text-gray-500">Aucune image disponible</span>
-        </figure>
+        </figure> -->
       </div>
     </div>
+    <!-- end carousel -->
 
     <!-- faces -->
     <div class="flex flex-col items-center gap-y-6">
@@ -227,28 +268,101 @@ export default {
         Nos <span class="text-primary">faces</span> disponibles
       </h1>
 
+      <p>faces.length: {{ faces.length }}</p>
+
+      <!-- div faces -->
       <div
         class="flex flex-row flex-wrap gap-6 justify-center md:justify-start"
       >
         <div
           v-if="faces.length > 0"
           class="flex flex-wrap gap-6 justify-center md:justify-start"
-          :class="{ 'border border-dashed border-primary': isEditing }"
         >
           <figure
             v-for="(face, index) in faces"
             :key="index"
             class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
+            :class="{ 'border border-dashed border-primary': isEditing }"
           >
             <img
+              v-if="face.id != 'add_img'"
               :src="face.image_link"
               class="w-full h-full object-cover rounded-t-lg"
             />
+
+            <!-- si mode edition on affiche une face supplémentaire pour permettre l'ajout d'une nouvelle faces a la page d'accueil -->
+            <figure
+              v-if="face.id == 'add_img' && isEditing"
+              class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg"
+            >
+              <button
+                v-if="
+                  (isEditing &&
+                    editableImage?.index === '' &&
+                    editableImage?.type === '') ||
+                  (isEditing &&
+                    editableImage?.index === 0 &&
+                    editableImage?.type === 'carousel_add')
+                "
+                @click="editImage('faces_add', 'faces_add')"
+                class="bg-gray-200 bottom-5 left-5"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-8 bg-gray-200"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </button>
+              <span
+                v-if="
+                  (isEditing &&
+                    editableImage?.index === '' &&
+                    editableImage?.type === '') ||
+                  (isEditing &&
+                    editableImage?.index === 0 &&
+                    editableImage?.type === 'carousel_add')
+                "
+                class="text-gray-500"
+                >Aucune image disponible</span
+              >
+            </figure>
+
+            <!-- //TODO séparer cette div en 2 div, une pour la face d'ajout et l'autre pour l'affichage de l'input modif img -->
+            <!-- div d'ajout d'img -->
+            <div
+              v-if="
+                isEditing &&
+                editableImage?.index === 'faces_add' &&
+                editableImage?.type === 'faces_add' &&
+                face.id == 'add_img'
+              "
+              class="top-5 left-5 bg-white p-2 shadow rounded"
+            >
+              <input
+                type="text"
+                v-model="faces[index].image_link"
+                @blur="addImage(faces[index].image_link)"
+                class="input input-sm"
+                placeholder="Image URL"
+              />
+            </div>
+
+            <!-- div classic de modification -->
             <div
               v-if="
                 isEditing &&
                 editableImage?.index === index &&
-                editableImage?.type === 'faces'
+                editableImage?.type === 'faces' &&
+                face.id != 'add_img'
               "
               class="absolute top-5 left-5 bg-white p-2 shadow rounded"
             >
@@ -261,7 +375,7 @@ export default {
               />
             </div>
             <button
-              v-if="isEditing"
+              v-if="isEditing && face.id != 'add_img'"
               @click="editImage(index, 'faces')"
               class="btn btn-sm absolute bottom-5 left-5"
               style="
@@ -275,8 +389,7 @@ export default {
           </figure>
         </div>
 
-        <!-- no faces images -->
-        <div
+        <!-- <div
           v-else-if="isEditing && !faces.length > 0"
           class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-lg"
           :class="{ 'border border-dashed border-primary': isEditing }"
@@ -335,8 +448,9 @@ export default {
             </figure>
           </div>
         </div>
+         -->
 
-        <!-- no faces images / no editing -->
+        <!--
         <div
           v-else
           class="flex flex-wrap gap-6 justify-center md:justify-start"
@@ -346,9 +460,11 @@ export default {
           >
             <span class="text-gray-500">Aucune image disponible</span>
           </figure>
-        </div>
+        </div> -->
       </div>
+      <!-- end div faces -->
     </div>
+    <!-- end faces -->
   </div>
 </template>
 
@@ -358,3 +474,13 @@ export default {
   padding: 2px;
 }
 </style>
+
+<!-- 
+//TODO
+Ïl faut ajouter le fait que l'on doit pouvoir ajouter d'autres slides au carousel et d'autres faces
+C'est à dire:
+- S'il y a des données et que l'on est en mode édition > affiche la div d'ajout d'image
+> pour les slides, une slide supplémentaire et qui devient la currentSlide
+> pour les faces, une face supplémentaire
+- Si on quitte le mode édition, on cache les div d'ajout d'image (slides & faces) et currentSlide prend l'index 0
+-->
