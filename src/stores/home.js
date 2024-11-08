@@ -15,6 +15,16 @@ export const useHomeStore = defineStore('home', {
     currentSlide: 0,
     slides: [],
     faces: [],
+    newSlides: [
+      {
+        image_link: '',
+      },
+    ],
+    newFaces: [
+      {
+        image_link: '',
+      },
+    ],
   }),
 
   actions: {
@@ -84,16 +94,18 @@ export const useHomeStore = defineStore('home', {
               )
               this.faces[index] = { image_link: url }
             }
-            this.editableImage = null
           }
         } catch (error) {
           console.error('Error adding image:', error)
         }
       }
+      await this.fetchContent()
       this.editableImage = {
         index: '',
         type: '',
       }
+      this.newSlides = [{ image_link: '' }]
+      this.newFaces = [{ image_link: '' }]
     },
 
     async updateImage(newUrl) {
@@ -130,7 +142,6 @@ export const useHomeStore = defineStore('home', {
                 )
                 this.faces[index].image_link = newUrl
               }
-              this.editableImage = null
             }
           } catch (error) {
             console.error('Error updating image:', error)
@@ -165,12 +176,16 @@ export const useHomeStore = defineStore('home', {
                   )
                   this.faces[index].image_link = newUrl
                 }
-                this.editableImage = null
               }
             } catch (error) {
               console.error('Error deleting image:', error)
             }
           }
+        }
+        await this.fetchContent()
+        this.editableImage = {
+          index: '',
+          type: '',
         }
       }
     },

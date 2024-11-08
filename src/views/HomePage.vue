@@ -5,20 +5,6 @@ import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'HomePage',
-  data() {
-    return {
-      newSlides: [
-        {
-          image_link: '',
-        },
-      ],
-      newFaces: [
-        {
-          image_link: '',
-        },
-      ],
-    }
-  },
   computed: {
     ...mapState(useHomeStore, [
       'isEditing',
@@ -26,6 +12,8 @@ export default {
       'currentSlide',
       'slides',
       'faces',
+      'newSlides',
+      'newFaces',
     ]),
     ...mapState(useUserStore, ['userLoggedIn']),
   },
@@ -253,7 +241,6 @@ export default {
           >
             <img
               :src="face.image_link"
-              alt="panel"
               class="w-full h-full object-cover rounded-t-lg"
             />
             <div
