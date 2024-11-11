@@ -8,8 +8,8 @@ export default {
   <section
     class="p-8 min-h-screen flex items-center justify-center bg-gray-100"
   >
-    <div id="privacy-policy" class="w-full max-w-3xl mx-auto bg-white shadow-xl rounded-lg p-10 space-y-8">
-      <h1 class="text-4xl font-bold text-primary text-center mb-6">
+    <div class="w-full max-w-3xl mx-auto bg-white shadow-xl rounded-lg p-10 space-y-8">
+      <h1 id="privacy-policy" class="text-4xl font-bold text-primary text-center mb-6">
         Politique de Confidentialité
       </h1>
 
