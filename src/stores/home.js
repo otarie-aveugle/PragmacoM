@@ -39,9 +39,6 @@ export const useHomeStore = defineStore('home', {
           FACES_COLLECTION_ID,
         )
 
-        console.log('fetchContent call')
-        console.log('slidesData : ', slidesData)
-        console.log('facesData : ', facesData)
         this.slides = slidesData.documents.map(doc => ({
           id: doc.$id,
           image_link: doc.image_link,
@@ -50,69 +47,36 @@ export const useHomeStore = defineStore('home', {
           id: doc.$id,
           image_link: doc.image_link,
         }))
-        console.log('slides : ', this.slides)
       } catch (error) {
         console.error('Error fetching content:', error)
       }
     },
 
     toggleAddImg() {
-      console.log('----------')
-      console.log('toggleAddImg start')
-      console.log('----------')
-      console.log('isEditing : ', this.isEditing)
-      console.log('slides : ', this.slides)
-      console.log('faces : ', this.faces)
       if (this.isEditing) {
-        console.log('push')
         this.slides.push({ id: 'add_img', image_link: '' }) //add image
         this.faces.push({ id: 'add_img', image_link: '' }) //add image
       } else {
-        console.log('pop')
         this.slides.pop() //remove last slide 'add_img'
         this.faces.pop() //remove last faces 'add_img'
       }
-      console.log('isEditing : ', this.isEditing)
-      console.log('slides : ', this.slides)
-      console.log('faces : ', this.faces)
-      console.log('----------')
-      console.log('toggleAddImg end')
-      console.log('----------')
     },
 
     toggleEdit() {
       this.isEditing = !this.isEditing
-      if (this.isEditing) {
-        console.log('[EDITION] ON')
-      } else {
-        console.log('[EDITION] OFF')
-      }
-      console.log('----------')
-      console.log('slides : ', this.slides)
-      console.log('faces : ', this.faces)
-      console.log('slides.lenght : ', this.slides.length)
-      console.log('faces.lenght : ', this.faces.length)
       this.toggleAddImg()
-      console.log('slides : ', this.slides)
-      console.log('faces : ', this.faces)
-      console.log('slides.lenght : ', this.slides.length)
-      console.log('faces.lenght : ', this.faces.length)
-      console.log('----------')
     },
 
     editImage(index, type) {
       this.editableImage = { index, type }
-      console.log('editableImage : ', this.editableImage)
     },
 
     async addImage(url) {
-      console.log('addImage url : ', url)
       if (typeof url === 'string' && url) {
         try {
           if (this.editableImage) {
             const { index, type } = this.editableImage
             if (type === 'carousel' || type === 'carousel_add') {
-              console.log('carousel url : ', url)
               await databases.createDocument(
                 DATABASE_ID,
                 SLIDES_COLLECTION_ID,
@@ -123,7 +87,6 @@ export const useHomeStore = defineStore('home', {
               )
               this.slides[index] = { image_link: url }
             } else if (type === 'faces' || type === 'faces_add') {
-              console.log('faces url : ', url)
               await databases.createDocument(
                 DATABASE_ID,
                 FACES_COLLECTION_ID,
@@ -150,17 +113,14 @@ export const useHomeStore = defineStore('home', {
     },
 
     async updateImage(newUrl) {
-      console.log('updateImage newUrl : ', newUrl)
       if (typeof newUrl === 'string') {
         if (newUrl.length > 0) {
           //update
-          console.log('update method')
           try {
             if (this.editableImage) {
               const { index, type } = this.editableImage
               if (type === 'carousel') {
                 const documentId = this.slides[index].id
-                console.log('update carousel documentId : ', documentId)
                 await databases.updateDocument(
                   DATABASE_ID,
                   SLIDES_COLLECTION_ID,
@@ -172,7 +132,6 @@ export const useHomeStore = defineStore('home', {
                 this.slides[index].image_link = newUrl
               } else if (type === 'faces') {
                 const documentId = this.faces[index].id
-                console.log('update faces documentId : ', documentId)
                 await databases.updateDocument(
                   DATABASE_ID,
                   FACES_COLLECTION_ID,
@@ -190,7 +149,6 @@ export const useHomeStore = defineStore('home', {
         } else {
           if (newUrl === '') {
             //delete
-            console.log('delete method')
             try {
               if (this.editableImage) {
                 const { index, type } = this.editableImage
