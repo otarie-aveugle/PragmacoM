@@ -56,6 +56,30 @@ export const useHomeStore = defineStore('home', {
       }
     },
 
+    toggleAddImg() {
+      console.log('----------')
+      console.log('toggleAddImg start')
+      console.log('----------')
+      console.log('isEditing : ', this.isEditing)
+      console.log('slides : ', this.slides)
+      console.log('faces : ', this.faces)
+      if (this.isEditing) {
+        console.log('push')
+        this.slides.push({ id: 'add_img', image_link: '' }) //add image
+        this.faces.push({ id: 'add_img', image_link: '' }) //add image
+      } else {
+        console.log('pop')
+        this.slides.pop() //remove last slide 'add_img'
+        this.faces.pop() //remove last faces 'add_img'
+      }
+      console.log('isEditing : ', this.isEditing)
+      console.log('slides : ', this.slides)
+      console.log('faces : ', this.faces)
+      console.log('----------')
+      console.log('toggleAddImg end')
+      console.log('----------')
+    },
+
     toggleEdit() {
       this.isEditing = !this.isEditing
       if (this.isEditing) {
@@ -68,13 +92,7 @@ export const useHomeStore = defineStore('home', {
       console.log('faces : ', this.faces)
       console.log('slides.lenght : ', this.slides.length)
       console.log('faces.lenght : ', this.faces.length)
-      if (this.isEditing) {
-        this.slides.push({ id: 'add_img', image_link: '' }) //add image
-        this.faces.push({ id: 'add_img', image_link: '' }) //add image
-      } else {
-        this.slides.pop() //remove last slide 'add_img'
-        this.faces.pop() //remove last faces 'add_img'
-      }
+      this.toggleAddImg()
       console.log('slides : ', this.slides)
       console.log('faces : ', this.faces)
       console.log('slides.lenght : ', this.slides.length)
@@ -128,8 +146,7 @@ export const useHomeStore = defineStore('home', {
       }
       this.newSlides = [{ image_link: '' }]
       this.newFaces = [{ image_link: '' }]
-      this.toggleEdit()
-      this.toggleEdit()
+      this.toggleAddImg()
     },
 
     async updateImage(newUrl) {
@@ -211,8 +228,7 @@ export const useHomeStore = defineStore('home', {
           index: '',
           type: '',
         }
-        this.toggleEdit()
-        this.toggleEdit()
+        this.toggleAddImg()
       }
     },
 
