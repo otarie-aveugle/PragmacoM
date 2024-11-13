@@ -133,7 +133,7 @@ export default {
                       editableImage?.type === 'faces_add')
                   "
                   @click="editImage(0, 'carousel')"
-                  class="bg-gray-200 bottom-5 left-5"
+                  class="bg-gray-200 bottom-5 left-5 z-10"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +151,7 @@ export default {
                   </svg>
                 </button>
                 <span
-                  class="text-gray-500"
+                  class="text-gray-500 z-10"
                   v-if="
                     (isEditing &&
                       editableImage?.index === '' &&
