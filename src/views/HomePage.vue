@@ -132,7 +132,7 @@ export default {
                       editableImage?.index === 0 &&
                       editableImage?.type === 'faces_add')
                   "
-                  @click="editImage(0, 'carousel')"
+                  @click="editImage(index, 'carousel')"
                   class="bg-gray-200 bottom-5 left-5 z-10"
                 >
                   <svg

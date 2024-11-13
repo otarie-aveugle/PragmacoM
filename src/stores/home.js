@@ -64,10 +64,13 @@ export const useHomeStore = defineStore('home', {
 
     toggleSlideToAddImg() {
       let index = 0
-      do {
+      while (
+        index < this.slides.length &&
+        this.slides[index].id !== 'add_img'
+      ) {
         this.nextSlide()
         index++
-      } while (this.slides[index].id != 'add_img')
+      }
     },
 
     toggleEdit() {
