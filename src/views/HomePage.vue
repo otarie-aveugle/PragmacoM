@@ -35,7 +35,6 @@ export default {
 </script>
 
 <template>
-  <!-- mode édition -->
   <div class="flex flex-col mx-4 gap-6">
     <div v-if="userLoggedIn" class="flex justify-end">
       <button @click="toggleEdit" class="btn btn-sm btn-outline btn-primary">
@@ -47,7 +46,6 @@ export default {
     <div
       class="flex flex-col gap-6 md:flex-row md:justify-between md:items-center"
     >
-      <!-- texte+CTA -->
       <div class="flex flex-col gap-y-12 md:w-1/2 items-center md:items-start">
         <h1
           :contenteditable="isEditing"
@@ -95,12 +93,10 @@ export default {
         </RouterLink>
       </div>
 
-      <!-- carousel -->
       <div
         class="flex justify-center items-center w-full md:w-1/2"
         :class="{ 'border border-dashed border-primary': isEditing }"
       >
-        <!-- datas -->
         <div
           v-if="slides.length > 0"
           class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
@@ -120,7 +116,6 @@ export default {
               class="w-full h-full object-cover"
             />
 
-            <!-- slide add -->
             <div
               v-if="isEditing && slide.id == 'add_img'"
               class="w-full h-full flex items-center justify-center bg-gray-200"
@@ -169,7 +164,6 @@ export default {
                 >
               </figure>
             </div>
-            <!-- slide add end -->
 
             <div
               v-if="
@@ -189,7 +183,6 @@ export default {
               />
             </div>
 
-            <!-- update -->
             <div
               v-if="
                 isEditing &&
@@ -220,9 +213,8 @@ export default {
               Modifier
             </button>
 
-            <!-- slides buttons -->
             <div
-              v-if="slides.length > 1 && slide.id"
+              v-if="slides.length > 1"
               class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
             >
               <button @click="prevSlide" class="btn btn-circle">❮</button>
@@ -231,63 +223,6 @@ export default {
           </div>
         </div>
 
-        <!-- no slides images -->
-        <!-- <div
-          v-else-if="isEditing && !slides.length > 0"
-          class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
-        >
-          <div
-            v-if="
-              isEditing &&
-              editableImage?.index === 0 &&
-              editableImage?.type === 'carousel'
-            "
-            class="top-5 left-5 bg-white p-2 shadow rounded"
-          >
-            <input
-              type="text"
-              v-model="newSlides[0].image_link"
-              @blur="addImage(newSlides[0].image_link)"
-              class="input input-sm"
-              placeholder="Image URL"
-            />
-          </div>
-          <figure
-            v-else
-            class="w-full h-[400px] flex flex-col items-center justify-center bg-gray-200 rounded-lg"
-          >
-            <button
-              v-if="
-                (isEditing &&
-                  editableImage?.index === '' &&
-                  editableImage?.type === '') ||
-                (isEditing &&
-                  editableImage?.index === 0 &&
-                  editableImage?.type === 'faces')
-              "
-              @click="editImage(0, 'carousel')"
-              class="bg-gray-200 bottom-5 left-5"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-8 bg-gray-200"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-            </button>
-            <span class="text-gray-500">Aucune image disponible</span>
-          </figure>
-        </div> -->
-
-        <!-- no datas -->
         <figure
           v-else
           class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
@@ -298,11 +233,7 @@ export default {
         </figure>
       </div>
     </div>
-    <!-- end carousel -->
-    <!-- ------------ -->
 
-    <!-- ------------ -->
-    <!-- faces -->
     <div class="flex flex-col items-center gap-y-6">
       <h1
         :contenteditable="isEditing"
@@ -312,11 +243,9 @@ export default {
         Nos <span class="text-primary">faces</span> disponibles
       </h1>
 
-      <!-- div faces -->
       <div
         class="flex flex-row flex-wrap gap-6 justify-center md:justify-start"
       >
-        <!-- datas -->
         <div
           v-if="faces.length > 0"
           class="flex flex-wrap gap-6 justify-center md:justify-start"
@@ -333,7 +262,6 @@ export default {
               class="w-full h-full object-cover rounded-t-lg"
             />
 
-            <!-- add faces -->
             <figure
               v-if="face.id == 'add_img' && isEditing"
               class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg"
@@ -396,7 +324,6 @@ export default {
               />
             </div>
 
-            <!-- update faces -->
             <div
               v-if="
                 isEditing &&
@@ -429,7 +356,6 @@ export default {
           </figure>
         </div>
 
-        <!-- no datas -->
         <div
           v-else
           class="flex flex-wrap gap-6 justify-center md:justify-start"
@@ -443,9 +369,7 @@ export default {
           </figure>
         </div>
       </div>
-      <!-- end div faces -->
     </div>
-    <!-- end faces -->
   </div>
 </template>
 
@@ -455,18 +379,3 @@ export default {
   padding: 2px;
 }
 </style>
-
-<!-- 
-//TODO
-Ïl faut ajouter le fait que l'on doit pouvoir ajouter d'autres slides au carousel et d'autres faces
-C'est à dire:
-- S'il y a des données et que l'on est en mode édition > affiche la div d'ajout d'image
-> ajout d'une slide supplémentaire et qui devient la currentSlide
-- Si on quitte le mode édition, on cache les div d'ajout d'image (slides & faces) et currentSlide prend l'index 0
--->
-
-<!-- 
-//TODO !important
-
-
--->

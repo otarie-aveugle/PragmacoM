@@ -62,13 +62,23 @@ export const useHomeStore = defineStore('home', {
       }
     },
 
+    toggleSlideToAddImg() {
+      let index = 0
+      do {
+        this.nextSlide()
+        index++
+      } while (this.slides[index].id != 'add_img')
+    },
+
     toggleEdit() {
       this.isEditing = !this.isEditing
       this.toggleAddImg()
+      this.toggleSlideToAddImg()
     },
 
     editImage(index, type) {
       this.editableImage = { index, type }
+      console.log('editableImage : ', this.editableImage)
     },
 
     async addImage(url) {
