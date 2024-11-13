@@ -4,6 +4,7 @@ import { databases, ID } from '@/lib/appwrite'
 const DATABASE_ID = '67248eb20017c1067937'
 const SLIDES_COLLECTION_ID = '672b437d00367fdf47ea'
 const FACES_COLLECTION_ID = '672b4553001da9498403'
+const CONTENT_COLLECTION_ID = '6734da81001a24dd3dab'
 
 export const useHomeStore = defineStore('home', {
   state: () => ({
@@ -25,6 +26,22 @@ export const useHomeStore = defineStore('home', {
         image_link: '',
       },
     ],
+    contentData: [],
+    title1: {
+      id: '',
+      type: '',
+      content: '',
+    }, //index 0
+    title2: {
+      id: '',
+      type: '',
+      content: '',
+    }, //index 1
+    content_text: {
+      id: '',
+      type: '',
+      content: '',
+    }, //index 2
   }),
 
   actions: {
@@ -38,6 +55,22 @@ export const useHomeStore = defineStore('home', {
           DATABASE_ID,
           FACES_COLLECTION_ID,
         )
+        const contentData = await databases.listDocuments(
+          DATABASE_ID,
+          CONTENT_COLLECTION_ID,
+        )
+
+        this.contentData = contentData.documents.map(doc => ({
+          id: doc.$id,
+          type: doc.type,
+          content: doc.content,
+        }))
+        if (contentData.total != 0) {
+          if (contentData[0]?.type === 'title1') this.title1 = contentData[0]
+          if (contentData[1]?.type === 'title2') this.title2 = contentData[1]
+          if (contentData[2]?.type === 'content_text')
+            this.content_text = contentData[2]
+        }
 
         this.slides = slidesData.documents.map(doc => ({
           id: doc.$id,
@@ -49,6 +82,47 @@ export const useHomeStore = defineStore('home', {
         }))
       } catch (error) {
         console.error('Error fetching content:', error)
+      }
+    },
+
+    async updateContentData(index) {
+      let content = {
+        id: '',
+        type: '',
+        content: '',
+      }
+      if (index === 0) {
+        content = this.title1
+      } else if (index === 1) {
+        content = this.title2
+      } else if (index === 2) {
+        content = this.content_text
+      } else {
+        return 0
+      }
+
+      if (content.content != '') {
+        if (this.contentData.total > 0) {
+          await databases.updateDocument(
+            DATABASE_ID,
+            CONTENT_COLLECTION_ID,
+            content.id,
+            {
+              type: content.type,
+              content: content.content,
+            },
+          )
+        } else {
+          await databases.createDocument(
+            DATABASE_ID,
+            CONTENT_COLLECTION_ID,
+            ID.unique(),
+            {
+              type: content.type,
+              content: content.content,
+            },
+          )
+        }
       }
     },
 
