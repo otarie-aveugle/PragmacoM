@@ -59,12 +59,30 @@ export const useHomeStore = defineStore('home', {
           DATABASE_ID,
           CONTENT_COLLECTION_ID,
         )
-        contentData.documents.forEach(element => {
-          if (element.type === 'title1') this.title1 = element
-          if (element.type === 'title2') this.title2 = element
-          if (element.type === 'content_text') this.content_text = element
-        })
-
+        if (contentData.total > 0) {
+          contentData.documents.forEach(element => {
+            if (element.type === 'title1') this.title1 = element
+            if (element.type === 'title2') this.title2 = element
+            if (element.type === 'content_text') this.content_text = element
+          })
+        } else {
+          this.title1 = {
+            id: '',
+            type: 'title1',
+            content: '',
+          }
+          this.title2 = {
+            id: '',
+            type: 'title2',
+            content: '',
+          }
+          this.content_text = {
+            id: '',
+            type: 'content_text',
+            content: '',
+          }
+        }
+        this.contentData = contentData
         this.slides = slidesData.documents.map(doc => ({
           id: doc.$id,
           image_link: doc.image_link,
@@ -86,7 +104,6 @@ export const useHomeStore = defineStore('home', {
       }
       if (index === 0) {
         content = this.title1
-        console.log('content : ', content)
       } else if (index === 1) {
         content = this.title2
       } else if (index === 2) {
@@ -100,7 +117,7 @@ export const useHomeStore = defineStore('home', {
           await databases.updateDocument(
             DATABASE_ID,
             CONTENT_COLLECTION_ID,
-            content.id,
+            content.$id,
             {
               type: content.type,
               content: content.content,
@@ -141,26 +158,12 @@ export const useHomeStore = defineStore('home', {
       }
     },
 
-    async toggleEdit() {
+    toggleEdit() {
       this.isEditing = !this.isEditing
       this.toggleAddImg()
       this.toggleSlideToAddImg()
-      await this.fetchContent()
-      // this.title1 = {
-      //   id: '',
-      //   type: 'title1',
-      //   content: '',
-      // }
-      // this.title2 = {
-      //   id: '',
-      //   type: 'title2',
-      //   content: '',
-      // }
-      // this.content_text = {
-      //   id: '',
-      //   type: 'content_text',
-      //   content: '',
-      // }
+      this.fetchContent()
+      if (!this.isEditing) window.location.reload()
     },
 
     editImage(index, type) {

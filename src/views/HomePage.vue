@@ -15,6 +15,7 @@ export default {
       'faces',
       'newSlides',
       'newFaces',
+      'contentData',
     ]),
     ...mapState(useUserStore, ['userLoggedIn']),
     ...mapWritableState(useHomeStore, ['title1', 'title2', 'content_text']),
@@ -40,8 +41,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.fetchContent()
+  async mounted() {
+    await this.fetchContent()
   },
 }
 </script>
@@ -81,7 +82,10 @@ export default {
             </svg>
           </button>
           <h1
-            v-if="!title1.content"
+            v-if="
+              !title1.content ||
+              title1.content != contentData.documents[0]?.content
+            "
             class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
             :class="{ 'border border-dashed border-primary': isEditing }"
             :contenteditable="isEditing"
@@ -123,7 +127,10 @@ export default {
             </svg>
           </button>
           <p
-            v-if="!content_text.content"
+            v-if="
+              !content_text.content ||
+              content_text.content != contentData.documents[2]?.content
+            "
             class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
             :class="{ 'border border-dashed border-primary': isEditing }"
             :contenteditable="isEditing"
@@ -335,11 +342,14 @@ export default {
           </svg>
         </button>
         <h1
-          v-if="!title2.content"
+          v-if="
+            !title2.content ||
+            title2.content != contentData.documents[1]?.content
+          "
           class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
           :class="{ 'border border-dashed border-primary': isEditing }"
           :contenteditable="isEditing"
-          @input="updateContent('title2'), $event"
+          @input="updateContent('title2', $event)"
         >
           Nos <span class="text-primary">faces</span> disponibles
         </h1>
@@ -348,7 +358,7 @@ export default {
           class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
           :class="{ 'border border-dashed border-primary': isEditing }"
           :contenteditable="isEditing"
-          @input="updateContent('title2'), $event"
+          @input="updateContent('title2', $event)"
         >
           {{ title2.content }}
         </h1>
