@@ -1,66 +1,159 @@
 <script>
+import { mapState, mapActions } from 'pinia'
+import { useHomeStore } from '@/stores/home'
+import { useUserStore } from '@/stores/user'
+import { mapWritableState } from 'pinia'
+
 export default {
   name: 'HomePage',
-  data() {
-    return {
-      currentSlide: 0,
-      slides: [
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp',
-        },
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp',
-        },
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp',
-        },
-        {
-          image:
-            'https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp',
-        },
-      ],
-    }
+  computed: {
+    ...mapState(useHomeStore, [
+      'isEditing',
+      'editableImage',
+      'currentSlide',
+      'slides',
+      'faces',
+      'newSlides',
+      'newFaces',
+      'contentData',
+    ]),
+    ...mapState(useUserStore, ['userLoggedIn']),
+    ...mapWritableState(useHomeStore, ['title1', 'title2', 'content_text']),
   },
   methods: {
-    nextSlide() {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length
+    ...mapActions(useHomeStore, [
+      'toggleEdit',
+      'editImage',
+      'updateImage',
+      'addImage',
+      'nextSlide',
+      'prevSlide',
+      'fetchContent',
+      'updateContentData',
+    ]),
+    updateContent(field, event) {
+      if (field === 'title1') {
+        this.title1.content = event.target.innerText
+      } else if (field === 'title2') {
+        this.title2.content = event.target.innerText
+      } else if (field === 'content_text') {
+        this.content_text.content = event.target.innerText
+      }
     },
-    prevSlide() {
-      this.currentSlide =
-        (this.currentSlide - 1 + this.slides.length) % this.slides.length
-    },
+  },
+  async mounted() {
+    await this.fetchContent()
   },
 }
 </script>
 
 <template>
   <div class="flex flex-col mx-4 gap-6">
+    <div v-if="userLoggedIn" class="flex justify-end">
+      <button @click="toggleEdit" class="btn btn-sm btn-outline btn-primary">
+        <span v-if="isEditing">Arrêter l'édition</span>
+        <span v-else>Éditer la page</span>
+      </button>
+    </div>
+
     <div
       class="flex flex-col gap-6 md:flex-row md:justify-between md:items-center"
     >
-      <!-- texte+CTA -->
       <div class="flex flex-col gap-y-12 md:w-1/2 items-center md:items-start">
-        <h1
-          class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
-        >
-          Un panneau, <br />
-          <span class="text-primary">1000</span> regards
-        </h1>
+        <div>
+          <button
+            @click="updateContentData(0)"
+            v-if="isEditing"
+            class="flex m-2 gap-2 btn-outline hover:bg-primary"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
+          </button>
+          <h1
+            v-if="
+              !title1.content ||
+              title1.content != contentData.documents[0]?.content
+            "
+            class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+            :class="{ 'border border-dashed border-primary': isEditing }"
+            :contenteditable="isEditing"
+            @input="updateContent('title1', $event)"
+          >
+            Un panneau, <br />
+            <span class="text-primary">1000</span> regards
+          </h1>
+          <h1
+            v-else
+            class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+            :class="{ 'border border-dashed border-primary': isEditing }"
+            :contenteditable="isEditing"
+            @input="updateContent('title1', $event)"
+          >
+            {{ title1.content }}
+          </h1>
+        </div>
 
-        <p
-          class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
-        >
-          Donec tincidunt ultricies dui, at tincidunt nisl porta eu. Fusce nec
-          ipsum dignissim, egestas nisl a, interdum dui. Fusce urna erat,
-          efficitur et lectus vitae, congue tincidunt augue. Suspendisse
-          venenatis vel elit sed ullamcorper. Donec vel semper risus, eu mollis
-          lectus. Phasellus commodo lectus libero. Integer lorem enim, lobortis
-          sed mi quis, suscipit vulputate nulla. Donec at vulputate metus, a
-          varius purus.
-        </p>
+        <div>
+          <button
+            @click="updateContentData(2)"
+            v-if="isEditing"
+            class="flex m-2 gap-2 btn-outline hover:bg-primary"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
+          </button>
+          <p
+            v-if="
+              !content_text.content ||
+              content_text.content != contentData.documents[2]?.content
+            "
+            class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
+            :class="{ 'border border-dashed border-primary': isEditing }"
+            :contenteditable="isEditing"
+            @input="updateContent('content_text', $event)"
+          >
+            Donec tincidunt ultricies dui, at tincidunt nisl porta eu. Fusce nec
+            ipsum dignissim, egestas nisl a, interdum dui. Fusce urna erat,
+            efficitur et lectus vitae, congue tincidunt augue. Suspendisse
+            venenatis vel elit sed ullamcorper. Donec vel semper risus, eu
+            mollis lectus. Phasellus commodo lectus libero. Integer lorem enim,
+            lobortis sed mi quis, suscipit vulputate nulla. Donec at vulputate
+            metus, a varius purus.
+          </p>
+          <p
+            v-else
+            class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
+            :class="{ 'border border-dashed border-primary': isEditing }"
+            :contenteditable="isEditing"
+            @input="updateContent('content_text', $event)"
+          >
+            {{ content_text.content }}
+          </p>
+        </div>
 
         <RouterLink to="/map">
           <button
@@ -84,9 +177,13 @@ export default {
           </button>
         </RouterLink>
       </div>
-      <!-- carousel -->
-      <div class="flex justify-center items-center w-full md:w-1/2">
+
+      <div
+        class="flex justify-center items-center w-full md:w-1/2"
+        :class="{ 'border border-dashed border-primary': isEditing }"
+      >
         <div
+          v-if="slides.length > 0"
           class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
         >
           <div
@@ -98,8 +195,111 @@ export default {
               flex: currentSlide === index,
             }"
           >
-            <img :src="slide.image" class="w-full h-full object-cover" />
+            <img
+              v-if="slide.id != 'add_img'"
+              :src="slide.image_link"
+              class="w-full h-full object-cover"
+            />
+
             <div
+              v-if="isEditing && slide.id == 'add_img'"
+              class="w-full h-full flex items-center justify-center bg-gray-200"
+            >
+              <figure
+                class="w-full h-[400px] flex flex-col items-center justify-center bg-gray-200 rounded-lg"
+              >
+                <button
+                  v-if="
+                    (isEditing &&
+                      editableImage?.index === '' &&
+                      editableImage?.type === '') ||
+                    (isEditing &&
+                      editableImage?.index === 0 &&
+                      editableImage?.type === 'faces_add')
+                  "
+                  @click="editImage(index, 'carousel')"
+                  class="bg-gray-200 bottom-5 left-5 z-10"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-8 bg-gray-200"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </button>
+                <span
+                  class="text-gray-500 z-10"
+                  v-if="
+                    (isEditing &&
+                      editableImage?.index === '' &&
+                      editableImage?.type === '') ||
+                    (isEditing &&
+                      editableImage?.index === 0 &&
+                      editableImage?.type === 'faces_add')
+                  "
+                  >Aucune image enregistrée</span
+                >
+              </figure>
+            </div>
+
+            <div
+              v-if="
+                isEditing &&
+                editableImage?.index === index &&
+                editableImage?.type === 'carousel' &&
+                slide.id == 'add_img'
+              "
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
+            >
+              <input
+                type="text"
+                v-model="slides[index].image_link"
+                @blur="addImage(slides[index].image_link)"
+                class="input input-sm"
+                placeholder="Image URL"
+              />
+            </div>
+
+            <div
+              v-if="
+                isEditing &&
+                editableImage?.index === index &&
+                editableImage?.type === 'carousel' &&
+                slide.id != 'add_img'
+              "
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
+            >
+              <input
+                type="text"
+                v-model="slides[index].image_link"
+                @blur="updateImage(slides[index].image_link)"
+                class="input input-sm"
+                placeholder="Image URL"
+              />
+            </div>
+            <button
+              v-if="isEditing && slide.id != 'add_img'"
+              @click="editImage(index, 'carousel')"
+              class="btn btn-sm absolute bottom-5 left-5"
+              style="
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+                font-weight: bold;
+              "
+            >
+              Modifier
+            </button>
+
+            <div
+              v-if="slides.length > 1"
               class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
             >
               <button @click="prevSlide" class="btn btn-circle">❮</button>
@@ -107,56 +307,196 @@ export default {
             </div>
           </div>
         </div>
+
+        <figure
+          v-else
+          class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
+        >
+          <span class="text-gray-500"
+            >Aucune image de carrousel n'est enregistrée actuellement</span
+          >
+        </figure>
       </div>
     </div>
 
-    <!-- faces disponibles -->
-    <div class="flex flex-col gap-y-6">
-      <h1
-        class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
-      >
-        Nos <span class="text-primary">faces</span> disponibles
-      </h1>
+    <div class="flex flex-col items-center gap-y-6">
+      <div>
+        <button
+          @click="updateContentData(1)"
+          v-if="isEditing"
+          class="flex m-2 gap-2 btn-outline hover:bg-primary"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+            />
+          </svg>
+        </button>
+        <h1
+          v-if="
+            !title2.content ||
+            title2.content != contentData.documents[1]?.content
+          "
+          class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+          :class="{ 'border border-dashed border-primary': isEditing }"
+          :contenteditable="isEditing"
+          @input="updateContent('title2', $event)"
+        >
+          Nos <span class="text-primary">faces</span> disponibles
+        </h1>
+        <h1
+          v-else
+          class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+          :class="{ 'border border-dashed border-primary': isEditing }"
+          :contenteditable="isEditing"
+          @input="updateContent('title2', $event)"
+        >
+          {{ title2.content }}
+        </h1>
+      </div>
+
       <div
         class="flex flex-row flex-wrap gap-6 justify-center md:justify-start"
       >
-        <figure
-          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+        <div
+          v-if="faces.length > 0"
+          class="flex flex-wrap gap-6 justify-center md:justify-start"
         >
-          <img
-            src="../assets/images/Panneau1.jpg"
-            alt="panel"
-            class="w-full h-full object-cover rounded-t-lg"
-          />
-        </figure>
-        <figure
-          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
+          <figure
+            v-for="(face, index) in faces"
+            :key="index"
+            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
+            :class="{ 'border border-dashed border-primary': isEditing }"
+          >
+            <img
+              v-if="face.id != 'add_img'"
+              :src="face.image_link"
+              class="w-full h-full object-cover rounded-t-lg"
+            />
+
+            <figure
+              v-if="face.id == 'add_img' && isEditing"
+              class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg"
+            >
+              <button
+                v-if="
+                  (isEditing &&
+                    editableImage?.index === '' &&
+                    editableImage?.type === '') ||
+                  (isEditing &&
+                    editableImage?.index === 0 &&
+                    editableImage?.type === 'carousel_add')
+                "
+                @click="editImage('faces_add', 'faces_add')"
+                class="bg-gray-200 bottom-5 left-5"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-8 bg-gray-200"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </button>
+              <span
+                v-if="
+                  (isEditing &&
+                    editableImage?.index === '' &&
+                    editableImage?.type === '') ||
+                  (isEditing &&
+                    editableImage?.index === 0 &&
+                    editableImage?.type === 'carousel_add')
+                "
+                class="text-gray-500"
+                >Aucune image enregistrée</span
+              >
+            </figure>
+            <div
+              v-if="
+                isEditing &&
+                editableImage?.index === 'faces_add' &&
+                editableImage?.type === 'faces_add' &&
+                face.id == 'add_img'
+              "
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
+            >
+              <input
+                type="text"
+                v-model="faces[index].image_link"
+                @blur="addImage(faces[index].image_link)"
+                class="input input-sm"
+                placeholder="Image URL"
+              />
+            </div>
+
+            <div
+              v-if="
+                isEditing &&
+                editableImage?.index === index &&
+                editableImage?.type === 'faces' &&
+                face.id != 'add_img'
+              "
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
+            >
+              <input
+                type="text"
+                v-model="faces[index].image_link"
+                @blur="updateImage(faces[index].image_link)"
+                class="input input-sm"
+                placeholder="Image URL"
+              />
+            </div>
+            <button
+              v-if="isEditing && face.id != 'add_img'"
+              @click="editImage(index, 'faces')"
+              class="btn btn-sm absolute bottom-5 left-5"
+              style="
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+                font-weight: bold;
+              "
+            >
+              Modifier
+            </button>
+          </figure>
+        </div>
+
+        <div
+          v-else
+          class="flex flex-wrap gap-6 justify-center md:justify-start"
         >
-          <img
-            src="../assets/images/Panneau2.jpg"
-            alt="panel"
-            class="w-full h-full object-cover rounded-t-lg"
-          />
-        </figure>
-        <figure
-          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
-        >
-          <img
-            src="../assets/images/Panneau3.jpg"
-            alt="panel"
-            class="w-full h-full object-cover rounded-t-lg"
-          />
-        </figure>
-        <figure
-          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg"
-        >
-          <img
-            src="../assets/images/Panneau4.jpg"
-            alt="panel"
-            class="w-full h-full object-cover rounded-t-lg"
-          />
-        </figure>
+          <figure
+            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
+          >
+            <span class="text-gray-500"
+              >Aucune faces n'est enregistrée actuellement</span
+            >
+          </figure>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+[contenteditable='true'] {
+  outline: 2px dashed #6b7280;
+  padding: 2px;
+}
+</style>
