@@ -29,17 +29,17 @@ export const useHomeStore = defineStore('home', {
     contentData: [],
     title1: {
       id: '',
-      type: '',
+      type: 'title1',
       content: '',
     }, //index 0
     title2: {
       id: '',
-      type: '',
+      type: 'title2',
       content: '',
     }, //index 1
     content_text: {
       id: '',
-      type: '',
+      type: 'content_text',
       content: '',
     }, //index 2
   }),
@@ -59,18 +59,11 @@ export const useHomeStore = defineStore('home', {
           DATABASE_ID,
           CONTENT_COLLECTION_ID,
         )
-
-        this.contentData = contentData.documents.map(doc => ({
-          id: doc.$id,
-          type: doc.type,
-          content: doc.content,
-        }))
-        if (contentData.total != 0) {
-          if (contentData[0]?.type === 'title1') this.title1 = contentData[0]
-          if (contentData[1]?.type === 'title2') this.title2 = contentData[1]
-          if (contentData[2]?.type === 'content_text')
-            this.content_text = contentData[2]
-        }
+        contentData.documents.forEach(element => {
+          if (element.type === 'title1') this.title1 = element
+          if (element.type === 'title2') this.title2 = element
+          if (element.type === 'content_text') this.content_text = element
+        })
 
         this.slides = slidesData.documents.map(doc => ({
           id: doc.$id,
@@ -93,6 +86,7 @@ export const useHomeStore = defineStore('home', {
       }
       if (index === 0) {
         content = this.title1
+        console.log('content : ', content)
       } else if (index === 1) {
         content = this.title2
       } else if (index === 2) {
@@ -147,15 +141,30 @@ export const useHomeStore = defineStore('home', {
       }
     },
 
-    toggleEdit() {
+    async toggleEdit() {
       this.isEditing = !this.isEditing
       this.toggleAddImg()
       this.toggleSlideToAddImg()
+      await this.fetchContent()
+      // this.title1 = {
+      //   id: '',
+      //   type: 'title1',
+      //   content: '',
+      // }
+      // this.title2 = {
+      //   id: '',
+      //   type: 'title2',
+      //   content: '',
+      // }
+      // this.content_text = {
+      //   id: '',
+      //   type: 'content_text',
+      //   content: '',
+      // }
     },
 
     editImage(index, type) {
       this.editableImage = { index, type }
-      console.log('editableImage : ', this.editableImage)
     },
 
     async addImage(url) {
