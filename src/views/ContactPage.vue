@@ -23,7 +23,7 @@ export default {
     ...mapActions(useContactStore, ['sendMessage']),
     closeToast() {
       this.toastShow = false
-      this.$router.push({ name: "home" })
+      this.$router.push({ name: 'home' })
     },
     async submitForm() {
       this.errorMessage = ''
@@ -40,14 +40,14 @@ export default {
           this.toastShow = true
           setTimeout(() => {
             this.toastShow = false
-            if (this.$route.href === '/contact' && this.toastShow == true) {
+            if (this.$route.href === '/contact' && this.toastShow == false) {
               //prevent si l'utilsateur décide de naviguer dans le site avant la redirection
               this.$router.push({ name: 'home' })
             }
           }, 4000),
-          setInterval(() => {
-            --this.countdown
-          }, 1000)
+            setInterval(() => {
+              --this.countdown
+            }, 1000)
         }
       } else {
         if (!this.validEmail(this.email)) {
@@ -92,10 +92,12 @@ export default {
         >
           <h3 class="text-lg font-bold mb-2 text-green-600">Message envoyé</h3>
           <p>Votre message a bien été envoyé !</p>
-          <p class= "text-s text-gray-900 mt-4">Vous allez être redirigé dans&nbsp;
+          <p class="text-s text-gray-900 mt-4">
+            Vous allez être redirigé dans&nbsp;
             <span class="countdown">
-              <span v-bind:style='`--value:${countdown}`'></span>
-            </span> secondes
+              <span v-bind:style="`--value:${countdown}`"></span>
+            </span>
+            secondes
           </p>
           <button
             @click="closeToast"
@@ -170,8 +172,10 @@ export default {
             J'accepte que mes informations soient collectées et traitées
             conformément à la
             <RouterLink to="/privacy_policy">
-              <span class="text-primary">politique de confidentialité</span>
-            </RouterLink>.
+              <span class="text-primary"
+                >politique de confidentialité</span
+              > </RouterLink
+            >.
           </label>
         </div>
 
