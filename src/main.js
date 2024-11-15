@@ -54,3 +54,4 @@ app.config.globalProperties.$filters = {
     return text.charAt(0)
   },
 }
+
