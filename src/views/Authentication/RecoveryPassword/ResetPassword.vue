@@ -6,6 +6,8 @@ export default {
   name: 'ResetPassword',
   data() {
     return {
+      toastShow: false,
+      countdown: 3,
       userId: this.$route.query.userId,
       secret: this.$route.query.secret,
       password: '',
@@ -17,6 +19,10 @@ export default {
   },
   methods: {
     ...mapActions(useUserStore, ['confirm_recovery_password']),
+    closeToast() {
+      this.toastShow = false
+      this.$router.push({ name: "login" })
+    },
     async submitForm() {
       this.errorMessage = ''
       if (this.isFormValid()) {
@@ -27,7 +33,20 @@ export default {
           this.password_confirmation,
         )
         if (!this.errorMessage) {
-          this.$router.push({ name: 'success_recover_password' })
+          this.toastShow = true
+          setTimeout(() => {
+            this.toastShow = false
+            console.log(this.$route)
+            console.log(this.$route.path === '/reset_password')
+            console.log(this.toastShow == true)
+            if (this.$route.path === '/reset_password/'  && this.toastShow == true) {console.log("coucou")
+              //prevent si l'utilsateur décide de naviguer dans le site avant la redirection
+              this.$router.push({ name: 'login' })
+            }
+          }, 4000),
+          setInterval(() => {
+            --this.countdown
+          }, 1000)
         }
       } else {
         if (this.password !== this.password_confirmation) {
@@ -66,14 +85,39 @@ export default {
         <li class="step step-primary">Mot de passe oublié</li>
         <li class="step step-primary">Lien de réinitialisation</li>
         <li class="step step-primary">Réinitialisation du mot de passe</li>
-        <li class="step">Mot de passe réinitialisé</li>
       </ul>
     </div>
+
+    <transition name="fade">
+      <div
+        v-if="toastShow"
+        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50"
+      >
+        <div
+          class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md text-center"
+        >
+          <h3 class="text-lg font-bold mb-2 text-green-600">Mot de passe mis à jour</h3>
+          <p>Votre mot de passe a bien été modifié !</p>
+          <p class= "text-s text-gray-900 mt-4">Vous allez être redirigé dans&nbsp;
+            <span class="countdown">
+              <span v-bind:style='`--value:${countdown}`'></span>
+            </span> secondes
+          </p>
+          <button
+            @click="closeToast"
+            class="mt-4 bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </transition>
 
     <form
       class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8"
       @submit.prevent="submitForm"
-    >
+      v-if="!toastShow"
+      >
       <p class="text-xl font-bold mb-6">Réinitialisation du mot de passe</p>
 
       <label class="input input-bordered flex items-center gap-2">

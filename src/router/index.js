@@ -6,7 +6,6 @@ import RecoveryPasswordPage from '@/views/Authentication/RecoveryPassword/Recove
 import ForgotPassword from '@/views/Authentication/RecoveryPassword/ForgotPassword.vue'
 import ResetLink from '@/views/Authentication/RecoveryPassword/ResetLink.vue'
 import ResetPassword from '@/views/Authentication/RecoveryPassword/ResetPassword.vue'
-import SuccessRecoveryPassword from '@/views/Authentication/RecoveryPassword/SuccessRecoveryPassword.vue'
 import PanelsPage from '@/views/Panels/PanelsPage.vue'
 import PanelPage from '@/views/Panels/PanelPage.vue'
 import CreatePanelPage from '@/views/Panels/CreatePanelPage.vue'
@@ -80,11 +79,6 @@ const router = createRouter({
           path: '/reset_password',
           name: 'reset_password',
           component: ResetPassword,
-        },
-        {
-          path: '/success_recover_password',
-          name: 'success_recover_password',
-          component: SuccessRecoveryPassword,
         },
       ],
     },

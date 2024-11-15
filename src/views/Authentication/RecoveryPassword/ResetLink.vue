@@ -11,7 +11,6 @@ export default {
         <li class="step step-primary">Mot de passe oublié</li>
         <li class="step step-primary">Lien de réinitialisation</li>
         <li class="step">Réinitialisation du mot de passe</li>
-        <li class="step">Mot de passe réinitialisé</li>
       </ul>
     </div>
 
