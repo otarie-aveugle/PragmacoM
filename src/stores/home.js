@@ -106,6 +106,7 @@ export const useHomeStore = defineStore('home', {
         content = this.title1
       } else if (index === 1) {
         content = this.title2
+        console.log('title2 content : ', content)
       } else if (index === 2) {
         content = this.content_text
       } else {
@@ -113,26 +114,44 @@ export const useHomeStore = defineStore('home', {
       }
 
       if (content.content != '') {
-        if (this.contentData.total > 0) {
-          await databases.updateDocument(
-            DATABASE_ID,
-            CONTENT_COLLECTION_ID,
-            content.$id,
-            {
-              type: content.type,
-              content: content.content,
-            },
-          )
+        const dataExist = false
+        for (const element in this.contentData) {
+          if (element.type == content.type && element.content) {
+            dataExist == true
+          }
+        }
+        console.log('dataExist : ', dataExist)
+        if (dataExist) {
+          try {
+            const result = await databases.updateDocument(
+              DATABASE_ID,
+              CONTENT_COLLECTION_ID,
+              content.$id,
+              {
+                type: content.type,
+                content: content.content,
+              },
+            )
+            console.log('result update : ', result)
+          } catch (error) {
+            console.error(error)
+          }
         } else {
-          await databases.createDocument(
-            DATABASE_ID,
-            CONTENT_COLLECTION_ID,
-            ID.unique(),
-            {
-              type: content.type,
-              content: content.content,
-            },
-          )
+          console.log('content : ', content)
+          try {
+            const result = await databases.createDocument(
+              DATABASE_ID,
+              CONTENT_COLLECTION_ID,
+              ID.unique(),
+              {
+                type: content.type,
+                content: content.content,
+              },
+            )
+            console.log('result create: ', result)
+          } catch (error) {
+            console.error(error)
+          }
         }
       }
     },
@@ -162,7 +181,6 @@ export const useHomeStore = defineStore('home', {
       this.isEditing = !this.isEditing
       this.toggleAddImg()
       this.toggleSlideToAddImg()
-      this.fetchContent()
       if (!this.isEditing) window.location.reload()
     },
 
