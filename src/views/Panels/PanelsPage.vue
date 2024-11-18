@@ -42,7 +42,7 @@ export default {
 <template>
   <div class="flex-grow">
     <div class="text-center mb-6">
-      <p class="text-3xl mb-6">Liste des panneaux</p>
+      <p class="text-3xl mb-6">Faces disponibles</p>
     </div>
     <div
       class="overflow-x-auto mx-14"
@@ -120,7 +120,7 @@ export default {
             <th>Date de disponibilité</th>
             <th>Adresse</th>
             <th>Ville</th>
-            <th>Code postale</th>
+            <th>Code postal</th>
             <th>Position</th>
             <th>Format</th>
             <th>Observations</th>
@@ -248,7 +248,7 @@ export default {
             <th>Date de disponibilité</th>
             <th>Adresse</th>
             <th>Ville</th>
-            <th>Code postale</th>
+            <th>Code postal</th>
             <th>Position</th>
             <th>Format</th>
             <th>Observations</th>

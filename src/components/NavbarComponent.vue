@@ -1,14 +1,11 @@
 <script>
-import { mapState, mapActions } from 'pinia'
+import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'NavbarComponent',
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
-  },
-  methods: {
-    ...mapActions(useUserStore, ['logout']),
   },
 }
 </script>
@@ -40,16 +37,9 @@ export default {
         </RouterLink>
         <RouterLink
           v-if="!userLoggedIn"
-          to="/login"
+          to="/contact"
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"
-          ><li class="text-lg p-2">Connexion</li>
-        </RouterLink>
-        <RouterLink
-          v-else
-          to="/"
-          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
-          @click="logout"
-          ><li class="text-lg p-2">Déconnexion</li>
+          ><li class="text-lg p-2">Contact</li>
         </RouterLink>
       </ul>
     </div>

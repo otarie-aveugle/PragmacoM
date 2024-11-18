@@ -23,15 +23,16 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-grow flex-col items-center justify-center">
-    <div
-      class="mx-6 card bg-base-100 shadow-xl min-w-[80%] min-h-[400px] md:min-w-[50%] lg:min-w-[40%]"
-    >
-      <figure v-if="panel.preview" class="w-full h-64">
+  <div class="flex flex-grow flex-col items-center justify-center px-4 sm:px-6">
+    <div class="mx-4 card bg-base-100 shadow-xl w-full max-w-xl lg:max-w-4xl">
+      <figure
+        v-if="panel.preview"
+        class="relative w-full aspect-w-16 aspect-h-9"
+      >
         <img
           v-bind:src="panel.preview"
           alt="panel"
-          class="w-full h-full object-cover rounded-t-lg"
+          class="w-full h-full object-cover object-center rounded-t-lg"
         />
       </figure>
       <figure
@@ -58,8 +59,11 @@ export default {
         </h2>
         <div class="flex flex-col gap-y-4">
           <p class="text-lg">{{ panel.postal_code }} - {{ panel.town }}</p>
-          <p v-bind:title="panel.observations">
-            {{ $filters.truncateText(panel.observations, 32) }}
+          <p
+            v-bind:title="panel.observations"
+            class="break-words whitespace-pre-wrap pr-2"
+          >
+            {{ panel.observations }}
           </p>
         </div>
 
