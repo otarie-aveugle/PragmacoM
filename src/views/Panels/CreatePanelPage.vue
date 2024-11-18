@@ -209,7 +209,7 @@ export default {
           <input
             type="text"
             class="placeholder-base-content/70"
-            placeholder="Code postale"
+            placeholder="Code postal"
             v-model="postal_code"
             required
           />
