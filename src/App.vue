@@ -1,4 +1,6 @@
 <script>
+import { mapActions, mapState } from 'pinia'
+import { useUserStore } from '@/stores/user'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 
@@ -6,6 +8,12 @@ export default {
   components: {
     NavbarComponent,
     FooterComponent,
+  },
+  computed: {
+    ...mapState(useUserStore, ['userLoggedIn']),
+  },
+  methods: {
+    ...mapActions(useUserStore, ['logout']),
   },
 }
 </script>
@@ -15,6 +23,27 @@ export default {
     <NavbarComponent />
 
     <RouterView />
+
+    <dialog
+      v-if="userLoggedIn"
+      id="logoutModal"
+      class="modal modal-middle px-4 sm:px-6"
+    >
+      <div class="modal-box">
+        <h3 class="text-lg font-bold">Confirmation de déconnexion</h3>
+        <p class="py-4">
+          Cette action vous déconnectera de votre session actuelle
+        </p>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn">Annuler</button>
+          </form>
+          <button class="btn btn-error ml-4" @click="logout()">
+            <RouterLink to="/">Déconnexion</RouterLink>
+          </button>
+        </div>
+      </div>
+    </dialog>
 
     <FooterComponent />
   </div>
@@ -32,11 +61,10 @@ export default {
   src: url('~@/assets/fonts/malgun-gothic/malgun-gothic.ttf') format('ttf');
 }
 
-
 @font-face {
   font-family: 'Inter';
   src: url('~@/assets/fonts/inter/Inter_18pt-Regular.ttf') format('ttf')
-  url('~@/assets/fonts/inter/Inter-Regular.otf') format('otf');
+    url('~@/assets/fonts/inter/Inter-Regular.otf') format('otf');
 }
 
 .main {

@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapActions } from 'pinia'
+import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -8,7 +8,6 @@ export default {
     this.scrollToAnchor()
   },
   methods: {
-    ...mapActions(useUserStore, ['logout']),
     scrollToAnchor() {
       const anchor = this.$route.hash
       if (anchor) {
@@ -58,13 +57,14 @@ export default {
           class="link link-hover text-lg"
           ><li>Connexion</li>
         </RouterLink>
-        <RouterLink
+        <button
           v-else
-          to="/"
+          type="button"
           class="link link-hover text-lg"
-          @click="logout"
-          ><li>Déconnexion</li>
-        </RouterLink>
+          onclick="logoutModal.showModal()"
+        >
+          <li>Déconnexion</li>
+        </button>
       </ul>
     </div>
   </footer>
