@@ -17,14 +17,16 @@ export default {
 </script>
 
 <template>
-    <!-- add margin autour de la box pour le responsive design -->
+  <!-- add margin autour de la box pour le responsive design -->
   <div class="flex flex-col h-screen">
     <div class="text-center mb-6">
       <h1 class="text-3xl mb-6">Boîte de réception</h1>
     </div>
 
     <div class="flex-grow flex justify-center items-center mx-4">
-      <div class="w-full max-h-[75vh] min-h-[50vh] h-full p-5 bg-white rounded-lg shadow-lg mx-4">
+      <div
+        class="w-full max-h-[75vh] min-h-[50vh] h-full p-5 bg-white rounded-lg shadow-lg mx-4"
+      >
         <div class="chat-container overflow-y-auto h-full">
           <!-- messages -->
           <div v-if="messages.total > 0">
@@ -46,10 +48,10 @@ export default {
                 {{ $filters.capitalizeText(document.name) }}
               </div>
               <div
-                class="chat-bubble bg-primary text-xl text-white"
+                class="chat-bubble bg-primary text-xl text-white break-words whitespace-pre-wrap p-3"
                 :title="document.message"
               >
-                {{ $filters.truncateText(document.message, 32) }}
+                {{ document.message }}
               </div>
               <div class="chat-footer">
                 <a class="chat-footer" :href="`mailto:${document.email}`">
@@ -68,7 +70,9 @@ export default {
                 <span class="text-xl">P</span>
               </div>
             </div>
-            <div class="chat-bubble bg-primary text-xl text-white">
+            <div
+              class="chat-bubble bg-primary text-xl text-white break-words whitespace-pre-wrap p-3"
+            >
               Il n'y a pas de message pour le moment.
             </div>
           </div>
@@ -78,6 +82,5 @@ export default {
     </div>
   </div>
 </template>
-
 
 <style></style>

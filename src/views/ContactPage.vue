@@ -7,12 +7,14 @@ export default {
   name: 'ContactPage',
   data() {
     return {
+      charCount: 0,
       toastShow: false,
-      name: '',
-      email: '',
-      message: '',
-      phone: '',
-      consent: false,
+      name: 'toto',
+      email: 'test@test.com',
+      message:
+        'tfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortruc test bipbip123 SOleil',
+      phone: '0606060606',
+      consent: true,
       countdown: 3,
     }
   },
@@ -21,6 +23,9 @@ export default {
   },
   methods: {
     ...mapActions(useContactStore, ['sendMessage']),
+    updateCharacterCount() {
+      this.charCount = this.message.length
+    },
     closeToast() {
       this.toastShow = false
       this.$router.push({ name: 'home' })
@@ -63,7 +68,7 @@ export default {
         this.validEmail(this.email) &&
         this.validTextInput(this.name) &&
         this.validTextInput(this.phone) &&
-        this.validTextInput(this.message) &&
+        this.validMessageLength(this.message) &&
         this.consent === true
       )
     },
@@ -74,6 +79,9 @@ export default {
     },
     validTextInput(content) {
       return content.length > 0
+    },
+    validMessageLength(content) {
+      return this.validTextInput(content) && content.length <= 2000
     },
   },
 }
@@ -153,12 +161,22 @@ export default {
           />
         </label>
 
-        <textarea
-          class="textarea textarea-bordered placeholder-base-content/70 text-base"
-          placeholder="Envoyer nous un message !"
-          v-model="message"
-          required
-        ></textarea>
+        <label>
+          <textarea
+            class="textarea textarea-bordered placeholder-base-content/70 text-base w-full"
+            placeholder="Envoyer nous un message !"
+            v-model="message"
+            :maxlength="2000"
+            @input="updateCharacterCount"
+            required
+          ></textarea>
+          <div class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"
+              >{{ charCount }} / 2000 caractères</span
+            >
+          </div>
+        </label>
 
         <div class="mb-4 flex items-start">
           <input
