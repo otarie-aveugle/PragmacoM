@@ -40,6 +40,7 @@ export default {
 
     <div class="mx-4 text-left">
       <ul class="menu menu-vertical md:menu-horizontal md:gap-x-6">
+        <li class="text-lg">cpragmacom@aol.com</li>
         <RouterLink
           to="/privacy_policy#privacy-policy"
           class="link link-hover text-lg"

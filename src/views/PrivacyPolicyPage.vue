@@ -8,8 +8,13 @@ export default {
   <section
     class="p-8 min-h-screen flex items-center justify-center bg-gray-100"
   >
-    <div class="w-full max-w-3xl mx-auto bg-white shadow-xl rounded-lg p-10 space-y-8">
-      <h1 id="privacy-policy" class="text-4xl font-bold text-primary text-center mb-6">
+    <div
+      class="w-full max-w-3xl mx-auto bg-white shadow-xl rounded-lg p-10 space-y-8"
+    >
+      <h1
+        id="privacy-policy"
+        class="text-4xl font-bold text-primary text-center mb-6"
+      >
         Politique de Confidentialité
       </h1>
 
@@ -110,8 +115,11 @@ export default {
         <h2 class="text-2xl font-semibold">8. Contact</h2>
         <p>
           Pour toute question ou demande d’information complémentaire,
-          contactez-nous via notre formulaire de contact ou bien par
-          <a class="link-primary" href="mailto:cpragmacom@aol.com">e-mail</a>.
+          contactez-nous via notre formulaire de contact ou bien par e-mail à
+          l'adresse
+          <a class="link-primary" href="mailto:cpragmacom@aol.com"
+            >cpragmacom@aol.com</a
+          >
         </p>
       </div>
     </div>
