@@ -1,7 +1,12 @@
 <script>
+import { mapState } from 'pinia'
+import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'NavbarComponent',
+  computed: {
+    ...mapState(useUserStore, ['userLoggedIn']),
+  },
 }
 </script>
 
@@ -30,7 +35,10 @@ export default {
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"
           ><li class="text-lg p-2">Boite de réception</li>
         </RouterLink>
-        <RouterLink to="/contact" class="hover:bg-primary hover:text-white hover:shadow rounded-md"
+        <RouterLink
+          v-if="!userLoggedIn"
+          to="/contact"
+          class="hover:bg-primary hover:text-white hover:shadow rounded-md"
           ><li class="text-lg p-2">Contact</li>
         </RouterLink>
       </ul>
