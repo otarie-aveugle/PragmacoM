@@ -9,12 +9,11 @@ export default {
     return {
       charCount: 0,
       toastShow: false,
-      name: 'toto',
-      email: 'test@test.com',
-      message:
-        'tfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortructfhivoiernviernvronvrivioernvrivioernvirnvoirenvoiernvoiernvioernvioernvioernvioernvioernvoiernivoernoiverniovneriovnreiovneriovneroivninvrinvioerniortruc test bipbip123 SOleil',
-      phone: '0606060606',
-      consent: true,
+      name: '',
+      email: '',
+      message: '',
+      phone: '',
+      consent: false,
       countdown: 3,
     }
   },
@@ -93,7 +92,7 @@ export default {
     <transition name="fade">
       <div
         v-if="toastShow"
-        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50"
+        class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 px-4 sm:px-6"
       >
         <div
           class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md text-center"
