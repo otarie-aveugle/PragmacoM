@@ -124,7 +124,7 @@ export default {
     >
       <div class="card bg-base-100 w-96 shadow-xl gap-y-4 p-8">
         <p class="text-xl font-bold">Formulaire de contact</p>
-        <p class="text-base mb-6">
+        <p class="text-sm mb-6">
           Laissez-nous vos coordonnées pour que nous puissions vous recontacter.
         </p>
 
@@ -185,7 +185,7 @@ export default {
             class="checkbox checkbox-primary"
             required
           />
-          <label for="consent" class="ml-2 text-gray-700">
+          <label for="consent" class="text-sm ml-2 text-gray-700">
             J'accepte que mes informations soient collectées et traitées
             conformément à la
             <RouterLink to="/privacy_policy">

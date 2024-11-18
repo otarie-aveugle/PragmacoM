@@ -48,7 +48,7 @@ export default {
       class="overflow-x-auto mx-14"
       v-bind:class="{ 'text-center': !panels.total }"
     >
-      <div class="flex flex-col items-center md:flex-row gap-2 mb-4">
+      <div class="text-sm flex flex-col items-center md:flex-row gap-2 mb-4">
         <RouterLink
           to="/create_panel"
           class="btn btn-primary"

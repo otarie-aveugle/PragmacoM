@@ -20,7 +20,7 @@ export default {
 
       <div class="text-gray-700 space-y-6">
         <!-- Introduction -->
-        <p>
+        <p class="text-sm">
           La protection de vos données personnelles est importante pour
           <span class="font-semibold">PragmacoM</span>.<br /><br />
           Cette politique de confidentialité explique quelles informations nous
@@ -29,12 +29,12 @@ export default {
         </p>
 
         <!-- Informations collectées -->
-        <h2 class="text-2xl font-semibold">1. Informations collectées</h2>
-        <p>
+        <h2 class="text-xl font-semibold">1. Informations collectées</h2>
+        <p class="text-sm">
           Nous collectons différentes informations lorsque vous utilisez notre
           site, y compris :
         </p>
-        <ul class="list-disc list-inside pl-6 space-y-2">
+        <ul class="text-sm list-disc list-inside pl-6 space-y-2">
           <li>
             <strong>Informations fournies par vous :</strong> telles que nom,
             adresse e-mail ainsi que le numéro de téléphone.
@@ -42,30 +42,30 @@ export default {
         </ul>
 
         <!-- Utilisation des informations -->
-        <h2 class="text-2xl font-semibold">2. Utilisation des informations</h2>
-        <p>
+        <h2 class="text-xl font-semibold">2. Utilisation des informations</h2>
+        <p class="text-sm">
           Les informations que nous collectons peuvent être utilisées pour :
         </p>
-        <ul class="list-disc list-inside pl-6 space-y-2">
+        <ul class="text-sm list-disc list-inside pl-6 space-y-2">
           <li>Communiquer avec vous, notamment pour vous recontacter.</li>
         </ul>
 
         <!-- Partage des informations -->
-        <h2 class="text-2xl font-semibold">3. Partage des informations</h2>
-        <p>
+        <h2 class="text-xl font-semibold">3. Partage des informations</h2>
+        <p class="text-sm">
           Nous ne vendons pas vos informations personnelles.<br />Cependant,
           nous pouvons partager certaines données avec des tiers dans les cas
           suivants :
         </p>
-        <ul class="list-disc list-inside pl-6 space-y-2">
+        <ul class="text-sm list-disc list-inside pl-6 space-y-2">
           <li>
             Dans le cadre d'obligations légales ou pour protéger nos droits.
           </li>
         </ul>
 
         <!-- Stockage des données -->
-        <h2 class="text-2xl font-semibold">4. Stockage des données</h2>
-        <p>
+        <h2 class="text-xl font-semibold">4. Stockage des données</h2>
+        <p class="text-sm">
           Les données personnelles sont stockées en toute sécurité dans nos
           bases de données, pour la durée nécessaire à leur traitement, sauf
           indication contraire de votre part ou en cas d'obligation légale de
@@ -73,20 +73,20 @@ export default {
         </p>
 
         <!-- Sécurité des données -->
-        <h2 class="text-2xl font-semibold">5. Sécurité des données</h2>
-        <p>
+        <h2 class="text-xl font-semibold">5. Sécurité des données</h2>
+        <p class="text-sm">
           Nous mettons en œuvre des mesures de sécurité pour protéger vos
           informations.<br />Toutefois, malgré nos efforts, nous ne pouvons
           garantir une sécurité absolue.
         </p>
 
         <!-- Vos droits -->
-        <h2 class="text-2xl font-semibold">6. Vos droits</h2>
-        <p>
+        <h2 class="text-xl font-semibold">6. Vos droits</h2>
+        <p class="text-sm">
           Vous disposez de droits concernant vos données personnelles, y compris
           :
         </p>
-        <ul class="list-disc list-inside pl-6 space-y-2">
+        <ul class="text-sm list-disc list-inside pl-6 space-y-2">
           <li>Le droit d'accès à vos informations.</li>
           <li>Le droit de rectification de vos données.</li>
           <li>
@@ -96,28 +96,28 @@ export default {
             Le droit de retirer votre consentement au traitement des données.
           </li>
         </ul>
-        <p>
+        <p class="text-sm">
           Pour exercer ces droits, contactez-nous à
-          <span class="font-semibold">[Adresse e-mail ou téléphone]</span>.
+          <span class="text-sm font-semibold">[Adresse e-mail ou téléphone]</span>.
         </p>
 
         <!-- Modifications de la politique -->
-        <h2 class="text-2xl font-semibold">
+        <h2 class="text-xl font-semibold">
           7. Modifications de la politique de confidentialité
         </h2>
-        <p>
+        <p class="text-sm">
           Nous pouvons mettre à jour cette politique de confidentialité pour
           refléter les changements de nos pratiques. Nous vous encourageons à
           consulter cette page régulièrement pour rester informé.
         </p>
 
         <!-- Contact -->
-        <h2 class="text-2xl font-semibold">8. Contact</h2>
-        <p>
+        <h2 class="text-xl font-semibold">8. Contact</h2>
+        <p class="text-sm">
           Pour toute question ou demande d’information complémentaire,
           contactez-nous via notre formulaire de contact ou bien par e-mail à
           l'adresse
-          <a class="link-primary" href="mailto:cpragmacom@aol.com"
+          <a class="link-primary text-sm" href="mailto:cpragmacom@aol.com"
             >cpragmacom@aol.com</a
           >
         </p>
