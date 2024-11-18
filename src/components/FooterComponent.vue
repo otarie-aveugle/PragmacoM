@@ -1,20 +1,27 @@
 <script>
+import { mapState, mapActions } from 'pinia'
+import { useUserStore } from '@/stores/user'
+
 export default {
   name: 'FooterComponent',
   mounted() {
-    this.scrollToAnchor();
+    this.scrollToAnchor()
   },
   methods: {
+    ...mapActions(useUserStore, ['logout']),
     scrollToAnchor() {
-      const anchor = this.$route.hash;
+      const anchor = this.$route.hash
       if (anchor) {
-        const element = document.querySelector(anchor);
+        const element = document.querySelector(anchor)
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: 'smooth' })
         }
       }
-    }
-  }
+    },
+  },
+  computed: {
+    ...mapState(useUserStore, ['userLoggedIn']),
+  },
 }
 </script>
 
@@ -33,14 +40,29 @@ export default {
 
     <div class="mx-4 text-left">
       <ul class="menu menu-vertical md:menu-horizontal md:gap-x-6">
-        <RouterLink to="/privacy_policy#privacy-policy" class="link link-hover text-lg"
+        <RouterLink
+          to="/privacy_policy#privacy-policy"
+          class="link link-hover text-lg"
           ><li>Politique de confidentialité</li>
         </RouterLink>
-        <RouterLink to="/contact" class="link link-hover text-lg"
-          ><li>Contact</li>
-        </RouterLink>
-        <RouterLink to="/legal_notices#legal-notices" class="link link-hover text-lg">
+        <RouterLink
+          to="/legal_notices#legal-notices"
+          class="link link-hover text-lg"
+        >
           <li>Mentions légales</li>
+        </RouterLink>
+        <RouterLink
+          v-if="!userLoggedIn"
+          to="/login"
+          class="link link-hover text-lg"
+          ><li>Connexion</li>
+        </RouterLink>
+        <RouterLink
+          v-else
+          to="/"
+          class="link link-hover text-lg"
+          @click="logout"
+          ><li>Déconnexion</li>
         </RouterLink>
       </ul>
     </div>
