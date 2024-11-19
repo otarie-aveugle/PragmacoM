@@ -101,13 +101,13 @@ const router = createRouter({
       path: '/privacy_policy',
       name: 'privacy_policy',
       component: PrivacyPolicyPage,
-    }
+    },
   ],
 })
 
 router.beforeEach(async to => {
   const store = useUserStore()
-  const pages = ['create_panel', 'edit_panel', 'box']
+  const pages = ['create_panel', 'edit_panel', 'panel', 'box']
   const pages_userLoggedIn = [
     'login',
     'recovery_password',
@@ -115,12 +115,15 @@ router.beforeEach(async to => {
     'reset_link',
     'reset_password',
     'success_recover_password',
+    'contact',
   ]
 
+  //LOGGEDIN
   if (store.userLoggedIn && pages_userLoggedIn.includes(to.name)) {
     return { name: 'home' }
   }
 
+  //NOT LOGGEDIN
   if (!store.userLoggedIn && pages.includes(to.name)) {
     return { name: 'home' }
   }
