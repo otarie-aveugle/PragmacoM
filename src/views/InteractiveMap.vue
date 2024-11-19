@@ -48,7 +48,7 @@
       frameborder="0"
       allowfullscreen
       allow="geolocation"
-      src="//umap.openstreetmap.fr/fr/map/test-carte-interactive_1133743?scaleControl=true&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=false&searchControl=true&tilelayersControl=true&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=true&locateControl=true&measureControl=true&editinosmControl=false&starControl=false"
+      src="https://framacarte.org/fr/map/panneaux_199122?scaleControl=false&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=false&datalayersControl=true&onLoadPanel=none&captionBar=true&captionMenus=false&locateControl=false&editinosmControl=false&starControl=null&datalayers=8305e073-1059-43cf-ab49-6d1c941a08ad#11/48.8075/2.1355"
     ></iframe>
   </div>
 
