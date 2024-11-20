@@ -57,9 +57,7 @@ export default {
           par des droits d'auteur. <br />Les images et autres contenus visuels
           sont la propriété de leurs auteurs respectifs ou utilisés sous
           licence. <br />Toute reproduction, copie ou usage est strictement
-          interdit sans autorisation préalable.
-        </p>
-        <p class="text-sm mb-2">
+          interdit sans autorisation préalable.<br />
           Les textes utilisés sur ce site sont, sauf mention contraire, la
           propriété de PRAGMACOM. <br />Tout autre texte doit être accompagné
           d'une source ou d'une autorisation de l'auteur original.
