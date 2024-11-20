@@ -53,9 +53,9 @@ export default {
       <div class="mb-8">
         <h2 class="text-xl font-semibold mb-3">Propriété Intellectuelle</h2>
         <p class="text-sm mb-2">
-          Ce site utilise des images, illustrations, et photographies protégées
-          par des droits d'auteur. <br />Les images et autres contenus visuels
-          sont la propriété de leurs auteurs respectifs ou utilisés sous
+          Ce site utilise des images, des illustrations et des photographies
+          protégées par des droits d'auteur. <br />Les images et autres contenus
+          visuels sont la propriété de leurs auteurs respectifs ou utilisés sous
           licence. <br />Toute reproduction, copie ou usage est strictement
           interdit sans autorisation préalable.<br />
           Les textes utilisés sur ce site sont, sauf mention contraire, la

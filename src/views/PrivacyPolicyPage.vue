@@ -98,7 +98,9 @@ export default {
         </ul>
         <p class="text-sm">
           Pour exercer ces droits, contactez-nous à
-          <span class="text-sm font-semibold">[Adresse e-mail ou téléphone]</span>.
+          <span class="text-sm font-semibold">cpragmacom@aol.com</span>
+          et
+          <span class="text-sm font-semibold">06 03 00 84 06</span>.
         </p>
 
         <!-- Modifications de la politique -->
