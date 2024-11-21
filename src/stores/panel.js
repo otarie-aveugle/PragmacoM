@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { databases, ID, storage } from '@/lib/appwrite'
 
-const DATABASE_ID = '67248eb20017c1067937'
-const COLLECTION_ID = '67248edd003126d4a0e0'
-const BUCKET_ID = '6729f24a000edbe08ba8'
+const DATABASE_ID = '673db72d00269c663b43'
+const COLLECTION_ID = '673db74d002bd53d8112'
+const BUCKET_ID = '673dbb740035a264cf07'
 
 export const usePanelStore = defineStore('panel', {
   state: () => ({

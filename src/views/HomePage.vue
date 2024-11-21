@@ -476,7 +476,7 @@ export default {
             class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
           >
             <span class="text-gray-500"
-              >Aucune faces n'est enregistrée actuellement</span
+              >Aucune face n'est enregistrée actuellement</span
             >
           </figure>
         </div>

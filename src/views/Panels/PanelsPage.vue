@@ -45,8 +45,11 @@ export default {
       <p class="text-3xl mb-6">Faces disponibles</p>
     </div>
     <div
-      class="overflow-x-auto mx-14"
-      v-bind:class="{ 'text-center': !panels.total }"
+      class="mx-14"
+      v-bind:class="{
+        'text-center': !panels.total,
+        'overflow-x-auto': panels.total,
+      }"
     >
       <div class="text-sm flex flex-col items-center md:flex-row gap-2 mb-4">
         <RouterLink
