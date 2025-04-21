@@ -22,7 +22,7 @@ export default {
         <RouterLink
           to="/map"
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"
-          ><li class="text-lg p-2">Carte intéractive</li>
+          ><li class="text-lg p-2">Carte interactive</li>
         </RouterLink>
         <RouterLink
           to="/panels"
@@ -33,7 +33,7 @@ export default {
           v-if="userLoggedIn"
           to="/box"
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"
-          ><li class="text-lg p-2">Boite de réception</li>
+          ><li class="text-lg p-2">Boîte de réception</li>
         </RouterLink>
         <RouterLink
           v-if="!userLoggedIn"
