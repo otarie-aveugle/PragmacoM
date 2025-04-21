@@ -31,7 +31,7 @@ export default {
     <div class="mx-4 text-left">
       <ul class="menu menu-vertical">
         <li class="text-lg">PragmacoM</li>
-        <li class="text-lg">43 RUE DU MOULIN D AULINE</li>
+        <li class="text-lg">43 RUE DU MOULIN D'AULNE</li>
         <li class="text-lg">78720 SENLISSE</li>
         <li class="text-lg">France</li>
       </ul>
