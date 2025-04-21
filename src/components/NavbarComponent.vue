@@ -27,7 +27,7 @@ export default {
         <RouterLink
           to="/panels"
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"
-          ><li class="text-lg p-2">Panneaux</li>
+          ><li class="text-lg p-2">Emplacements disponibles</li>
         </RouterLink>
         <RouterLink
           v-if="userLoggedIn"
