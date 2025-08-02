@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { databases, ID } from '@/lib/appwrite'
 
-const DATABASE_ID = '673db72d00269c663b43'
-const COLLECTION_ID = '673db747001fbc00df98'
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
+const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_MESSAGES
 
 export const useContactStore = defineStore('contact', {
   state: () => ({

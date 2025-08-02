@@ -45,7 +45,7 @@ export default {
           position: this.position,
           format: this.format,
           observations: this.observations,
-          imageField: this.fileId ? this.fileId : null,
+          imageFileId: this.fileId ? this.fileId : null,
         }
         await this.createPanel(document)
         if (!this.errorMessage) {
