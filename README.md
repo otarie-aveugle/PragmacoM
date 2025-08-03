@@ -18,7 +18,7 @@ pnpm install
 mv .env.exemple .env
 ```
 
-And update the `APPWRITE_PROJECT_ID`
+Edit the `.env` file and fill in the environment variables.
 
 ### Run the project
 
