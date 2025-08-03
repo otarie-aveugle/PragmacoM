@@ -15,8 +15,8 @@ export default {
   },
   async created() {
     this.panel = await this.getPanelById(this.panel_id)
-    if (this.panel.imageField) {
-      this.panel.preview = await this.getPanelImage(this.panel.imageField)
+    if (this.panel.imageFileId) {
+      this.panel.preview = await this.getPanelImage(this.panel.imageFileId)
     }
   },
 }

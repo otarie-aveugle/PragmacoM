@@ -34,7 +34,7 @@ export default {
     this.position = panel.position
     this.format = panel.format
     this.observations = panel.observations
-    this.fileId = panel.imageField
+    this.fileId = panel.imageFileId
   },
   methods: {
     ...mapActions(usePanelStore, [
@@ -77,7 +77,7 @@ export default {
           position: this.position,
           format: this.format,
           observations: this.observations,
-          imageField: this.fileId,
+          imageFileId: this.fileId,
         }
         await this.updatePanel(this.panel_id, document)
         if (!this.errorMessage) {
