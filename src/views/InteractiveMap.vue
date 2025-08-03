@@ -42,7 +42,7 @@
   </main> -->
 
   <!-- carte de test -->
-  <div class="flex justify-center items-center mx-4">
+  <div class="flex justify-center items-center mx-6 md:mx-8">
     <iframe
       class="w-full h-[calc(100vh-20px)]"
       frameborder="0"

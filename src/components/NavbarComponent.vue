@@ -11,7 +11,7 @@ export default {
 </script>
 
 <template>
-  <div class="mb-6 p-6 navbar bg-base-100 text-base-100-content drop-shadow">
+  <div class="mb-8 p-6 navbar bg-base-100 text-base-100-content drop-shadow">
     <div class="navbar-start mx-4">
       <RouterLink to="/"
         ><img src="../assets/logo/PragamacoM.png" class="min-h-10 h-14"
