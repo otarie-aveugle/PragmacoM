@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { databases, ID } from '@/lib/appwrite'
 
-const DATABASE_ID = '673db72d00269c663b43'
-const SLIDES_COLLECTION_ID = '673db7420001d4f50e82'
-const FACES_COLLECTION_ID = '673db73e0022b560282c'
-const CONTENT_COLLECTION_ID = '673db738002199b2a2f7'
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
+const SLIDES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_SLIDES
+const FACES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_FACES
+const CONTENT_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_CONTENT
 
 export const useHomeStore = defineStore('home', {
   state: () => ({

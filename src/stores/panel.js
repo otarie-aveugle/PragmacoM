@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { databases, ID, storage } from '@/lib/appwrite'
 
-const DATABASE_ID = '673db72d00269c663b43'
-const COLLECTION_ID = '673db74d002bd53d8112'
-const BUCKET_ID = '673dbb740035a264cf07'
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
+const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_PANELS
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID
 
 export const usePanelStore = defineStore('panel', {
   state: () => ({
