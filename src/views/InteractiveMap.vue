@@ -14,7 +14,7 @@
 <!-- si un component ne fonctionne pas, vérifier l'import ! -->
 <template>
   <div class="text-center">
-    <p class="text-3xl mb-6">Carte intéractive</p>
+    <p class="text-3xl mb-6">Emplacements disponibles</p>
   </div>
   <!-- <main class="m-6 flex justify-center">
     <l-map

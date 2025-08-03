@@ -22,7 +22,7 @@ export default {
         <RouterLink
           to="/map"
           class="hover:bg-primary hover:text-white hover:shadow rounded-md"
-          ><li class="text-lg p-2">Carte interactive</li>
+          ><li class="text-lg p-2">Carte des emplacements disponibles</li>
         </RouterLink>
         <RouterLink
           to="/panels"

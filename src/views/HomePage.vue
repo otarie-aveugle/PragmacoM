@@ -1,53 +1,80 @@
 <script>
-import { mapState, mapActions } from 'pinia'
-import { useHomeStore } from '@/stores/home'
-import { useUserStore } from '@/stores/user'
-import { mapWritableState } from 'pinia'
+// import { mapState, mapActions } from 'pinia'
+// import { useHomeStore } from '@/stores/home'
+// import { useUserStore } from '@/stores/user'
+// import { mapWritableState } from 'pinia'
+import { quillEditor } from 'vue3-quill'
 
 export default {
   name: 'HomePage',
-  computed: {
-    ...mapState(useHomeStore, [
-      'isEditing',
-      'editableImage',
-      'currentSlide',
-      'slides',
-      'faces',
-      'newSlides',
-      'newFaces',
-      'contentData',
-    ]),
-    ...mapState(useUserStore, ['userLoggedIn']),
-    ...mapWritableState(useHomeStore, ['title1', 'title2', 'content_text']),
+  components: {
+    quillEditor
+  },
+  // computed: {
+  //   ...mapState(useHomeStore, [
+  //     'isEditing',
+  //     'editableImage',
+  //     'currentSlide',
+  //     'slides',
+  //     'faces',
+  //     'newSlides',
+  //     'newFaces',
+  //     'contentData',
+  //   ]),
+  //   ...mapState(useUserStore, ['userLoggedIn']),
+  //   ...mapWritableState(useHomeStore, ['title1', 'title2', 'content_text']),
+  // },
+  // methods: {
+  //   ...mapActions(useHomeStore, [
+  //     'toggleEdit',
+  //     'editImage',
+  //     'updateImage',
+  //     'addImage',
+  //     'nextSlide',
+  //     'prevSlide',
+  //     'fetchContent',
+  //     'updateContentData',
+  //   ]),
+  //   updateContent(field, event) {
+  //     if (field === 'title1') {
+  //       this.title1.content = event.target.innerText
+  //     } else if (field === 'title2') {
+  //       this.title2.content = event.target.innerText
+  //     } else if (field === 'content_text') {
+  //       this.content_text.content = event.target.innerText
+  //     }
+  //   },
+  // },
+  // async mounted() {
+  //   await this.fetchContent()
+  // },
+   data() {
+    return {
+      state: {
+        content: '',
+        editorOption: {},
+        disabled: false
+      }
+    }
   },
   methods: {
-    ...mapActions(useHomeStore, [
-      'toggleEdit',
-      'editImage',
-      'updateImage',
-      'addImage',
-      'nextSlide',
-      'prevSlide',
-      'fetchContent',
-      'updateContentData',
-    ]),
-    updateContent(field, event) {
-      if (field === 'title1') {
-        this.title1.content = event.target.innerText
-      } else if (field === 'title2') {
-        this.title2.content = event.target.innerText
-      } else if (field === 'content_text') {
-        this.content_text.content = event.target.innerText
-      }
+    onEditorBlur(event) {
+      console.log('Editor blur:', event)
     },
-  },
-  async mounted() {
-    await this.fetchContent()
-  },
+    onEditorFocus(event) {
+      console.log('Editor focus:', event)
+    },
+    onEditorReady(event) {
+      console.log('Editor ready:', event)
+    },
+    onEditorChange(event) {
+      console.log('Editor content changed:', event)
+    }
+  }
 }
 </script>
 
-<template>
+<!-- <template>
   <div class="flex flex-col mx-4 gap-6">
     <div v-if="userLoggedIn" class="flex justify-end">
       <button @click="toggleEdit" class="btn btn-sm btn-outline btn-primary">
@@ -153,7 +180,7 @@ export default {
           <button
             class="btn btn-primary md:btn-md lg:btn-lg flex items-center gap-2"
           >
-            Carte Interactive
+            Carte des emplacements disponibles
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="white"
@@ -483,11 +510,23 @@ export default {
       </div>
     </div>
   </div>
+</template> -->
+
+<template>
+  <quill-editor
+    v-model:value="state.content"
+    :options="state.editorOption"
+    :disabled="state.disabled"
+    @blur="onEditorBlur"
+    @focus="onEditorFocus"
+    @ready="onEditorReady"
+    @change="onEditorChange"
+  />
 </template>
 
 <style>
-[contenteditable='true'] {
+/* [contenteditable='true'] {
   outline: 2px dashed #6b7280;
   padding: 2px;
-}
+} */
 </style>
