@@ -106,7 +106,6 @@ export const useHomeStore = defineStore('home', {
         content = this.title1
       } else if (index === 1) {
         content = this.title2
-        console.log('title2 content : ', content)
       } else if (index === 2) {
         content = this.content_text
       } else {
@@ -120,10 +119,9 @@ export const useHomeStore = defineStore('home', {
             dataExist == true
           }
         }
-        console.log('dataExist : ', dataExist)
         if (dataExist) {
           try {
-            const result = await databases.updateDocument(
+            await databases.updateDocument(
               DATABASE_ID,
               CONTENT_COLLECTION_ID,
               content.$id,
@@ -132,14 +130,12 @@ export const useHomeStore = defineStore('home', {
                 content: content.content,
               },
             )
-            console.log('result update : ', result)
           } catch (error) {
             console.error(error)
           }
         } else {
-          console.log('content : ', content)
           try {
-            const result = await databases.createDocument(
+            await databases.createDocument(
               DATABASE_ID,
               CONTENT_COLLECTION_ID,
               ID.unique(),
@@ -148,7 +144,6 @@ export const useHomeStore = defineStore('home', {
                 content: content.content,
               },
             )
-            console.log('result create: ', result)
           } catch (error) {
             console.error(error)
           }
