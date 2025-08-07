@@ -79,7 +79,7 @@ export default {
             <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="title1.content"
               @change="onEditorChange('title1', $event)" />
           </div>
-          <h1 v-else class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+          <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
             v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
           </h1>
         </div>
@@ -96,7 +96,7 @@ export default {
             <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="content_text.content"
               @change="onEditorChange('content_text', $event)" />
           </div>
-          <p v-else class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
+          <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
             v-html="content_text.content || `Donec tincidunt ultricies dui, at tincidunt nisl porta eu. Fusce nec ipsum dignissim, egestas nisl a, interdum dui. Fusce urna erat, efficitur et lectus vitae, congue tincidunt augue. Suspendisse venenatis vel elit sed ullamcorper. Donec vel semper risus, eu mollis lectus. Phasellus commodo lectus libero. Integer lorem enim, lobortis sed mi quis, suscipit vulputate nulla. Donec at vulputate metus, a varius purus.`">
           </p>
         </div>
@@ -201,7 +201,7 @@ export default {
           <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="title2.content"
             @change="onEditorChange('title2', $event)" />
         </div>
-        <h1 v-else class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
+        <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
           v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'">
         </h1>
       </div>
