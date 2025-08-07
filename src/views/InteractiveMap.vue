@@ -14,7 +14,7 @@
 <!-- si un component ne fonctionne pas, vérifier l'import ! -->
 <template>
   <div class="text-center">
-    <p class="text-3xl mb-6">Carte intéractive</p>
+    <p class="text-3xl mb-6">Emplacements disponibles</p>
   </div>
   <!-- <main class="m-6 flex justify-center">
     <l-map
@@ -42,7 +42,7 @@
   </main> -->
 
   <!-- carte de test -->
-  <div class="flex justify-center items-center mx-4">
+  <div class="flex justify-center items-center mx-6 md:mx-8">
     <iframe
       class="w-full h-[calc(100vh-20px)]"
       frameborder="0"

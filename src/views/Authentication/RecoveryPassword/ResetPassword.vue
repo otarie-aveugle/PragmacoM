@@ -40,7 +40,6 @@ export default {
               this.$route.path === '/reset_password/' &&
               this.toastShow == false
             ) {
-              console.log('coucou')
               //prevent si l'utilsateur décide de naviguer dans le site avant la redirection
               this.$router.push({ name: 'login' })
             }

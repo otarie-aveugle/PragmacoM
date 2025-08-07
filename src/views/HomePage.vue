@@ -1,11 +1,14 @@
 <script>
-import { mapState, mapActions } from 'pinia'
+import { mapState, mapActions, mapWritableState } from 'pinia'
 import { useHomeStore } from '@/stores/home'
 import { useUserStore } from '@/stores/user'
-import { mapWritableState } from 'pinia'
+import { quillEditor } from 'vue3-quill'
 
 export default {
   name: 'HomePage',
+  components: {
+    quillEditor
+  },
   computed: {
     ...mapState(useHomeStore, [
       'isEditing',
@@ -31,463 +34,270 @@ export default {
       'fetchContent',
       'updateContentData',
     ]),
-    updateContent(field, event) {
-      if (field === 'title1') {
-        this.title1.content = event.target.innerText
-      } else if (field === 'title2') {
-        this.title2.content = event.target.innerText
-      } else if (field === 'content_text') {
-        this.content_text.content = event.target.innerText
+    async saveField(index, label) {
+      try {
+        if (await this.updateContentData(index)) this.showToast(`${label} modifié avec succès`, 'success')
+      } catch (error) {
+        this.showToast(`Erreur lors de la sauvegarde de ${label}`, 'error')
       }
     },
+    showToast(message, type) {
+      const toast = document.createElement('div')
+      toast.className = 'toast toast-top toast-center z-[100]'
+      toast.innerHTML = `
+        <div class="alert ${type === 'success' ? 'alert-success' : 'alert-error'} text-white">
+          <span>${message}</span>
+        </div>
+      `
+      document.body.appendChild(toast)
+      setTimeout(() => {
+        toast.remove()
+      }, 3000)
+    },
+    onEditorChange(field, value) {
+      if (this[field] && this[field].content !== undefined) {
+        this[field].content = value.html
+      }
+    }
   },
   async mounted() {
     await this.fetchContent()
+    this.contentLoaded = true
   },
+  data() {
+    return {
+      contentLoaded: false,
+      editorOption: {
+        placeholder: '',
+        modules: {
+          toolbar: false
+        }
+      },
+    }
+  }
 }
 </script>
 
 <template>
-  <div class="flex flex-col mx-4 gap-6">
-    <div v-if="userLoggedIn" class="flex justify-end">
+  <!-- Overlay gris quand mode édition activé -->
+  <div v-if="isEditing"
+    class="fixed inset-0 bg-black bg-opacity-40 z-30 transition-opacity duration-300 pointer-events-auto"></div>
+
+  <!-- Bandeau "Mode édition activé" -->
+  <div v-if="isEditing"
+    class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-2 rounded z-50 shadow-lg flex items-center gap-4">
+    <span>Mode édition activé</span>
+    <button @click="toggleEdit" class="btn btn-sm bg-primary text-white border-white hover:bg-blue-600">
+      Arrêter l'édition
+    </button>
+  </div>
+
+  <!-- Conteneur global -->
+  <div class="mt-4 flex flex-col mx-4 gap-12">
+
+    <!-- Bouton "Éditer la page" -->
+    <div v-if="userLoggedIn && !isEditing" class="flex justify-end">
       <button @click="toggleEdit" class="btn btn-sm btn-outline btn-primary">
-        <span v-if="isEditing">Arrêter l'édition</span>
-        <span v-else>Éditer la page</span>
+        Éditer la page
       </button>
     </div>
 
-    <div
-      class="flex flex-col gap-6 md:flex-row md:justify-between md:items-center"
-    >
-      <div class="flex flex-col gap-y-12 md:w-1/2 items-center md:items-start">
+    <!-- === Bloc 1 + Bloc 2 (contenu texte + carrousel) === -->
+    <div class="flex flex-col lg:flex-row gap-10 items-start relative z-40">
+
+      <!-- === Bloc 1 : Titre, contenu, bouton (colonne gauche) === -->
+      <div class="flex flex-col gap-6 w-full lg:w-1/2">
+
+        <!-- Titre principal -->
         <div>
-          <button
-            @click="updateContentData(0)"
-            v-if="isEditing"
-            class="flex m-2 gap-2 btn-outline hover:bg-primary"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-              />
-            </svg>
-          </button>
-          <h1
-            v-if="!title1.content"
-            class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
-            :class="{ 'border border-dashed border-primary': isEditing }"
-            :contenteditable="isEditing"
-            @input="updateContent('title1', $event)"
-          >
-            Un panneau, <br />
-            <span class="text-primary">1000</span> regards
-          </h1>
-          <h1
-            v-else
-            class="text-7xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
-            :class="{ 'border border-dashed border-primary': isEditing }"
-            :contenteditable="isEditing"
-            @input="updateContent('title1', $event)"
-          >
-            {{ title1.content }}
-          </h1>
+          <div v-if="isEditing" class="flex items-center gap-2 mb-2">
+            <button @click="saveField(0, 'Titre 1')" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+              Sauvegarder
+            </button>
+          </div>
+          <div v-if="isEditing"
+            class="w-full h-28 border border-dashed border-primary rounded p-4 bg-white z-40 relative">
+            <quill-editor class="min-w-full" :options="editorOption" :content="title1.content"
+              @change="onEditorChange('title1', $event)" />
+          </div>
+
+          <!-- Skeleton si pas de contenu -->
+          <div v-else>
+            <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
+            <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+              v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
+            </h1>
+          </div>
         </div>
 
+        <!-- Texte principal -->
         <div>
-          <button
-            @click="updateContentData(2)"
-            v-if="isEditing"
-            class="flex m-2 gap-2 btn-outline hover:bg-primary"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-              />
-            </svg>
-          </button>
-          <p
-            v-if="!content_text.content"
-            class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
-            :class="{ 'border border-dashed border-primary': isEditing }"
-            :contenteditable="isEditing"
-            @input="updateContent('content_text', $event)"
-          >
-            Donec tincidunt ultricies dui, at tincidunt nisl porta eu. Fusce nec
-            ipsum dignissim, egestas nisl a, interdum dui. Fusce urna erat,
-            efficitur et lectus vitae, congue tincidunt augue. Suspendisse
-            venenatis vel elit sed ullamcorper. Donec vel semper risus, eu
-            mollis lectus. Phasellus commodo lectus libero. Integer lorem enim,
-            lobortis sed mi quis, suscipit vulputate nulla. Donec at vulputate
-            metus, a varius purus.
-          </p>
-          <p
-            v-else
-            class="text-sm text-gray-700 leading-relaxed sm:text-base md:text-lg"
-            :class="{ 'border border-dashed border-primary': isEditing }"
-            :contenteditable="isEditing"
-            @input="updateContent('content_text', $event)"
-          >
-            {{ content_text.content }}
-          </p>
+          <div v-if="isEditing" class="flex items-center gap-2 mb-2">
+            <button @click="saveField(2, 'Contenu principal')"
+              class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+              Sauvegarder
+            </button>
+          </div>
+          <div v-if="isEditing"
+            class="w-full h-48 border border-dashed border-primary rounded p-4 bg-white z-40 relative">
+            <quill-editor class="min-w-full" :options="editorOption" :content="content_text.content"
+              @change="onEditorChange('content_text', $event)" />
+          </div>
+
+          <!-- Skeleton si pas de contenu -->
+          <div v-else>
+            <div v-if="!contentLoaded" class="w-full h-40 rounded-lg bg-base-300 animate-pulse"></div>
+            <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
+              v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'">
+            </p>
+          </div>
         </div>
 
-        <RouterLink to="/map">
-          <button
-            class="btn btn-primary md:btn-md lg:btn-lg flex items-center gap-2"
-          >
-            Carte Interactive
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="white"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="white"
-              class="w-5 h-5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </button>
-        </RouterLink>
+        <!-- Bouton carte -->
+        <div>
+          <RouterLink v-if="!isEditing" to="/map">
+            <button class="btn btn-primary md:btn-md lg:btn-lg flex items-center gap-2">
+              Carte des emplacements disponibles
+              <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"
+                class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+              </svg>
+            </button>
+          </RouterLink>
+        </div>
       </div>
 
-      <div
-        class="flex justify-center items-center w-full md:w-1/2"
-        :class="{ 'border border-dashed border-primary': isEditing }"
-      >
-        <div
-          v-if="slides.length > 0"
-          class="carousel w-full h-auto md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden"
-        >
-          <div
-            v-for="(slide, index) in slides"
-            :key="index"
-            class="carousel-item relative w-full h-full"
-            :class="{
-              hidden: currentSlide !== index,
-              flex: currentSlide === index,
-            }"
-          >
-            <img
-              v-if="slide.id != 'add_img'"
-              :src="slide.image_link"
-              class="w-full h-full object-cover"
-            />
+      <!-- === Bloc 2 : Carrousel (colonne droite) === -->
+      <div class="w-full lg:w-1/2 flex justify-center items-center"
+        :class="{ 'border border-dashed border-primary': isEditing }">
 
-            <div
-              v-if="isEditing && slide.id == 'add_img'"
-              class="w-full h-full flex items-center justify-center bg-gray-200"
-            >
-              <figure
-                class="w-full h-[400px] flex flex-col items-center justify-center bg-gray-200 rounded-lg"
-              >
-                <button
-                  v-if="
-                    (isEditing &&
-                      editableImage?.index === '' &&
-                      editableImage?.type === '') ||
-                    (isEditing &&
-                      editableImage?.index === 0 &&
-                      editableImage?.type === 'faces_add')
-                  "
-                  @click="editImage(index, 'carousel')"
-                  class="bg-gray-200 bottom-5 left-5 z-10"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-8 bg-gray-200"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
+        <!-- Skeleton carrousel -->
+        <div v-if="slides.length === 0" class="w-full h-[400px] rounded-lg bg-base-300 animate-pulse"></div>
+
+        <!-- Carrousel -->
+        <div v-else class="carousel w-full h-[300px] md:h-[400px] lg:h-[500px] rounded-lg overflow-hidden">
+
+          <!-- Slide -->
+          <div v-for="(slide, index) in slides" :key="index" class="carousel-item relative w-full h-full"
+            :class="{ hidden: currentSlide !== index, flex: currentSlide === index }">
+
+            <!-- Image normale -->
+            <img v-if="slide.id != 'add_img'" :src="slide.image_link" class="w-full h-full object-cover" />
+
+            <!-- Slide vide (ajout image) -->
+            <div v-if="isEditing && slide.id == 'add_img'"
+              class="w-full h-full flex items-center justify-center bg-gray-200">
+              <figure class="w-full h-[400px] flex flex-col items-center justify-center bg-gray-200 rounded-lg">
+                <button @click="editImage(index, 'carousel')" class="bg-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                 </button>
-                <span
-                  class="text-gray-500 z-10"
-                  v-if="
-                    (isEditing &&
-                      editableImage?.index === '' &&
-                      editableImage?.type === '') ||
-                    (isEditing &&
-                      editableImage?.index === 0 &&
-                      editableImage?.type === 'faces_add')
-                  "
-                  >Aucune image enregistrée</span
-                >
+                <span class="text-gray-500 z-10">Aucune image enregistrée</span>
               </figure>
             </div>
 
-            <div
-              v-if="
-                isEditing &&
-                editableImage?.index === index &&
-                editableImage?.type === 'carousel' &&
-                slide.id == 'add_img'
-              "
-              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
-            >
-              <input
-                type="text"
-                v-model="slides[index].image_link"
-                @blur="addImage(slides[index].image_link)"
-                class="input input-sm"
-                placeholder="Image URL"
-              />
+            <!-- Input d'ajout ou modification image -->
+            <div v-if="isEditing && editableImage?.index === index && editableImage?.type === 'carousel'"
+              class="absolute top-5 left-5 bg-white p-2 shadow rounded">
+              <input type="text" v-model="slides[index].image_link"
+                @blur="slide.id == 'add_img' ? addImage(slides[index].image_link) : updateImage(slides[index].image_link)"
+                class="input input-sm" placeholder="Image URL" />
             </div>
 
-            <div
-              v-if="
-                isEditing &&
-                editableImage?.index === index &&
-                editableImage?.type === 'carousel' &&
-                slide.id != 'add_img'
-              "
-              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
-            >
-              <input
-                type="text"
-                v-model="slides[index].image_link"
-                @blur="updateImage(slides[index].image_link)"
-                class="input input-sm"
-                placeholder="Image URL"
-              />
-            </div>
-            <button
-              v-if="isEditing && slide.id != 'add_img'"
-              @click="editImage(index, 'carousel')"
+            <!-- Bouton modifier -->
+            <button v-if="isEditing && slide.id != 'add_img'" @click="editImage(index, 'carousel')"
               class="btn btn-sm absolute bottom-5 left-5"
-              style="
-                background-color: rgba(0, 0, 0, 0.6);
-                color: white;
-                font-weight: bold;
-              "
-            >
+              style="background-color: rgba(0, 0, 0, 0.6); color: white; font-weight: bold;">
               Modifier
             </button>
 
-            <div
-              v-if="slides.length > 1"
-              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-            >
+            <!-- Flèches de navigation -->
+            <div v-if="slides.length > 1"
+              class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
               <button @click="prevSlide" class="btn btn-circle">❮</button>
               <button @click="nextSlide" class="btn btn-circle">❯</button>
             </div>
           </div>
         </div>
-
-        <figure
-          v-else
-          class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg"
-        >
-          <span class="text-gray-500"
-            >Aucune image de carrousel n'est enregistrée actuellement</span
-          >
-        </figure>
       </div>
     </div>
 
-    <div class="flex flex-col items-center gap-y-6">
-      <div>
-        <button
-          @click="updateContentData(1)"
-          v-if="isEditing"
-          class="flex m-2 gap-2 btn-outline hover:bg-primary"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-            />
-          </svg>
-        </button>
-        <h1
-          v-if="!title2.content"
-          class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
-          :class="{ 'border border-dashed border-primary': isEditing }"
-          :contenteditable="isEditing"
-          @input="updateContent('title2', $event)"
-        >
-          Nos <span class="text-primary">faces</span> disponibles
-        </h1>
-        <h1
-          v-else
-          class="text-4xl font-bold text-center sm:text-5xl md:text-6xl md:text-start lg:text-7xl"
-          :class="{ 'border border-dashed border-primary': isEditing }"
-          :contenteditable="isEditing"
-          @input="updateContent('title2', $event)"
-        >
-          {{ title2.content }}
-        </h1>
+    <!-- === Bloc 3 : Titre + Faces === -->
+    <div class="flex flex-col gap-y-6 relative z-40">
+
+      <!-- Titre 2 centré -->
+      <div class="w-1/2 mx-auto">
+        <div v-if="isEditing" class="flex justify-start mb-2">
+          <button @click="saveField(1, 'Titre 2')" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+            Sauvegarder
+          </button>
+        </div>
+        <div v-if="isEditing" class="h-28 border border-dashed border-primary rounded p-4 bg-white z-40 relative">
+          <quill-editor class="min-w-full" :options="editorOption" :content="title2.content"
+            @change="onEditorChange('title2', $event)" />
+        </div>
+
+        <!-- Skeleton si pas de contenu -->
+        <div v-else>
+          <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
+          <h2 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+            v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'"></h2>
+        </div>
       </div>
 
-      <div
-        class="flex flex-row flex-wrap gap-6 justify-center md:justify-start"
-      >
-        <div
-          v-if="faces.length > 0"
-          class="flex flex-wrap gap-6 justify-center md:justify-start"
-        >
-          <figure
-            v-for="(face, index) in faces"
-            :key="index"
-            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
-            :class="{ 'border border-dashed border-primary': isEditing }"
-          >
-            <img
-              v-if="face.id != 'add_img'"
-              :src="face.image_link"
-              class="w-full h-full object-cover rounded-t-lg"
-            />
+      <!-- Liste des faces (stacked, responsive) -->
+      <div class="flex flex-row flex-wrap gap-6 justify-center md:justify-start">
+        <!-- Skeleton faces -->
+        <template v-if="faces.length === 0">
+          <div v-for="n in 3" :key="n" class="w-96 h-64 bg-base-300 rounded-t-lg animate-pulse"></div>
+        </template>
 
-            <figure
-              v-if="face.id == 'add_img' && isEditing"
-              class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg"
-            >
-              <button
-                v-if="
-                  (isEditing &&
-                    editableImage?.index === '' &&
-                    editableImage?.type === '') ||
-                  (isEditing &&
-                    editableImage?.index === 0 &&
-                    editableImage?.type === 'carousel_add')
-                "
-                @click="editImage('faces_add', 'faces_add')"
-                class="bg-gray-200 bottom-5 left-5"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-8 bg-gray-200"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                  />
-                </svg>
-              </button>
-              <span
-                v-if="
-                  (isEditing &&
-                    editableImage?.index === '' &&
-                    editableImage?.type === '') ||
-                  (isEditing &&
-                    editableImage?.index === 0 &&
-                    editableImage?.type === 'carousel_add')
-                "
-                class="text-gray-500"
-                >Aucune image enregistrée</span
-              >
-            </figure>
-            <div
-              v-if="
-                isEditing &&
-                editableImage?.index === 'faces_add' &&
-                editableImage?.type === 'faces_add' &&
-                face.id == 'add_img'
-              "
-              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
-            >
-              <input
-                type="text"
-                v-model="faces[index].image_link"
-                @blur="addImage(faces[index].image_link)"
-                class="input input-sm"
-                placeholder="Image URL"
-              />
-            </div>
+        <figure v-for="(face, index) in faces" :key="index"
+          class="w-96 max-w-5xl mx-auto h-64 bg-gray-200 rounded-t-lg relative overflow-hidden flex justify-center items-center"
+          :class="{ 'border border-dashed border-primary': isEditing }">
 
-            <div
-              v-if="
-                isEditing &&
-                editableImage?.index === index &&
-                editableImage?.type === 'faces' &&
-                face.id != 'add_img'
-              "
-              class="absolute top-5 left-5 bg-white p-2 shadow rounded"
-            >
-              <input
-                type="text"
-                v-model="faces[index].image_link"
-                @blur="updateImage(faces[index].image_link)"
-                class="input input-sm"
-                placeholder="Image URL"
-              />
-            </div>
-            <button
-              v-if="isEditing && face.id != 'add_img'"
-              @click="editImage(index, 'faces')"
-              class="btn btn-sm absolute bottom-5 left-5"
-              style="
-                background-color: rgba(0, 0, 0, 0.6);
-                color: white;
-                font-weight: bold;
-              "
-            >
-              Modifier
+          <!-- Image face -->
+          <img v-if="face.id != 'add_img'" :src="face.image_link" class="w-full h-full object-cover rounded-t-lg" />
+
+          <!-- Ajout image (vide) -->
+          <figure v-if="face.id == 'add_img' && isEditing"
+            class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg">
+            <button @click="editImage('faces_add', 'faces_add')" class="bg-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
+            <span class="text-gray-500">Aucune image enregistrée</span>
           </figure>
-        </div>
 
-        <div
-          v-else
-          class="flex flex-wrap gap-6 justify-center md:justify-start"
-        >
-          <figure
-            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
-          >
-            <span class="text-gray-500"
-              >Aucune face n'est enregistrée actuellement</span
-            >
-          </figure>
-        </div>
+          <!-- Formulaires d'ajout / modif -->
+          <div
+            v-if="isEditing && editableImage?.index === index && editableImage?.type === 'faces' && face.id != 'add_img'"
+            class="absolute top-5 left-5 bg-white p-2 shadow rounded">
+            <input type="text" v-model="faces[index].image_link" @blur="updateImage(faces[index].image_link)"
+              class="input input-sm" placeholder="Image URL" />
+          </div>
+
+          <div v-if="isEditing && editableImage?.index === 'faces_add' && editableImage?.type === 'faces_add'"
+            class="absolute top-5 left-5 bg-white p-2 shadow rounded">
+            <input type="text" v-model="faces[index].image_link" @blur="addImage(faces[index].image_link)"
+              class="input input-sm" placeholder="Image URL" />
+          </div>
+
+          <!-- Bouton modifier -->
+          <button v-if="isEditing && face.id != 'add_img'" @click="editImage(index, 'faces')"
+            class="btn btn-sm absolute bottom-5 left-5"
+            style="background-color: rgba(0, 0, 0, 0.6); color: white; font-weight: bold;">
+            Modifier
+          </button>
+        </figure>
       </div>
     </div>
   </div>
 </template>
 
-<style>
-[contenteditable='true'] {
-  outline: 2px dashed #6b7280;
-  padding: 2px;
-}
-</style>
+
+<style></style>

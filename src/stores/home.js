@@ -4,7 +4,8 @@ import { databases, ID } from '@/lib/appwrite'
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
 const SLIDES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_SLIDES
 const FACES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_FACES
-const CONTENT_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_CONTENT
+const CONTENT_COLLECTION_ID = import.meta.env
+  .VITE_APPWRITE_COLLECTION_ID_CONTENT
 
 export const useHomeStore = defineStore('home', {
   state: () => ({
@@ -102,58 +103,48 @@ export const useHomeStore = defineStore('home', {
         type: '',
         content: '',
       }
-      if (index === 0) {
-        content = this.title1
-      } else if (index === 1) {
-        content = this.title2
-        console.log('title2 content : ', content)
-      } else if (index === 2) {
-        content = this.content_text
-      } else {
-        return 0
+
+      if (index === 0) content = this.title1
+      else if (index === 1) content = this.title2
+      else if (index === 2) content = this.content_text
+      else return
+
+      if (content.content.trim() === '') return false
+
+      const existingDoc = this.contentData.documents.find(
+        doc => doc.type === content.type,
+      )
+
+      try {
+        if (existingDoc) {
+          await databases.updateDocument(
+            DATABASE_ID,
+            CONTENT_COLLECTION_ID,
+            existingDoc.$id,
+            {
+              type: content.type,
+              content: content.content,
+            },
+          )
+          return true
+        } else {
+          await databases.createDocument(
+            DATABASE_ID,
+            CONTENT_COLLECTION_ID,
+            ID.unique(),
+            {
+              type: content.type,
+              content: content.content,
+            },
+          )
+          return true
+        }
+      } catch (error) {
+        console.error('updateContentData', error)
+        return false
       }
 
-      if (content.content != '') {
-        const dataExist = false
-        for (const element in this.contentData) {
-          if (element.type == content.type && element.content) {
-            dataExist == true
-          }
-        }
-        console.log('dataExist : ', dataExist)
-        if (dataExist) {
-          try {
-            const result = await databases.updateDocument(
-              DATABASE_ID,
-              CONTENT_COLLECTION_ID,
-              content.$id,
-              {
-                type: content.type,
-                content: content.content,
-              },
-            )
-            console.log('result update : ', result)
-          } catch (error) {
-            console.error(error)
-          }
-        } else {
-          console.log('content : ', content)
-          try {
-            const result = await databases.createDocument(
-              DATABASE_ID,
-              CONTENT_COLLECTION_ID,
-              ID.unique(),
-              {
-                type: content.type,
-                content: content.content,
-              },
-            )
-            console.log('result create: ', result)
-          } catch (error) {
-            console.error(error)
-          }
-        }
-      }
+      await this.fetchContent()
     },
 
     toggleAddImg() {

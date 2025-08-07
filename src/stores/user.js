@@ -17,13 +17,11 @@ export const useUserStore = defineStore('user', {
         localStorage.setItem('userLoggedIn', true)
         this.errorMessage = ''
       } catch (error) {
-        console.log(error.message)
 
         switch (error.message) {
           //TODO gérer les autres cas en suivants les taux de limites indiqués + ajouter le cas du taux de limite dépassé !
           //https://appwrite.io/docs/references/cloud/client-web/account#createEmailPasswordSession
           case 'Invalid credentials. Please check the email and password.':
-            console.log(messages)
             this.errorMessage = messages.login.failure.credentials
             break
           default:
