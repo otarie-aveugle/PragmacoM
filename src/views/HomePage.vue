@@ -34,6 +34,26 @@ export default {
       'fetchContent',
       'updateContentData',
     ]),
+    async saveField(index, label) {
+      try {
+        if (await this.updateContentData(index)) this.showToast(`${label} modifié avec succès`, 'success')
+      } catch (error) {
+        this.showToast(`Erreur lors de la sauvegarde de ${label}`, 'error')
+      }
+    },
+    showToast(message, type) {
+      const toast = document.createElement('div')
+      toast.className = 'toast toast-top toast-center z-[100]'
+      toast.innerHTML = `
+        <div class="alert ${type === 'success' ? 'alert-success' : 'alert-error'} text-white">
+          <span>${message}</span>
+        </div>
+      `
+      document.body.appendChild(toast)
+      setTimeout(() => {
+        toast.remove()
+      }, 3000)
+    },
     onEditorChange(field, value) {
       if (this[field] && this[field].content !== undefined) {
         this[field].content = value.html
@@ -57,51 +77,77 @@ export default {
 </script>
 
 <template>
+  <!-- Overlay (Masque gris) -->
+  <div v-if="isEditing"
+    class="fixed inset-0 bg-black bg-opacity-40 z-30 transition-opacity duration-300 pointer-events-auto"></div>
+
+  <!-- Bandeau "Mode édition activé" -->
+  <div v-if="isEditing"
+    class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-2 rounded z-50 shadow-lg flex items-center gap-4">
+    <span>Mode édition activé</span>
+    <button @click="toggleEdit" class="btn btn-sm bg-primary text-white border-white hover:bg-blue-600">
+      Arrêter l'édition
+    </button>
+  </div>
+
+  <!-- Bouton d'activation du "Mode édition" -->
   <div class="mt-4 flex flex-col mx-4 gap-6">
-    <div v-if="userLoggedIn" class="flex justify-end">
+    <div v-if="userLoggedIn && !isEditing" class="flex justify-end">
       <button @click="toggleEdit" class="btn btn-sm btn-outline btn-primary">
-        <span v-if="isEditing">Arrêter l'édition</span>
-        <span v-else>Éditer la page</span>
+        <span>Éditer la page</span>
       </button>
     </div>
 
-    <div class="flex flex-col gap-6 md:flex-row md:justify-between md:items-center">
-      <div class="flex flex-col gap-y-12 md:w-1/2 items-center md:items-start">
-        <div>
-          <button @click="updateContentData(0)" v-if="isEditing" class="flex m-2 gap-2 btn-outline hover:bg-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-          </button>
-          <div v-if="isEditing" class="w-full border border-dashed border-primary rounded p-2">
-            <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="title1.content"
-              @change="onEditorChange('title1', $event)" />
+    <div class="mt-4 flex flex-col mx-4 gap-6 relative z-40">
+      <div class="flex flex-col gap-6 md:flex-row md:justify-between md:items-center">
+        <div class="flex flex-col gap-y-12 md:w-1/2 items-center md:items-start">
+
+          <!-- Title 1 -->
+          <div>
+            <div v-if="isEditing" class="flex items-center gap-2 mb-2">
+              <button @click="saveField(0, 'Titre 1')" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M17 16v4H7v-4m10-10H7v4h10V6z" />
+                </svg>
+                Sauvegarder
+              </button>
+            </div>
+            <div v-if="isEditing" class="w-full border border-dashed border-primary rounded p-4 bg-white z-40 relative">
+              <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="title1.content"
+                @change="onEditorChange('title1', $event)" />
+            </div>
+            <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+              v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
+            </h1>
           </div>
-          <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
-            v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
-          </h1>
+
+          <!-- Content Text -->
+          <div>
+            <div v-if="isEditing" class="flex items-center gap-2 mb-2">
+              <button @click="saveField(2, 'Contenu principal')"
+                class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M17 16v4H7v-4m10-10H7v4h10V6z" />
+                </svg>
+                Sauvegarder
+              </button>
+            </div>
+            <div v-if="isEditing" class="w-full border border-dashed border-primary rounded p-4 bg-white z-40 relative">
+              <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="content_text.content"
+                @change="onEditorChange('content_text', $event)" />
+            </div>
+            <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
+              v-html="content_text.content || 'Texte de contenu par défaut'">
+            </p>
+          </div>
         </div>
 
-        <div>
-          <button @click="updateContentData(2)" v-if="isEditing" class="flex m-2 gap-2 btn-outline hover:bg-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-          </button>
-          <div v-if="isEditing" class="w-full border border-dashed border-primary rounded p-2">
-            <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="content_text.content"
-              @change="onEditorChange('content_text', $event)" />
-          </div>
-          <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
-            v-html="content_text.content || `Donec tincidunt ultricies dui, at tincidunt nisl porta eu. Fusce nec ipsum dignissim, egestas nisl a, interdum dui. Fusce urna erat, efficitur et lectus vitae, congue tincidunt augue. Suspendisse venenatis vel elit sed ullamcorper. Donec vel semper risus, eu mollis lectus. Phasellus commodo lectus libero. Integer lorem enim, lobortis sed mi quis, suscipit vulputate nulla. Donec at vulputate metus, a varius purus.`">
-          </p>
-        </div>
-
-        <RouterLink to="/map">
+        <!-- Bouton Carte (masqué pendant édition) -->
+        <RouterLink v-if="!isEditing" to="/map">
           <button class="btn btn-primary md:btn-md lg:btn-lg flex items-center gap-2">
             Carte des emplacements disponibles
             <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"
@@ -188,16 +234,20 @@ export default {
       </div>
     </div>
 
-    <div class="flex flex-col items-center gap-y-6">
+    <!-- Title 2 -->
+    <div class="flex flex-col items-center gap-y-6 relative z-40">
       <div>
-        <button @click="updateContentData(1)" v-if="isEditing" class="flex m-2 gap-2 btn-outline hover:bg-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>
-        </button>
-        <div v-if="isEditing" class="w-full border border-dashed border-primary rounded p-2">
+        <div v-if="isEditing" class="flex items-center gap-2 mb-2">
+          <button @click="saveField(1, 'Titre 2')" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M17 16v4H7v-4m10-10H7v4h10V6z" />
+            </svg>
+            Sauvegarder
+          </button>
+        </div>
+        <div v-if="isEditing" class="w-full border border-dashed border-primary rounded p-4 bg-white z-40 relative">
           <quill-editor class="min-w-80 md:min-w-96" :options="editorOption" :content="title2.content"
             @change="onEditorChange('title2', $event)" />
         </div>
@@ -205,76 +255,76 @@ export default {
           v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'">
         </h1>
       </div>
+    </div>
 
-      <div class="flex flex-row flex-wrap gap-6 justify-center md:justify-start">
-        <div v-if="faces.length > 0" class="flex flex-wrap gap-6 justify-center md:justify-start">
-          <figure v-for="(face, index) in faces" :key="index"
-            class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
-            :class="{ 'border border-dashed border-primary': isEditing }">
-            <img v-if="face.id != 'add_img'" :src="face.image_link" class="w-full h-full object-cover rounded-t-lg" />
+    <div class="flex flex-row flex-wrap gap-6 justify-center md:justify-start relative z-40">
+      <div v-if="faces.length > 0" class="flex flex-wrap gap-6 justify-center md:justify-start">
+        <figure v-for="(face, index) in faces" :key="index"
+          class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative"
+          :class="{ 'border border-dashed border-primary': isEditing }">
+          <img v-if="face.id != 'add_img'" :src="face.image_link" class="w-full h-full object-cover rounded-t-lg" />
 
-            <figure v-if="face.id == 'add_img' && isEditing"
-              class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg">
-              <button v-if="
-                (isEditing &&
-                  editableImage?.index === '' &&
-                  editableImage?.type === '') ||
-                (isEditing &&
-                  editableImage?.index === 0 &&
-                  editableImage?.type === 'carousel_add')
-              " @click="editImage('faces_add', 'faces_add')" class="bg-gray-200 bottom-5 left-5">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="size-8 bg-gray-200">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-              </button>
-              <span v-if="
-                (isEditing &&
-                  editableImage?.index === '' &&
-                  editableImage?.type === '') ||
-                (isEditing &&
-                  editableImage?.index === 0 &&
-                  editableImage?.type === 'carousel_add')
-              " class="text-gray-500">Aucune image enregistrée</span>
-            </figure>
-            <div v-if="
-              isEditing &&
-              editableImage?.index === 'faces_add' &&
-              editableImage?.type === 'faces_add' &&
-              face.id == 'add_img'
-            " class="absolute top-5 left-5 bg-white p-2 shadow rounded">
-              <input type="text" v-model="faces[index].image_link" @blur="addImage(faces[index].image_link)"
-                class="input input-sm" placeholder="Image URL" />
-            </div>
+          <figure v-if="face.id == 'add_img' && isEditing"
+            class="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-lg">
+            <button v-if="
+              (isEditing &&
+                editableImage?.index === '' &&
+                editableImage?.type === '') ||
+              (isEditing &&
+                editableImage?.index === 0 &&
+                editableImage?.type === 'carousel_add')
+            " @click="editImage('faces_add', 'faces_add')" class="bg-gray-200 bottom-5 left-5">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-8 bg-gray-200">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+            <span v-if="
+              (isEditing &&
+                editableImage?.index === '' &&
+                editableImage?.type === '') ||
+              (isEditing &&
+                editableImage?.index === 0 &&
+                editableImage?.type === 'carousel_add')
+            " class="text-gray-500">Aucune image enregistrée</span>
+          </figure>
+          <div v-if="
+            isEditing &&
+            editableImage?.index === 'faces_add' &&
+            editableImage?.type === 'faces_add' &&
+            face.id == 'add_img'
+          " class="absolute top-5 left-5 bg-white p-2 shadow rounded">
+            <input type="text" v-model="faces[index].image_link" @blur="addImage(faces[index].image_link)"
+              class="input input-sm" placeholder="Image URL" />
+          </div>
 
-            <div v-if="
-              isEditing &&
-              editableImage?.index === index &&
-              editableImage?.type === 'faces' &&
-              face.id != 'add_img'
-            " class="absolute top-5 left-5 bg-white p-2 shadow rounded">
-              <input type="text" v-model="faces[index].image_link" @blur="updateImage(faces[index].image_link)"
-                class="input input-sm" placeholder="Image URL" />
-            </div>
-            <button v-if="isEditing && face.id != 'add_img'" @click="editImage(index, 'faces')"
-              class="btn btn-sm absolute bottom-5 left-5" style="
+          <div v-if="
+            isEditing &&
+            editableImage?.index === index &&
+            editableImage?.type === 'faces' &&
+            face.id != 'add_img'
+          " class="absolute top-5 left-5 bg-white p-2 shadow rounded">
+            <input type="text" v-model="faces[index].image_link" @blur="updateImage(faces[index].image_link)"
+              class="input input-sm" placeholder="Image URL" />
+          </div>
+          <button v-if="isEditing && face.id != 'add_img'" @click="editImage(index, 'faces')"
+            class="btn btn-sm absolute bottom-5 left-5" style="
                 background-color: rgba(0, 0, 0, 0.6);
                 color: white;
                 font-weight: bold;
               ">
-              Modifier
-            </button>
-          </figure>
-        </div>
-
-        <div v-else class="flex flex-wrap gap-6 justify-center md:justify-start">
-          <figure class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative">
-            <span class="text-gray-500">Aucune face n'est enregistrée actuellement</span>
-          </figure>
-        </div>
+            Modifier
+          </button>
+        </figure>
       </div>
 
+      <div v-else class="flex flex-wrap gap-6 justify-center md:justify-start">
+        <figure class="w-96 h-64 flex items-center justify-center bg-gray-200 rounded-t-lg relative">
+          <span class="text-gray-500">Aucune face n'est enregistrée actuellement</span>
+        </figure>
+      </div>
     </div>
+
   </div>
 </template>
 

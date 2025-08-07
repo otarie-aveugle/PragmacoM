@@ -109,7 +109,7 @@ export const useHomeStore = defineStore('home', {
       else if (index === 2) content = this.content_text
       else return
 
-      if (content.content.trim() === '') return
+      if (content.content.trim() === '') return false
 
       const existingDoc = this.contentData.documents.find(
         doc => doc.type === content.type,
@@ -126,6 +126,7 @@ export const useHomeStore = defineStore('home', {
               content: content.content,
             },
           )
+          return true
         } else {
           await databases.createDocument(
             DATABASE_ID,
@@ -136,9 +137,11 @@ export const useHomeStore = defineStore('home', {
               content: content.content,
             },
           )
+          return true
         }
       } catch (error) {
         console.error('updateContentData', error)
+        return false
       }
 
       await this.fetchContent()
