@@ -62,15 +62,17 @@ export default {
   },
   async mounted() {
     await this.fetchContent()
+    this.contentLoaded = true
   },
   data() {
     return {
+      contentLoaded: false,
       editorOption: {
         placeholder: '',
         modules: {
           toolbar: false
         }
-      }
+      },
     }
   }
 }
@@ -118,9 +120,14 @@ export default {
             <quill-editor class="min-w-full" :options="editorOption" :content="title1.content"
               @change="onEditorChange('title1', $event)" />
           </div>
-          <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
-            v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
-          </h1>
+
+          <!-- Skeleton si pas de contenu -->
+          <div v-else>
+            <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
+            <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+              v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
+            </h1>
+          </div>
         </div>
 
         <!-- Texte principal -->
@@ -136,9 +143,14 @@ export default {
             <quill-editor class="min-w-full" :options="editorOption" :content="content_text.content"
               @change="onEditorChange('content_text', $event)" />
           </div>
-          <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
-            v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum fringilla lacinia semper. Fusce blandit nunc tortor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed mattis mollis eros, nec consequat quam sollicitudin a. Curabitur posuere tristique neque non sagittis. In ac maximus ex. Nulla porttitor laoreet nisl, porttitor tempus sapien posuere a. Curabitur lobortis ex eget purus tempor, at tempus orci facilisis. Duis dapibus fermentum scelerisque. Nulla facilisi. Vivamus sit amet gravida sapien, quis ultrices sapien. Integer efficitur arcu mi, sed semper ipsum fermentum lobortis. Nam ornare, tortor id fringilla aliquam, leo lacus pulvinar mauris, eu pretium ipsum orci id est. Aliquam at elit id arcu euismod dictum. Nam blandit dui id odio viverra ornare.'">
-          </p>
+
+          <!-- Skeleton si pas de contenu -->
+          <div v-else>
+            <div v-if="!contentLoaded" class="w-full h-40 rounded-lg bg-base-300 animate-pulse"></div>
+            <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
+              v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'">
+            </p>
+          </div>
         </div>
 
         <!-- Bouton carte -->
@@ -159,9 +171,11 @@ export default {
       <div class="w-full lg:w-1/2 flex justify-center items-center"
         :class="{ 'border border-dashed border-primary': isEditing }">
 
+        <!-- Skeleton carrousel -->
+        <div v-if="slides.length === 0" class="w-full h-[400px] rounded-lg bg-base-300 animate-pulse"></div>
+
         <!-- Carrousel -->
-        <div v-if="slides.length > 0"
-          class="carousel w-full h-[300px] md:h-[400px] lg:h-[500px] rounded-lg overflow-hidden">
+        <div v-else class="carousel w-full h-[300px] md:h-[400px] lg:h-[500px] rounded-lg overflow-hidden">
 
           <!-- Slide -->
           <div v-for="(slide, index) in slides" :key="index" class="carousel-item relative w-full h-full"
@@ -207,11 +221,6 @@ export default {
             </div>
           </div>
         </div>
-
-        <!-- Aucune image -->
-        <figure v-else class="w-full h-[400px] flex items-center justify-center bg-gray-200 rounded-lg">
-          <span class="text-gray-500">Aucune image de carrousel</span>
-        </figure>
       </div>
     </div>
 
@@ -229,12 +238,22 @@ export default {
           <quill-editor class="min-w-full" :options="editorOption" :content="title2.content"
             @change="onEditorChange('title2', $event)" />
         </div>
-        <h2 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
-          v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'"></h2>
+
+        <!-- Skeleton si pas de contenu -->
+        <div v-else>
+          <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
+          <h2 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+            v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'"></h2>
+        </div>
       </div>
 
       <!-- Liste des faces (stacked, responsive) -->
       <div class="flex flex-row flex-wrap gap-6 justify-center md:justify-start">
+        <!-- Skeleton faces -->
+        <template v-if="faces.length === 0">
+          <div v-for="n in 3" :key="n" class="w-96 h-64 bg-base-300 rounded-t-lg animate-pulse"></div>
+        </template>
+
         <figure v-for="(face, index) in faces" :key="index"
           class="w-96 max-w-5xl mx-auto h-64 bg-gray-200 rounded-t-lg relative overflow-hidden flex justify-center items-center"
           :class="{ 'border border-dashed border-primary': isEditing }">
@@ -279,5 +298,6 @@ export default {
     </div>
   </div>
 </template>
+
 
 <style></style>
