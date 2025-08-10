@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', {
       try {
         await account.createRecovery(
           email,
-          'http://localhost:5173/reset_password/',
+          import.meta.env.VITE_APP_BASE_URL + 'reset_password/',
         )
         this.errorMessage = ''
       } catch (error) {
