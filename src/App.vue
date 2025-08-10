@@ -13,7 +13,10 @@ export default {
     ...mapState(useUserStore, ['userLoggedIn']),
   },
   methods: {
-    ...mapActions(useUserStore, ['logout']),
+    ...mapActions(useUserStore, ['logout', 'initUser']),
+  },
+  async mounted() {
+    await this.initUser()
   },
 }
 </script>
@@ -24,11 +27,7 @@ export default {
 
     <RouterView />
 
-    <dialog
-      v-if="userLoggedIn"
-      id="logoutModal"
-      class="modal modal-middle px-4 sm:px-6"
-    >
+    <dialog v-if="userLoggedIn" id="logoutModal" class="modal modal-middle px-4 sm:px-6">
       <div class="modal-box">
         <h3 class="text-lg font-bold">Confirmation de déconnexion</h3>
         <p class="py-4">
@@ -63,8 +62,7 @@ export default {
 
 @font-face {
   font-family: 'Inter';
-  src: url('~@/assets/fonts/inter/Inter_18pt-Regular.ttf') format('ttf')
-    url('~@/assets/fonts/inter/Inter-Regular.otf') format('otf');
+  src: url('~@/assets/fonts/inter/Inter_18pt-Regular.ttf') format('ttf') url('~@/assets/fonts/inter/Inter-Regular.otf') format('otf');
 }
 
 .main {

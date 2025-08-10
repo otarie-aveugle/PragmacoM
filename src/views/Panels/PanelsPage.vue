@@ -5,23 +5,6 @@ import { usePanelStore } from '@/stores/panel'
 
 export default {
   name: 'PanelsPage',
-  mounted() {
-    if (this.userLoggedIn) {
-      this.disponibilityState = 'all'
-    }
-  },
-  data() {
-    return {
-      disponibility: false,
-      disponibilityState: 'true',
-    }
-  },
-  methods: {
-    ...mapActions(usePanelStore, ['getPanels']),
-  },
-  created() {
-    this.getPanels()
-  },
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
     ...mapState(usePanelStore, ['panels']),
@@ -35,6 +18,25 @@ export default {
         )
       }
     },
+  },
+  methods: {
+    ...mapActions(usePanelStore, ['getPanels']),
+    ...mapActions(useUserStore, ['initUser']),
+  },
+  async mounted() {
+    await this.initUser()
+    if (this.userLoggedIn) {
+      this.disponibilityState = 'all'
+    }
+  },
+  created() {
+    this.getPanels()
+  },
+  data() {
+    return {
+      disponibility: false,
+      disponibilityState: 'true',
+    }
   },
 }
 </script>

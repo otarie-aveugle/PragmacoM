@@ -34,6 +34,7 @@ export default {
       'fetchContent',
       'updateContentData',
     ]),
+    ...mapActions(useUserStore, ['initUser']),
     async saveField(index, label) {
       try {
         if (await this.updateContentData(index)) this.showToast(`${label} modifié avec succès`, 'success')
@@ -61,6 +62,7 @@ export default {
     }
   },
   async mounted() {
+    await this.initUser()
     await this.fetchContent()
     this.contentLoaded = true
   },
