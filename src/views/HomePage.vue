@@ -148,7 +148,7 @@ export default {
           <div v-else>
             <div v-if="!contentLoaded" class="w-full h-40 rounded-lg bg-base-300 animate-pulse"></div>
             <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
-              v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'">
+              v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel velit feugiat, sollicitudin magna id, fringilla tortor. Morbi a nisl fringilla, imperdiet sem non, luctus velit. In ornare est urna, non feugiat nibh pharetra in. Integer ultricies egestas velit sit amet ultricies. Nam velit odio, aliquet faucibus dictum sit amet, cursus in neque. Donec pretium massa sed odio convallis, non eleifend libero cursus. Sed tortor metus, vestibulum vel est id, iaculis pellentesque massa. Suspendisse iaculis lorem et neque vestibulum, a ultrices dolor molestie. Maecenas vitae eleifend sapien, pretium dictum ligula.Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Integer vestibulum leo at pellentesque eleifend.Nam lorem libero, pellentesque quis sapien at, tincidunt blandit enim.Sed varius dictum vehicula.Etiam pellentesque est id nisi luctus, ac blandit erat malesuada.Phasellus nec accumsan diam.Phasellus placerat blandit dolor ut faucibus.Aenean ac tempus ex.Donec convallis maximus ipsum ullamcorper tempus.'">
             </p>
           </div>
         </div>
