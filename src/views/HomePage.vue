@@ -38,7 +38,7 @@ export default {
       try {
         if (await this.updateContentData(index)) this.showToast(`${label} modifié avec succès`, 'success')
       } catch (error) {
-        this.showToast(`Erreur lors de la sauvegarde de ${label}`, 'error')
+        this.showToast(`Erreur lors de la sauvegarde de ${label}`, error)
       }
     },
     showToast(message, type) {
