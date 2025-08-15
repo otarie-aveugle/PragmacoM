@@ -1,4 +1,5 @@
 import './assets/main.css'
+import 'quill/dist/quill.snow.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -54,4 +55,3 @@ app.config.globalProperties.$filters = {
     return text.charAt(0)
   },
 }
-

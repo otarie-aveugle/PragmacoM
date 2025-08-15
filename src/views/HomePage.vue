@@ -2,12 +2,12 @@
 import { mapState, mapActions, mapWritableState } from 'pinia'
 import { useHomeStore } from '@/stores/home'
 import { useUserStore } from '@/stores/user'
-import { quillEditor } from 'vue3-quill'
+import QuillEditor from '@/components/QuillEditor/QuillEditor.vue'
 
 export default {
   name: 'HomePage',
   components: {
-    quillEditor
+    QuillEditor
   },
   computed: {
     ...mapState(useHomeStore, [
@@ -35,11 +35,11 @@ export default {
       'updateContentData',
     ]),
     ...mapActions(useUserStore, ['initUser']),
-    async saveField(index, label) {
+    async saveField(index) {
       try {
-        if (await this.updateContentData(index)) this.showToast(`${label} modifié avec succès`, 'success')
+        if (await this.updateContentData(index)) this.showToast(`Contenu modifié avec succès`, 'success')
       } catch (error) {
-        this.showToast(`Erreur lors de la sauvegarde de ${label}`, error)
+        this.showToast(`Erreur lors de la sauvegarde`, error)
       }
     },
     showToast(message, type) {
@@ -55,11 +55,6 @@ export default {
         toast.remove()
       }, 3000)
     },
-    onEditorChange(field, value) {
-      if (this[field] && this[field].content !== undefined) {
-        this[field].content = value.html
-      }
-    }
   },
   async mounted() {
     await this.initUser()
@@ -113,20 +108,19 @@ export default {
         <!-- Titre principal -->
         <div>
           <div v-if="isEditing" class="flex items-center gap-2 mb-2">
-            <button @click="saveField(0, 'Titre 1')" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+            <button @click="saveField(0)" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
               Sauvegarder
             </button>
           </div>
           <div v-if="isEditing"
-            class="w-full h-28 border border-dashed border-primary rounded p-4 bg-white z-40 relative">
-            <quill-editor class="min-w-full" :options="editorOption" :content="title1.content"
-              @change="onEditorChange('title1', $event)" />
+            class="w-full h-28 rounded p-4 bg-white z-40 relative max-w-full overflow-y-auto cursor-text break-words">
+            <QuillEditor contentType="html" v-model:content="title1.content" :options="editorOption" />
           </div>
 
           <!-- Skeleton si pas de contenu -->
           <div v-else>
             <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
-            <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+            <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl break-words max-w-full"
               v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
             </h1>
           </div>
@@ -135,21 +129,19 @@ export default {
         <!-- Texte principal -->
         <div>
           <div v-if="isEditing" class="flex items-center gap-2 mb-2">
-            <button @click="saveField(2, 'Contenu principal')"
-              class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+            <button @click="saveField(2)" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
               Sauvegarder
             </button>
           </div>
           <div v-if="isEditing"
-            class="w-full h-48 border border-dashed border-primary rounded p-4 bg-white z-40 relative">
-            <quill-editor class="min-w-full" :options="editorOption" :content="content_text.content"
-              @change="onEditorChange('content_text', $event)" />
+            class="w-full h-48 rounded p-4 bg-white z-40 relative max-w-full overflow-y-auto cursor-text break-words">
+            <QuillEditor contentType="html" :options="editorOption" v-model:content="content_text.content" />
           </div>
 
           <!-- Skeleton si pas de contenu -->
           <div v-else>
             <div v-if="!contentLoaded" class="w-full h-40 rounded-lg bg-base-300 animate-pulse"></div>
-            <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl"
+            <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl break-words max-w-full"
               v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel velit feugiat, sollicitudin magna id, fringilla tortor. Morbi a nisl fringilla, imperdiet sem non, luctus velit. In ornare est urna, non feugiat nibh pharetra in. Integer ultricies egestas velit sit amet ultricies. Nam velit odio, aliquet faucibus dictum sit amet, cursus in neque. Donec pretium massa sed odio convallis, non eleifend libero cursus. Sed tortor metus, vestibulum vel est id, iaculis pellentesque massa. Suspendisse iaculis lorem et neque vestibulum, a ultrices dolor molestie. Maecenas vitae eleifend sapien, pretium dictum ligula.Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Integer vestibulum leo at pellentesque eleifend.Nam lorem libero, pellentesque quis sapien at, tincidunt blandit enim.Sed varius dictum vehicula.Etiam pellentesque est id nisi luctus, ac blandit erat malesuada.Phasellus nec accumsan diam.Phasellus placerat blandit dolor ut faucibus.Aenean ac tempus ex.Donec convallis maximus ipsum ullamcorper tempus.'">
             </p>
           </div>
@@ -232,19 +224,19 @@ export default {
       <!-- Titre 2 centré -->
       <div class="w-1/2 mx-auto">
         <div v-if="isEditing" class="flex justify-start mb-2">
-          <button @click="saveField(1, 'Titre 2')" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
+          <button @click="saveField(1)" class="btn btn-sm bg-primary text-white hover:bg-blue-600">
             Sauvegarder
           </button>
         </div>
-        <div v-if="isEditing" class="h-28 border border-dashed border-primary rounded p-4 bg-white z-40 relative">
-          <quill-editor class="min-w-full" :options="editorOption" :content="title2.content"
-            @change="onEditorChange('title2', $event)" />
+        <div v-if="isEditing"
+          class="h-28 border border-dashed border-primary rounded p-4 bg-white z-40 relative overflow-y-auto cursor-text break-words">
+          <QuillEditor contentType="html" :options="editorOption" v-model:content="title2.content" />
         </div>
 
         <!-- Skeleton si pas de contenu -->
         <div v-else>
           <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
-          <h2 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl"
+          <h2 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl break-words max-w-full"
             v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'"></h2>
         </div>
       </div>
