@@ -15,11 +15,20 @@ export const useUserStore = defineStore('user', {
     async initUser() {
       if (this.loadingUser) return
       this.loadingUser = true
+
+      const sessionExists = !!localStorage.getItem('userSession')
+      if (!sessionExists) {
+        this.userLoggedIn = false
+        this.loadingUser = false
+        return
+      }
+
       try {
         await account.get()
         this.userLoggedIn = true
       } catch {
         this.userLoggedIn = false
+        localStorage.removeItem('userSession')
       } finally {
         this.loadingUser = false
       }
@@ -29,6 +38,7 @@ export const useUserStore = defineStore('user', {
       try {
         await account.createEmailPasswordSession(email, password)
         this.userLoggedIn = true
+        localStorage.setItem('userSession', '1')
         this.errorMessage = ''
       } catch (error) {
         switch (error.message) {
@@ -65,9 +75,19 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async confirm_recovery_password(userID, secret, password, password_confirmation) {
+    async confirm_recovery_password(
+      userID,
+      secret,
+      password,
+      password_confirmation,
+    ) {
       try {
-        await account.updateRecovery(userID, secret, password, password_confirmation)
+        await account.updateRecovery(
+          userID,
+          secret,
+          password,
+          password_confirmation,
+        )
         this.errorMessage = ''
       } catch (error) {
         console.error('Confirm recovery error:', error)
