@@ -28,7 +28,7 @@ export default {
         <div class="chat-container overflow-y-auto h-full">
           <!-- messages -->
           <div v-if="messages.total > 0">
-            <div v-for="(document, index) in messages" :key="index" class="chat chat-start">
+            <div v-for="(document, index) in messages.documents" :key="index" class="chat chat-start">
               <div class="chat-image avatar placeholder">
                 <div class="bg-primary text-white w-12 rounded-full">
                   <span class="text-xl">{{
