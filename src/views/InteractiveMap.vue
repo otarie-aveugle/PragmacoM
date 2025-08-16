@@ -43,13 +43,9 @@
 
   <!-- carte de test -->
   <div class="flex justify-center items-center mx-6 md:mx-8">
-    <iframe
-      class="w-full h-[calc(100vh-20px)]"
-      frameborder="0"
-      allowfullscreen
-      allow="geolocation"
-      src="https://framacarte.org/fr/map/panneaux_199122?scaleControl=false&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=false&datalayersControl=true&onLoadPanel=none&captionBar=true&captionMenus=false&locateControl=false&editinosmControl=false&starControl=null&datalayers=8305e073-1059-43cf-ab49-6d1c941a08ad#11/48.8075/2.1355"
-    ></iframe>
+    <iframe class="w-full h-[calc(100vh-20px)]" frameborder="0" allowfullscreen loading="lazy"
+      referrerpolicy="no-referrer"
+      src="https://framacarte.org/fr/map/panneaux_199122?scaleControl=false&miniMap=true&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=false&datalayersControl=true&onLoadPanel=none&captionBar=true&captionMenus=false&locateControl=false&editinosmControl=false&starControl=null&datalayers=8305e073-1059-43cf-ab49-6d1c941a08ad#11/48.8075/2.1355"></iframe>
   </div>
 
   <!-- Solution simple et rapide d'intégration de la carte d'origine de la localisation des panneaux avec possibilité d'ajout de lien et de photo dans les popups voir: https://docs.framasoft.org/fr/umap/5-infobulles-multimedia.html -->
