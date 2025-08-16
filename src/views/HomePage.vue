@@ -3,6 +3,7 @@ import { mapState, mapActions, mapWritableState } from 'pinia'
 import { useHomeStore } from '@/stores/home'
 import { useUserStore } from '@/stores/user'
 import QuillEditor from '@/components/QuillEditor/QuillEditor.vue'
+import DOMPurify from 'dompurify'
 
 export default {
   name: 'HomePage',
@@ -35,8 +36,17 @@ export default {
       'updateContentData',
     ]),
     ...mapActions(useUserStore, ['initUser']),
+    sanitize(content) {
+      return DOMPurify.sanitize(content)
+    },
     async saveField(index) {
       try {
+
+        // https://github.com/cure53/DOMPurify sanitization
+        if (this.title1?.content) this.title1.content = this.sanitize(this.title1.content)
+        if (this.title2?.content) this.title2.content = this.sanitize(this.title2.content)
+        if (this.content_text?.content) this.content_text.content = this.sanitize(this.content_text.content)
+
         if (await this.updateContentData(index)) this.showToast(`Contenu modifié avec succès`, 'success')
       } catch (error) {
         this.showToast(`Erreur lors de la sauvegarde`, error)
@@ -45,16 +55,20 @@ export default {
     showToast(message, type) {
       const toast = document.createElement('div')
       toast.className = 'toast toast-top toast-center z-[100]'
-      toast.innerHTML = `
-        <div class="alert ${type === 'success' ? 'alert-success' : 'alert-error'} text-white">
-          <span>${message}</span>
-        </div>
-      `
+
+      const alert = document.createElement('div')
+      alert.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'} text-white`
+
+      const span = document.createElement('span')
+      span.textContent = message
+
+      alert.appendChild(span)
+      toast.appendChild(alert)
       document.body.appendChild(toast)
-      setTimeout(() => {
-        toast.remove()
-      }, 3000)
-    },
+
+      setTimeout(() => toast.remove(), 3000)
+    }
+    ,
   },
   async mounted() {
     await this.initUser()
@@ -121,7 +135,7 @@ export default {
           <div v-else>
             <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
             <h1 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl break-words max-w-full"
-              v-html="title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards'">
+              v-html="sanitize(title1.content || 'Un panneau, <br /><span class=\'text-primary\'>1000</span> regards')">
             </h1>
           </div>
         </div>
@@ -142,7 +156,7 @@ export default {
           <div v-else>
             <div v-if="!contentLoaded" class="w-full h-40 rounded-lg bg-base-300 animate-pulse"></div>
             <p v-else class="text-lg text-gray-700 leading-relaxed md:text-2xl break-words max-w-full"
-              v-html="content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel velit feugiat, sollicitudin magna id, fringilla tortor. Morbi a nisl fringilla, imperdiet sem non, luctus velit. In ornare est urna, non feugiat nibh pharetra in. Integer ultricies egestas velit sit amet ultricies. Nam velit odio, aliquet faucibus dictum sit amet, cursus in neque. Donec pretium massa sed odio convallis, non eleifend libero cursus. Sed tortor metus, vestibulum vel est id, iaculis pellentesque massa. Suspendisse iaculis lorem et neque vestibulum, a ultrices dolor molestie. Maecenas vitae eleifend sapien, pretium dictum ligula.Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Integer vestibulum leo at pellentesque eleifend.Nam lorem libero, pellentesque quis sapien at, tincidunt blandit enim.Sed varius dictum vehicula.Etiam pellentesque est id nisi luctus, ac blandit erat malesuada.Phasellus nec accumsan diam.Phasellus placerat blandit dolor ut faucibus.Aenean ac tempus ex.Donec convallis maximus ipsum ullamcorper tempus.'">
+              v-html="sanitize(content_text.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel velit feugiat, sollicitudin magna id, fringilla tortor. Morbi a nisl fringilla, imperdiet sem non, luctus velit. In ornare est urna, non feugiat nibh pharetra in. Integer ultricies egestas velit sit amet ultricies. Nam velit odio, aliquet faucibus dictum sit amet, cursus in neque. Donec pretium massa sed odio convallis, non eleifend libero cursus. Sed tortor metus, vestibulum vel est id, iaculis pellentesque massa. Suspendisse iaculis lorem et neque vestibulum, a ultrices dolor molestie. Maecenas vitae eleifend sapien, pretium dictum ligula.Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.Integer vestibulum leo at pellentesque eleifend.Nam lorem libero, pellentesque quis sapien at, tincidunt blandit enim.Sed varius dictum vehicula.Etiam pellentesque est id nisi luctus, ac blandit erat malesuada.Phasellus nec accumsan diam.Phasellus placerat blandit dolor ut faucibus.Aenean ac tempus ex.Donec convallis maximus ipsum ullamcorper tempus.')">
             </p>
           </div>
         </div>
@@ -237,7 +251,7 @@ export default {
         <div v-else>
           <div v-if="!contentLoaded" class="w-full h-20 rounded-lg bg-base-300 animate-pulse"></div>
           <h2 v-else class="text-5xl font-bold text-center md:text-start lg:text-7xl break-words max-w-full"
-            v-html="title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles'"></h2>
+            v-html="sanitize(title2.content || 'Nos <span class=\'text-primary\'>faces</span> disponibles')"></h2>
         </div>
       </div>
 
