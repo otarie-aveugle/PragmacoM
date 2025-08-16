@@ -9,13 +9,12 @@ export default {
     ...mapState(useUserStore, ['userLoggedIn']),
     ...mapState(usePanelStore, ['panels']),
     filteredPanels() {
+      if (!this.panels || !this.panels.documents) return []
       if (this.disponibilityState === 'all') {
         return this.panels.documents
       } else {
-        const isAvailable = this.disponibilityState === 'true'
-        return this.panels.documents.filter(
-          panel => panel.disponibility === isAvailable,
-        )
+        const isAvailable = this.disponibilityState === 'true';
+        return this.panels.documents.filter(panel => panel.disponibility === isAvailable);
       }
     },
   },
@@ -28,13 +27,10 @@ export default {
     if (this.userLoggedIn) {
       this.disponibilityState = 'all'
     }
-  },
-  created() {
-    this.getPanels()
+    await this.getPanels()
   },
   data() {
     return {
-      disponibility: false,
       disponibilityState: 'true',
     }
   },
@@ -68,9 +64,9 @@ export default {
             Filtrer la disponibilité
           </div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-            <li @click="this.disponibilityState = 'all'"><a>Tous</a></li>
-            <li @click="this.disponibilityState = 'true'"><a>Disponible</a></li>
-            <li @click="this.disponibilityState = 'false'">
+            <li @click="disponibilityState = 'all'"><a>Tous</a></li>
+            <li @click="disponibilityState = 'true'"><a>Disponible</a></li>
+            <li @click="disponibilityState = 'false'">
               <a>Indisponible</a>
             </li>
           </ul>
@@ -152,7 +148,7 @@ export default {
             <!-- actions -->
             <td v-if="userLoggedIn">
               <div class="flex gap-2">
-                <RouterLink v-bind:to="/panel/ + `${panel.$id}`" class="link link-hover">
+                <RouterLink v-bind:to="`/panel/${panel.$id}`" class="link link-hover">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -160,7 +156,7 @@ export default {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                   </svg>
                 </RouterLink>
-                <RouterLink v-bind:to="/edit_panel/ + `${panel.$id}`" class="link link-hover">
+                <RouterLink v-bind:to="`/edit_panel/${panel.$id}`" class="link link-hover">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
