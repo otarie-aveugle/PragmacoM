@@ -143,8 +143,6 @@ export const useHomeStore = defineStore('home', {
         console.error('updateContentData', error)
         return false
       }
-
-      await this.fetchContent()
     },
 
     toggleAddImg() {
