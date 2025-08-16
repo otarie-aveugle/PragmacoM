@@ -24,17 +24,11 @@ export default {
     </div>
 
     <div class="flex-grow flex justify-center items-center mx-4">
-      <div
-        class="w-full max-h-[75vh] min-h-[50vh] h-full p-5 bg-white rounded-lg shadow-lg mx-4"
-      >
+      <div class="w-full max-h-[75vh] min-h-[50vh] h-full p-5 bg-white rounded-lg shadow-lg mx-4">
         <div class="chat-container overflow-y-auto h-full">
           <!-- messages -->
           <div v-if="messages.total > 0">
-            <div
-              v-for="(document, key, index) in messages.documents"
-              :key="index"
-              class="chat chat-start"
-            >
+            <div v-for="(document, index) in messages" :key="index" class="chat chat-start">
               <div class="chat-image avatar placeholder">
                 <div class="bg-primary text-white w-12 rounded-full">
                   <span class="text-xl">{{
@@ -47,10 +41,8 @@ export default {
               <div class="chat-header text-base">
                 {{ $filters.capitalizeText(document.name) }}
               </div>
-              <div
-                class="chat-bubble bg-primary text-xl text-white break-words whitespace-pre-wrap p-3"
-                :title="document.message"
-              >
+              <div class="chat-bubble bg-primary text-xl text-white break-words whitespace-pre-wrap p-3"
+                :title="document.message">
                 {{ document.message }}
               </div>
               <div class="chat-footer">
@@ -70,9 +62,7 @@ export default {
                 <span class="text-xl">P</span>
               </div>
             </div>
-            <div
-              class="chat-bubble bg-primary text-xl text-white break-words whitespace-pre-wrap p-3"
-            >
+            <div class="chat-bubble bg-primary text-xl text-white break-words whitespace-pre-wrap p-3">
               Il n'y a pas de message pour le moment.
             </div>
           </div>
