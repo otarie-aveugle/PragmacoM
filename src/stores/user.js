@@ -6,21 +6,42 @@ const messages = fr.fr
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userLoggedIn: localStorage.getItem('userLoggedIn') === 'true',
+    userLoggedIn: false,
+    loadingUser: false,
     errorMessage: '',
   }),
+
   actions: {
+    async initUser() {
+      if (this.loadingUser) return
+      this.loadingUser = true
+
+      const sessionExists = !!localStorage.getItem('userSession')
+      if (!sessionExists) {
+        this.userLoggedIn = false
+        this.loadingUser = false
+        return
+      }
+
+      try {
+        await account.get()
+        this.userLoggedIn = true
+      } catch {
+        this.userLoggedIn = false
+        localStorage.removeItem('userSession')
+      } finally {
+        this.loadingUser = false
+      }
+    },
+
     async login(email, password) {
       try {
         await account.createEmailPasswordSession(email, password)
         this.userLoggedIn = true
-        localStorage.setItem('userLoggedIn', true)
+        localStorage.setItem('userSession', '1')
         this.errorMessage = ''
       } catch (error) {
-
         switch (error.message) {
-          //TODO gérer les autres cas en suivants les taux de limites indiqués + ajouter le cas du taux de limite dépassé !
-          //https://appwrite.io/docs/references/cloud/client-web/account#createEmailPasswordSession
           case 'Invalid credentials. Please check the email and password.':
             this.errorMessage = messages.login.failure.credentials
             break
@@ -29,22 +50,23 @@ export const useUserStore = defineStore('user', {
         }
       }
     },
+
     async logout() {
       try {
         await account.deleteSession('current')
         this.userLoggedIn = false
-        localStorage.removeItem('userLoggedIn')
         this.errorMessage = ''
       } catch (error) {
         console.error('Logout error:', error)
         this.errorMessage = error.message
       }
     },
+
     async recovery_password(email) {
       try {
         await account.createRecovery(
           email,
-          'http://localhost:5173/reset_password/',
+          import.meta.env.VITE_APP_BASE_URL + 'reset_password/',
         )
         this.errorMessage = ''
       } catch (error) {
@@ -52,6 +74,7 @@ export const useUserStore = defineStore('user', {
         this.errorMessage = error.message
       }
     },
+
     async confirm_recovery_password(
       userID,
       secret,

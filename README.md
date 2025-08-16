@@ -17,7 +17,7 @@ pnpm install
 ### Configure the .env file
 
 ```sh
-mv .env.exemple .env
+mv .env.example .env
 ```
 
 Edit the `.env` file and fill in the environment variables.

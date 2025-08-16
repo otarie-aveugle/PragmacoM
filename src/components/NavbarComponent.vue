@@ -1,11 +1,17 @@
 <script>
-import { mapState } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'NavbarComponent',
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
+  },
+  methods: {
+    ...mapActions(useUserStore, ['initUser']),
+  },
+  async mounted() {
+    await this.initUser()
   },
 }
 </script>

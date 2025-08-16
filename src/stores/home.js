@@ -97,6 +97,20 @@ export const useHomeStore = defineStore('home', {
       }
     },
 
+    isContentEmpty(html) {
+      if (!html) return true
+
+      const clean = html
+        .replace(/&nbsp;/g, '') // espaces insécables
+        .replace(/<br\s*\/?>/gi, '') // sauts de ligne
+        .replace(/<p>\s*<\/p>/gi, '') // paragraphes vides
+        .replace(/<div>\s*<\/div>/gi, '') // divs vides
+        .replace(/\s+/g, '') // espaces
+        .trim()
+
+      return clean === ''
+    },
+
     async updateContentData(index) {
       let content = {
         id: '',
@@ -109,11 +123,26 @@ export const useHomeStore = defineStore('home', {
       else if (index === 2) content = this.content_text
       else return
 
-      if (content.content.trim() === '') return false
-
       const existingDoc = this.contentData.documents.find(
         doc => doc.type === content.type,
       )
+
+      if (this.isContentEmpty(content.content)) {
+        if (existingDoc) {
+          try {
+            await databases.deleteDocument(
+              DATABASE_ID,
+              CONTENT_COLLECTION_ID,
+              existingDoc.$id,
+            )
+            return true
+          } catch (error) {
+            console.error('deleteContentData', error)
+            return false
+          }
+        }
+        return false
+      }
 
       try {
         if (existingDoc) {

@@ -6,9 +6,15 @@ const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_PANELS
 const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID
 
 export const usePanelStore = defineStore('panel', {
-  state: () => ({
-    panels: localStorage.getItem('panels'),
-  }),
+  state: () => {
+    let panels = {
+      documents: [],
+      total: 0,
+    }
+    const stored = localStorage.getItem('panels')
+    if (stored) panels = JSON.parse(stored)
+    return { panels }
+  },
   actions: {
     //methods for bucket
     async addPanelImage(imageFile) {
@@ -48,8 +54,13 @@ export const usePanelStore = defineStore('panel', {
         COLLECTION_ID,
         [],
       )
-      this.panels = response
-      localStorage.setItem('panels', response)
+      if (response.total > 0) {
+        this.panels = response
+        localStorage.setItem('panels', JSON.stringify(this.panels))
+      } else {
+        this.panels = { documents: [], total: 0 }
+        localStorage.removeItem('panels')
+      }
     },
     async getPanelById(documentId) {
       const response = await databases.getDocument(

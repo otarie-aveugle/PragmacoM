@@ -5,9 +5,15 @@ const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID_MESSAGES
 
 export const useContactStore = defineStore('contact', {
-  state: () => ({
-    messages: localStorage.getItem('messages'),
-  }),
+  state: () => {
+    let messages = {
+      documents: [],
+      total: 0,
+    }
+    const stored = localStorage.getItem('messages')
+    if (stored) messages = JSON.parse(stored)
+    return { messages }
+  },
   actions: {
     async sendMessage(document) {
       await databases.createDocument(
@@ -23,8 +29,13 @@ export const useContactStore = defineStore('contact', {
         COLLECTION_ID,
         [],
       )
-      this.messages = response
-      localStorage.setItem('messages', response)
+      if (response.total > 0) {
+        this.messages = response
+        localStorage.setItem('messages', JSON.stringify(this.messages))
+      } else {
+        this.messages = { documents: [], total: 0 }
+        localStorage.removeItem('messages')
+      }
     },
     async deleteMessage(documentId) {
       await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, documentId)
