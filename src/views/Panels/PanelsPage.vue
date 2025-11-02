@@ -91,7 +91,7 @@ export default {
             <th>Position</th>
             <th>Format</th>
             <th>Observations</th>
-            <th v-if="userLoggedIn">Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <!-- end head -->
@@ -146,7 +146,7 @@ export default {
               {{ $filters.truncateText(panel.observations, 32) }}
             </td>
             <!-- actions -->
-            <td v-if="userLoggedIn">
+            <td>
               <div class="flex gap-2">
                 <RouterLink v-bind:to="`/panel/${panel.$id}`" class="link link-hover">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -156,7 +156,7 @@ export default {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                   </svg>
                 </RouterLink>
-                <RouterLink v-bind:to="`/edit_panel/${panel.$id}`" class="link link-hover">
+                <RouterLink v-if="userLoggedIn" v-bind:to="`/edit_panel/${panel.$id}`" class="link link-hover">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -185,7 +185,7 @@ export default {
             <th>Position</th>
             <th>Format</th>
             <th>Observations</th>
-            <th v-if="userLoggedIn">Actions</th>
+            <th>Actions</th>
           </tr>
         </tfoot>
         <!-- end foot -->
