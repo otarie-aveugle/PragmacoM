@@ -109,7 +109,6 @@ router.beforeEach(async to => {
   const store = useUserStore()
   const pages = ['create_panel', 'edit_panel', 'box']
   const pages_userLoggedIn = [
-    'panel',
     'login',
     'recovery_password',
     'forgot_password',
