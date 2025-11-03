@@ -38,5 +38,13 @@
     "jsdom": "^25.0.1",
     "prettier": "^3.6.2",
     "vitest": "^2.1.9"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite>esbuild": "^0.25.0",
+      "@vitejs/plugin-vue>esbuild": "^0.25.0",
+      "vitest>esbuild": "^0.25.0",
+      "@vitest/eslint-plugin>esbuild": "^0.25.0"
+    }
   }
 }
